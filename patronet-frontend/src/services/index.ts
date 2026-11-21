@@ -52,3 +52,6 @@ export * from './adapters/mockAuthAdapter';
 export * from './adapters/realAuthAdapter';
 export * from './adapters/mockWishlistAdapter';
 export * from './adapters/realWishlistAdapter';
+export * from './adapters/negotiationService';
+export * from './adapters/assistantService';
+export * from './adapters/comparorService';

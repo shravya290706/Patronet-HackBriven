@@ -127,3 +127,26 @@ def get_current_user(
         raise credentials_exception
 
     return customer
+
+
+def get_optional_current_user(
+    credentials: Optional[HTTPAuthorizationCredentials] = Depends(_bearer_security),
+    db: Session = Depends(get_db),
+) -> Optional[Customer]:
+    """
+    FastAPI dependency that returns the authenticated Customer if valid Bearer token
+    is provided, or None if anonymous/unauthenticated.
+    """
+    if not credentials or not credentials.credentials:
+        return None
+
+    payload = decode_access_token(credentials.credentials)
+    if not payload:
+        return None
+
+    customer_id = payload.get("sub")
+    if not customer_id:
+        return None
+
+    return CustomerRepository.get_by_id(db, customer_id)
+

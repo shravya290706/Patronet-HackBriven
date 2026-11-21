@@ -18,7 +18,7 @@ export interface CartModel {
 
 export interface ICartService {
   getCart(): Promise<CartModel>;
-  addItem(productId: string, quantity?: number): Promise<CartModel>;
+  addItem(productId: string, quantity?: number, negotiationId?: string): Promise<CartModel>;
   updateQuantity(productId: string, quantity: number): Promise<CartModel>;
   removeItem(productId: string): Promise<CartModel>;
   clearCart(): Promise<CartModel>;

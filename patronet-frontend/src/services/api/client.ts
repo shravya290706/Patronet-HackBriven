@@ -45,8 +45,29 @@ export function clearAuthToken(): void {
   }
 }
 
-const getBaseUrl = (): string => {
-  const envUrl = import.meta.env.VITE_API_BASE_URL || import.meta.env.VITE_API_URL || 'http://localhost:8000';
+/**
+ * Resolves the backend API base URL with environment variable precedence.
+ * In local development (DEV mode), falls back to http://localhost:8000 for seamless local dev.
+ * In production (PROD mode), strictly requires environment variable configuration
+ * (VITE_API_BASE_URL or VITE_API_URL) to prevent broken or unintended client-side requests to localhost.
+ */
+export const getBaseUrl = (): string => {
+  const envUrl = (
+    import.meta.env.VITE_API_BASE_URL ||
+    import.meta.env.VITE_API_URL ||
+    (import.meta.env.DEV ? 'http://localhost:8000' : '')
+  ).trim();
+
+  if (!envUrl) {
+    if (import.meta.env.PROD) {
+      console.warn(
+        'PATRONET API Notice: Neither VITE_API_BASE_URL nor VITE_API_URL is configured in production. ' +
+        'Falling back to same-origin relative path "/api/v1". Please configure VITE_API_BASE_URL in your hosting platform.'
+      );
+    }
+    return '/api/v1';
+  }
+
   const cleanUrl = envUrl.replace(/\/+$/, '');
   return cleanUrl.endsWith('/api/v1') ? cleanUrl : `${cleanUrl}/api/v1`;
 };

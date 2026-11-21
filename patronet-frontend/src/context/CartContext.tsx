@@ -8,7 +8,7 @@ interface CartContextValue {
   itemCount: number;
   loading: boolean;
   error: string | null;
-  addItem: (productId: string, quantity?: number) => Promise<void>;
+  addItem: (productId: string, quantity?: number, negotiationId?: string) => Promise<void>;
   updateQuantity: (productId: string, quantity: number) => Promise<void>;
   removeItem: (productId: string) => Promise<void>;
   clearCart: () => Promise<void>;
@@ -50,10 +50,10 @@ export const CartProvider: React.FC<{ children: React.ReactNode }> = ({ children
     refreshCart();
   }, [refreshCart, user?.id]);
 
-  const addItem = React.useCallback(async (productId: string, quantity = 1) => {
+  const addItem = React.useCallback(async (productId: string, quantity = 1, negotiationId?: string) => {
     try {
       setError(null);
-      const updated = await cartService.addItem(productId, quantity);
+      const updated = await cartService.addItem(productId, quantity, negotiationId);
       setCart(updated);
     } catch (err) {
       const msg = err instanceof Error ? err.message : 'Failed to add item to cart';

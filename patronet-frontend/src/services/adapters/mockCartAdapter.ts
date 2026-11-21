@@ -55,7 +55,7 @@ export class MockCartAdapter implements ICartService {
     return this.readStorage();
   }
 
-  async addItem(productId: string, quantity = 1): Promise<CartModel> {
+  async addItem(productId: string, quantity = 1, _negotiationId?: string): Promise<CartModel> {
     await new Promise((r) => setTimeout(r, 60));
     if (!productId || typeof productId !== 'string' || !productId.trim()) {
       throw new Error('Invalid product ID');

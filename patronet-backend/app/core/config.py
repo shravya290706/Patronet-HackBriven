@@ -36,7 +36,7 @@ class Settings:
         origin.strip()
         for origin in os.getenv(
             "CORS_ORIGINS",
-            "http://localhost:5173,http://127.0.0.1:5173",
+            "http://localhost:5173,http://127.0.0.1:5173,https://zealhackbriven.vercel.app",
         ).split(",")
         if origin.strip()
     ]
@@ -89,6 +89,10 @@ class Settings:
     KAFKA_ORDER_EVENTS_TOPIC: str = os.getenv(
         "KAFKA_ORDER_EVENTS_TOPIC", "patronet.order.events"
     )
+
+    # Google Gemini AI Integration
+    GEMINI_API_KEY: str = os.getenv("GEMINI_API_KEY", "")
+    GEMINI_MODEL: str = os.getenv("GEMINI_MODEL", "gemini-2.5-flash")
 
 
 settings = Settings()

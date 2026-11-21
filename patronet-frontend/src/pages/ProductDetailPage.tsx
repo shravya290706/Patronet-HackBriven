@@ -15,6 +15,7 @@ import { Container } from "@/components/layout/Container";
 import { ProductCard } from "@/components/products/ProductCard";
 import { ProductGallery } from "@/components/products/ProductGallery";
 import { productService } from "@/services";
+import { NegotiationModal } from "@/components/negotiation/NegotiationModal";
 import { useComparison } from "@/context/ComparisonContext";
 import { useCart } from "@/context/CartContext";
 import { useWishlist } from "@/context/WishlistContext";
@@ -32,6 +33,7 @@ export const ProductDetailPage: React.FC = () => {
   const [error, setError] = React.useState<string | null>(null);
   const [quantity, setQuantity] = React.useState<number>(1);
   const [isAdding, setIsAdding] = React.useState<boolean>(false);
+  const [isNegotiateOpen, setIsNegotiateOpen] = React.useState<boolean>(false);
 
   // Delivery check state
   const [pincode, setPincode] = React.useState<string>("");
@@ -378,7 +380,7 @@ export const ProductDetailPage: React.FC = () => {
 
                     <button
                       type="button"
-                      onClick={() => toast.info("Opening Negotiator for bargain demonstration...")}
+                      onClick={() => setIsNegotiateOpen(true)}
                       aria-label="Open Negotiator to bargain price with seller"
                       className="h-12 rounded-xl bg-amber-500/15 hover:bg-amber-500/25 text-amber-950 border border-amber-300 font-label-md text-xs sm:text-sm font-bold flex items-center justify-center gap-2 transition-all cursor-pointer shadow-xs hover:-translate-y-0.5 active:translate-y-0"
                     >
@@ -452,6 +454,14 @@ export const ProductDetailPage: React.FC = () => {
           </div>
         )}
       </Container>
+
+      {product && (
+        <NegotiationModal
+          product={product}
+          isOpen={isNegotiateOpen}
+          onClose={() => setIsNegotiateOpen(false)}
+        />
+      )}
     </div>
   );
 };

@@ -70,7 +70,12 @@ class CartRepository:
 
     @staticmethod
     def add_item(
-        db: Session, cart: Cart, product_id: UUID, quantity: int
+        db: Session,
+        cart: Cart,
+        product_id: UUID,
+        quantity: int,
+        negotiated_price: Optional[object] = None,
+        negotiation_id: Optional[UUID] = None,
     ) -> CartItem:
         """
         Insert a new item row into the customer's cart.
@@ -81,6 +86,8 @@ class CartRepository:
             cart_id=cart.id,
             product_id=product_id,
             quantity=quantity,
+            negotiated_price=negotiated_price,
+            negotiation_id=negotiation_id,
             added_at=now,
         )
         cart.updated_at = now

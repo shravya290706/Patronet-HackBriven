@@ -45,7 +45,9 @@ class CartService:
                 primary = next((img for img in product.images if img.is_primary), None)
                 image_url = primary.image_url if primary else product.images[0].image_url
 
-            price = Decimal(str(product.price)).quantize(Decimal("0.01"))
+            is_neg = getattr(item, "negotiated_price", None) is not None
+            price_val = item.negotiated_price if is_neg else product.price
+            price = Decimal(str(price_val)).quantize(Decimal("0.01"))
             subtotal = (price * item.quantity).quantize(Decimal("0.01"))
             total_quantity += item.quantity
             cart_total += subtotal
@@ -60,6 +62,8 @@ class CartService:
                     price=price,
                     quantity=item.quantity,
                     subtotal=subtotal,
+                    negotiated_price=Decimal(str(item.negotiated_price)).quantize(Decimal("0.01")) if is_neg else None,
+                    is_negotiated=is_neg,
                 )
             )
 
@@ -118,10 +122,50 @@ class CartService:
                 detail=f"Requested total quantity ({target_quantity}) exceeds available stock ({total_stock}).",
             )
 
+        # Validate negotiated session if provided
+        negotiated_price = None
+        negotiation_id = None
+        if req.negotiation_id:
+            from app.models.negotiation import NegotiationSession
+            from datetime import datetime, timezone
+            neg_session = db.query(NegotiationSession).filter(NegotiationSession.id == req.negotiation_id).first()
+            if not neg_session:
+                raise HTTPException(
+                    status_code=status.HTTP_400_BAD_REQUEST,
+                    detail=f"Negotiation session '{req.negotiation_id}' not found.",
+                )
+            if neg_session.product_id != product.id:
+                raise HTTPException(
+                    status_code=status.HTTP_400_BAD_REQUEST,
+                    detail="Negotiation session does not match requested product.",
+                )
+            if neg_session.status != "accepted":
+                raise HTTPException(
+                    status_code=status.HTTP_400_BAD_REQUEST,
+                    detail=f"Negotiation offer has not been accepted (current status: {neg_session.status}).",
+                )
+            if neg_session.expires_at and neg_session.expires_at < datetime.now(timezone.utc):
+                raise HTTPException(
+                    status_code=status.HTTP_400_BAD_REQUEST,
+                    detail="Negotiated offer has expired.",
+                )
+            negotiated_price = neg_session.agreed_price
+            negotiation_id = neg_session.id
+
         if existing_item:
+            if negotiated_price is not None:
+                existing_item.negotiated_price = negotiated_price
+                existing_item.negotiation_id = negotiation_id
             CartRepository.increment_item_quantity(db, cart, existing_item, req.quantity)
         else:
-            CartRepository.add_item(db, cart, product.id, req.quantity)
+            CartRepository.add_item(
+                db,
+                cart,
+                product.id,
+                req.quantity,
+                negotiated_price=negotiated_price,
+                negotiation_id=negotiation_id,
+            )
 
         # Refresh cart to reflect new items
         db.expire(cart, ["items"])

@@ -12,6 +12,9 @@ from app.api.routes import (
     products,
     search,
     wishlist,
+    negotiation,
+    assistant,
+    comparor,
 )
 from app.core.config import settings
 
@@ -40,6 +43,15 @@ v1_router.include_router(wishlist.router)
 
 # Search / OpenSearch
 v1_router.include_router(search.router)
+
+# Negotiations / Bargain Studio
+v1_router.include_router(negotiation.router)
+
+# Shopping Buddy / AI Assistant
+v1_router.include_router(assistant.router)
+
+# Comparor / AI Comparison Studio
+v1_router.include_router(comparor.router)
 
 # Attach versioned routes
 api_router.include_router(v1_router)

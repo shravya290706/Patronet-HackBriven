@@ -66,8 +66,9 @@ export class RealCartAdapter implements ICartService {
 
   /**
    * Add a product to the cart or increment quantity if already present.
+   * Optionally accepts a verified negotiation_id for negotiated price execution.
    */
-  async addItem(productId: string, quantity = 1): Promise<CartModel> {
+  async addItem(productId: string, quantity = 1, negotiationId?: string): Promise<CartModel> {
     const token = getAuthToken();
     if (!token) {
       throw new Error('Please sign in to add items to your cart.');
@@ -80,12 +81,17 @@ export class RealCartAdapter implements ICartService {
 
     const safeQty = Math.max(1, Math.floor(quantity || 1));
 
+    const payload: Record<string, unknown> = {
+      product_id: cleanId,
+      quantity: safeQty,
+    };
+    if (negotiationId) {
+      payload.negotiation_id = negotiationId;
+    }
+
     const response = await apiClient<BackendCartResponse>('/cart/items', {
       method: 'POST',
-      body: JSON.stringify({
-        product_id: cleanId,
-        quantity: safeQty,
-      }),
+      body: JSON.stringify(payload),
     });
 
     return mapBackendCartToFrontend(response);

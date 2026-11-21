@@ -19,6 +19,10 @@ class CartItemAddRequest(BaseModel):
         description="Quantity of product to add (must be at least 1)",
         examples=[1],
     )
+    negotiation_id: Optional[UUID] = Field(
+        None,
+        description="Optional ID of an accepted negotiation session to apply negotiated price",
+    )
 
 
 class CartItemUpdateRequest(BaseModel):
@@ -39,6 +43,8 @@ class CartItemResponse(BaseModel):
     price: Decimal
     quantity: int
     subtotal: Decimal
+    negotiated_price: Optional[Decimal] = None
+    is_negotiated: bool = False
 
     class Config:
         from_attributes = True

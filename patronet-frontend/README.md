@@ -1,75 +1,51 @@
-# React + TypeScript + Vite
+# PATRONET Frontend
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Modern e-commerce storefront for PATRONET, built with React, TypeScript, Vite, and Tailwind CSS.
 
-Currently, two official plugins are available:
+> **Live Demo Reference:** [https://zealhackbriven.vercel.app](https://zealhackbriven.vercel.app)
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+---
 
-## React Compiler
+## Features
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+- **Storefront**: High-performance catalogue browsing across 6 curated categories and 48 verified hardware products.
+- **Intelligent Search**: OpenSearch autocomplete dropdown with debouncing, category/brand suggestions, and typo-tolerant search.
+- **USP 1 — Comparor**: Side-by-side technical specification matrix comparing up to 4 products with automated Best Value calculation, pros/cons breakdown, and difference highlighting.
+- **USP 2 — Negotiator**: Interactive price bargaining studio modal with multi-round counteroffers and cart checkout at negotiated rates.
+- **USP 3 — Shopping Buddy**: Conversational assistant (`/ai-shopping`) parsing natural language workloads, budgets, and hardware needs with rich in-chat recommendation cards.
+- **Customer Account & Security**: Full JWT authentication, profile restoration, persistent database-backed cart, and customer wishlist.
 
-## Expanding the ESLint configuration
+---
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+## Environment Configuration
 
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
+Configuration is managed via Vite environment variables. Copy `.env.example` to `.env`:
 
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
-
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-
+```powershell
+Copy-Item .env.example .env
 ```
 
-You can also install [eslint-plugin-react-x](https://npmx.dev/package/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://npmx.dev/package/eslint-plugin-react-dom) for React-specific lint rules:
+| Variable | Description | Default |
+|---|---|---|
+| `VITE_API_BASE_URL` | Backend API base URL ending with `/api/v1` | `http://localhost:8000/api/v1` (in dev) |
+| `VITE_USE_MOCK_API` | Set `true` to use mock offline adapters; `false` for live FastAPI backend | `false` |
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
+> **Note on Production:** In production builds (`import.meta.env.PROD`), the client requires `VITE_API_BASE_URL` (or `VITE_API_URL`) to be set in your deployment environment (e.g. Vercel dashboard). It will not fall back to `localhost:8000` in production.
 
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+---
 
+## Local Setup & Scripts
+
+```powershell
+# Install dependencies
+npm install
+
+# Start development server (http://localhost:5173)
+npm run dev
+
+# Run type check and production build
+npm run build
+
+# Preview production build locally
+npm run preview
 ```

@@ -3,7 +3,7 @@ SQLAlchemy models for Shopping Cart and Cart Items.
 Maps to pre-existing `carts` and `cart_items` tables in PostgreSQL.
 """
 import uuid
-from sqlalchemy import Column, DateTime, ForeignKey, Integer, String, func
+from sqlalchemy import Column, DateTime, ForeignKey, Integer, Numeric, String, func
 from sqlalchemy.dialects.postgresql import UUID
 from sqlalchemy.orm import relationship
 from app.core.database import Base
@@ -46,6 +46,10 @@ class CartItem(Base):
         UUID(as_uuid=True), ForeignKey("products.id"), nullable=False, index=True
     )
     quantity = Column(Integer, nullable=False, default=1)
+    negotiated_price = Column(Numeric(10, 2), nullable=True)
+    negotiation_id = Column(
+        UUID(as_uuid=True), ForeignKey("negotiation_sessions.id"), nullable=True
+    )
     added_at = Column(
         DateTime(timezone=True), nullable=False, default=func.now()
     )
@@ -53,3 +57,4 @@ class CartItem(Base):
     # Relationships
     cart = relationship("Cart", back_populates="items")
     product = relationship("Product", lazy="joined")
+    negotiation = relationship("app.models.negotiation.NegotiationSession", lazy="joined")
