@@ -1,19 +1,16 @@
-from fastapi import FastAPI
+"""
+Server runner script for patronet-backend.
+Allows running the server with `python main.py` or `uvicorn main:app`.
+"""
+import uvicorn
+from app.main import app
 
-app = FastAPI(
-    title="PATRONET API",
-    description="E-commerce platform API",
-    version="1.0.0"
-)
+if __name__ == "__main__":
+    from app.core.config import settings
 
-@app.get("/")
-def root():
-    return {
-        "message": "PATRONET API is running 🚀"
-    }
-
-@app.get("/health")
-def health_check():
-    return {
-        "status": "healthy"
-    }
+    uvicorn.run(
+        "app.main:app",
+        host=settings.HOST,
+        port=settings.PORT,
+        reload=settings.DEBUG,
+    )
