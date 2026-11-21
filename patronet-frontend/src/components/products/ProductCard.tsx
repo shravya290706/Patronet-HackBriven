@@ -1,137 +1,241 @@
 import * as React from "react";
-import { Link } from "react-router-dom";
-import { Heart, ShoppingCart } from "lucide-react";
+import { Link, useNavigate } from "react-router-dom";
+import { Eye, Plus, Heart, Check, Scale } from "lucide-react";
 import type { Product } from "@/types";
 import { getProductPrimaryImageUrl, DEFAULT_PRODUCT_FALLBACK_IMAGE } from "@/lib/imageUtils";
 import { useWishlist } from "@/context/WishlistContext";
+import { useCart } from "@/context/CartContext";
+import { useComparison } from "@/context/ComparisonContext";
 
 export interface ProductCardProps {
   product: Product;
+  className?: string;
   isWishlisted?: boolean;
   onToggleWishlist?: (id: string) => void;
+  onAddToCart?: (product: Product) => void;
   isCompared?: boolean;
   onToggleCompare?: (product: Product) => void;
-  onAddToCart?: (product: Product) => void;
+  onViewDetails?: (product: Product) => void;
 }
 
 export const ProductCard: React.FC<ProductCardProps> = ({
   product,
+  className = "",
   isWishlisted: propIsWishlisted,
-  onToggleWishlist,
-  isCompared = false,
-  onToggleCompare,
-  onAddToCart,
+  onToggleWishlist: propToggleWishlist,
+  onAddToCart: propAddToCart,
+  isCompared: propIsCompared,
+  onToggleCompare: propToggleCompare,
+  onViewDetails: propViewDetails,
 }) => {
+  const navigate = useNavigate();
   const { isWishlisted: contextIsWishlisted, toggleWishlist: contextToggleWishlist } = useWishlist();
+  const { addItem } = useCart();
+  const { isCompared, addToCompare, removeFromCompare } = useComparison();
 
-  // Use prop if provided, else fallback to global WishlistContext
-  const activeIsWishlisted = propIsWishlisted !== undefined ? propIsWishlisted : contextIsWishlisted(product.id);
+  const [isAdding, setIsAdding] = React.useState(false);
+  const [feedback, setFeedback] = React.useState<string | null>(null);
 
-  const isAvailable = product.inventory && product.inventory.length > 0
-    ? product.inventory.some((i) => i.isAvailable && i.quantityOnHand > 0)
-    : product.isActive;
+  const activeIsWishlisted =
+    propIsWishlisted !== undefined ? propIsWishlisted : contextIsWishlisted(product.id);
 
-  const initialImageUrl = getProductPrimaryImageUrl(product);
-  const [imgSrc, setImgSrc] = React.useState<string>(initialImageUrl);
-  const [hasError, setHasError] = React.useState<boolean>(false);
+  const compared = propIsCompared !== undefined ? propIsCompared : isCompared(product.id);
+
+  const imageUrl = getProductPrimaryImageUrl(product);
+  const [imgSrc, setImgSrc] = React.useState<string>(imageUrl);
 
   React.useEffect(() => {
     setImgSrc(getProductPrimaryImageUrl(product));
-    setHasError(false);
   }, [product]);
 
-  const handleImageError = () => {
-    if (!hasError) {
-      setHasError(true);
-      setImgSrc(DEFAULT_PRODUCT_FALLBACK_IMAGE);
+  const formattedPrice = new Intl.NumberFormat("en-IN", {
+    style: "currency",
+    currency: "INR",
+    maximumFractionDigits: 0,
+  }).format(product.price);
+
+  const categoryName =
+    typeof product.category === "string"
+      ? product.category
+      : product.category?.name || (product as { categoryName?: string }).categoryName || "";
+
+  const handleToggleCompare = (e: React.MouseEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+    if (propToggleCompare) {
+      propToggleCompare(product);
+    } else if (compared) {
+      removeFromCompare(product.id);
+    } else {
+      addToCompare(product);
     }
   };
 
-  const handleHeartClick = (e: React.MouseEvent) => {
+  const handleHeartClick = async (e: React.MouseEvent) => {
     e.preventDefault();
     e.stopPropagation();
-    if (onToggleWishlist) {
-      onToggleWishlist(product.id);
+    if (propToggleWishlist) {
+      propToggleWishlist(product.id);
     } else {
       contextToggleWishlist(product.id);
     }
   };
 
+  const handleAddToCart = async (e: React.MouseEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+    if (isAdding) return;
+    setIsAdding(true);
+    setFeedback(null);
+    try {
+      if (propAddToCart) {
+        propAddToCart(product);
+      } else {
+        await addItem(product.id, 1);
+      }
+      setFeedback("Added to your cart.");
+      setTimeout(() => setFeedback(null), 2500);
+    } catch {
+      setFeedback("Could not add item.");
+      setTimeout(() => setFeedback(null), 2500);
+    } finally {
+      setIsAdding(false);
+    }
+  };
+
   return (
-    <article className="product-card h-full flex flex-col justify-between gap-4 border border-transparent hover:border-outline-subtle rounded-sm p-2 transition-all duration-150 bg-pure-white">
-      <div className="flex flex-col gap-3">
-        {/* Image Container with Wishlist Button */}
-        <div className="relative aspect-square w-full bg-light-gray rounded-sm overflow-hidden flex items-center justify-center p-6">
-          <Link to={`/products/${product.id}`} className="w-full h-full flex items-center justify-center">
+    <article
+      className={`group bg-surface-container-lowest rounded-xl p-space-md shadow-sm hover:shadow-md transition-all duration-300 hover:-translate-y-1 flex flex-col justify-between relative border border-surface-container/60 ${className}`}
+    >
+      <div>
+        {/* Image Container with + Compare and Wishlist Heart */}
+        <div className="relative w-full aspect-square bg-surface-container-low rounded-lg overflow-hidden mb-space-sm flex items-center justify-center">
+          {/* Compare Button */}
+          <button
+            type="button"
+            onClick={handleToggleCompare}
+            aria-label={compared ? "Remove from comparison" : "Add to compare"}
+            aria-pressed={compared}
+            title={compared ? "Remove from compare" : "Click to compare up to 4 items"}
+            className={`absolute top-2 left-2 z-20 h-7.5 rounded-lg px-2.5 py-1 text-xs font-bold shadow-sm transition-all flex items-center gap-1.5 cursor-pointer select-none ${
+              compared
+                ? "bg-primary text-on-primary ring-2 ring-primary/40 shadow-md"
+                : "bg-surface-container-lowest/95 text-on-surface hover:text-primary hover:bg-surface-container-lowest border border-surface-container-high/80"
+            }`}
+          >
+            {compared ? (
+              <>
+                <Check className="h-3.5 w-3.5 stroke-[2.5]" />
+                <span>Compared</span>
+              </>
+            ) : (
+              <>
+                <Scale className="h-3.5 w-3.5" />
+                <span>+ Compare</span>
+              </>
+            )}
+          </button>
+
+          {/* Product Image Link */}
+          <Link
+            to={`/products/${product.id}`}
+            aria-label={`View ${product.name}`}
+            className="w-full h-full flex items-center justify-center cursor-pointer"
+          >
             <img
               src={imgSrc}
               alt={product.name}
-              onError={handleImageError}
-              className="w-full h-full object-contain mix-blend-multiply hover:scale-105 transition-transform duration-200"
+              onError={() => setImgSrc(DEFAULT_PRODUCT_FALLBACK_IMAGE)}
+              className="w-full h-full object-contain p-3 group-hover:scale-105 transition-transform duration-300"
               loading="lazy"
             />
           </Link>
+
+          {/* Wishlist Heart Button */}
           <button
             type="button"
             onClick={handleHeartClick}
             aria-label={activeIsWishlisted ? `Remove ${product.name} from wishlist` : `Add ${product.name} to wishlist`}
             aria-pressed={activeIsWishlisted}
-            title={activeIsWishlisted ? "Remove from wishlist" : "Add to wishlist"}
-            className="absolute top-3 right-3 inline-flex items-center justify-center w-8 h-8 rounded-full bg-pure-white text-muted-gray hover:text-deep-black shadow-sm transition-colors duration-150 cursor-pointer z-10"
+            className="absolute top-2 right-2 rounded-full bg-surface-container-lowest/90 p-2 text-outline shadow-sm transition-colors hover:text-primary cursor-pointer z-20"
           >
             <Heart
-              className={`w-4 h-4 ${
-                activeIsWishlisted ? "fill-primary-orange text-primary-orange" : "text-muted-gray"
+              className={`h-4 w-4 ${
+                activeIsWishlisted ? "fill-primary text-primary" : "text-outline"
               }`}
             />
           </button>
         </div>
 
-        {/* Brand & Title */}
-        <div className="flex flex-col gap-1">
-          <span className="font-label text-xs uppercase tracking-wider text-muted-gray">
-            {product.brand}
-          </span>
-          <Link to={`/products/${product.id}`}>
-            <h3 className="font-title text-base font-semibold text-deep-black line-clamp-2 hover:text-accent-orange-text transition-colors duration-150">
-              {product.name}
-            </h3>
-          </Link>
-          <div className="pt-1 flex items-baseline gap-2">
-            <span className="font-headline text-lg font-bold tabular-nums text-deep-black">
-              ₹{product.price.toLocaleString("en-IN")}
+        {/* Brand & Category Row */}
+        <div className="flex items-center justify-between gap-1 mb-1">
+          {product.brand && (
+            <span className="font-label-sm text-label-sm text-outline uppercase tracking-wider">
+              {product.brand}
             </span>
-            {product.compareAtPrice && product.compareAtPrice > product.price && (
-              <span className="text-xs line-through text-muted-gray">
-                ₹{product.compareAtPrice.toLocaleString("en-IN")}
-              </span>
-            )}
-          </div>
+          )}
+          {categoryName && (
+            <span className="font-label-sm text-label-sm text-outline truncate">
+              {categoryName}
+            </span>
+          )}
+        </div>
+
+        {/* Product Title */}
+        <h3 className="font-title-md text-title-md text-on-surface font-semibold line-clamp-2 leading-snug group-hover:text-primary transition-colors">
+          <Link to={`/products/${product.id}`} className="cursor-pointer">
+            {product.name}
+          </Link>
+        </h3>
+
+        {/* SKU */}
+        <div className="flex items-center justify-between text-label-sm text-label-sm text-outline my-1.5">
+          <span>SKU: {product.sku}</span>
+        </div>
+
+        {/* Price in ₹ */}
+        <div className="flex items-baseline gap-2 mt-1">
+          <span className="font-headline-sm text-headline-sm font-bold text-primary">
+            {formattedPrice}
+          </span>
         </div>
       </div>
 
-      {/* Footer Controls: Compare Checkbox & Add to Cart */}
-      <footer className="flex items-center justify-between gap-2 pt-3 border-t border-outline-subtle">
-        <label className="inline-flex items-center gap-1.5 cursor-pointer">
-          <input
-            type="checkbox"
-            checked={isCompared}
-            onChange={() => onToggleCompare?.(product)}
-            className="rounded-sm border-outline-subtle text-deep-black focus:ring-deep-black"
-          />
-          <span className="font-label text-xs text-muted-gray">Compare</span>
-        </label>
-        <button
-          type="button"
-          disabled={!isAvailable}
-          onClick={() => onAddToCart?.(product)}
-          aria-label={`Add ${product.name} to cart`}
-          className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-sm bg-deep-black text-on-deep-black font-label text-xs font-semibold hover:bg-surface-dark-elevated disabled:opacity-40 disabled:cursor-not-allowed transition-colors duration-150 cursor-pointer"
-        >
-          <ShoppingCart className="w-3.5 h-3.5" />
-          <span>{isAvailable ? "Add" : "Unavailable"}</span>
-        </button>
-      </footer>
+      {/* Bottom Action Buttons: Details & + Add */}
+      <div>
+        <div className="grid grid-cols-2 gap-1.5 mt-3 pt-2 border-t border-surface-container/50">
+          <button
+            type="button"
+            onClick={() => {
+              if (propViewDetails) {
+                propViewDetails(product);
+              } else {
+                navigate(`/products/${product.id}`);
+              }
+            }}
+            className="w-full py-2 px-2 rounded-lg bg-surface-container-low hover:bg-primary-fixed text-primary font-label-md text-label-md transition-colors flex items-center justify-center gap-1 cursor-pointer"
+          >
+            <Eye className="h-3.5 w-3.5" />
+            <span>Details</span>
+          </button>
+          <button
+            type="button"
+            onClick={handleAddToCart}
+            disabled={isAdding}
+            className="w-full py-2 px-2 rounded-lg bg-primary hover:bg-primary-container text-on-primary font-label-md text-label-md transition-colors shadow-xs flex items-center justify-center gap-1 cursor-pointer disabled:opacity-60 disabled:cursor-not-allowed"
+          >
+            <Plus className="h-3.5 w-3.5" />
+            <span>{isAdding ? "Adding…" : "+ Add"}</span>
+          </button>
+        </div>
+
+        {/* Status Feedback */}
+        {feedback && (
+          <p role="status" className="mt-1 text-center text-label-sm text-primary font-medium">
+            {feedback}
+          </p>
+        )}
+      </div>
     </article>
   );
 };

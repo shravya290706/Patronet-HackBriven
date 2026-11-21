@@ -1,5 +1,4 @@
 import * as React from "react";
-import { ChevronLeft, ChevronRight } from "lucide-react";
 import type { Product, ProductImage } from "@/types";
 import { getProductGalleryImageUrls, DEFAULT_PRODUCT_FALLBACK_IMAGE } from "@/lib/imageUtils";
 
@@ -8,6 +7,7 @@ export interface ProductGalleryProps {
   images?: ProductImage[];
   fallbackImage?: string;
   productName: string;
+  className?: string;
 }
 
 export const ProductGallery: React.FC<ProductGalleryProps> = ({
@@ -15,6 +15,7 @@ export const ProductGallery: React.FC<ProductGalleryProps> = ({
   images,
   fallbackImage = DEFAULT_PRODUCT_FALLBACK_IMAGE,
   productName,
+  className = "",
 }) => {
   // Resolve gallery images from Product abstraction or images prop
   const galleryImages = React.useMemo(() => {
@@ -38,14 +39,6 @@ export const ProductGallery: React.FC<ProductGalleryProps> = ({
     setFailedIndices(new Set());
   }, [galleryImages]);
 
-  const handlePrev = () => {
-    setActiveIndex((prev) => (prev > 0 ? prev - 1 : galleryImages.length - 1));
-  };
-
-  const handleNext = () => {
-    setActiveIndex((prev) => (prev < galleryImages.length - 1 ? prev + 1 : 0));
-  };
-
   const currentRawUrl = galleryImages[activeIndex] || fallbackImage;
   const isCurrentFailed = failedIndices.has(activeIndex);
   const activeUrl = isCurrentFailed ? fallbackImage : currentRawUrl;
@@ -59,66 +52,48 @@ export const ProductGallery: React.FC<ProductGalleryProps> = ({
   };
 
   return (
-    <div className="flex flex-col gap-4">
-      {/* Main Image Display */}
-      <div className="relative aspect-[5/4] w-full bg-light-gray rounded-sm overflow-hidden flex items-center justify-center p-6 sm:p-10 border border-outline-subtle">
-        <img
-          id="main-product-image"
-          src={activeUrl}
-          alt={`${productName} — View ${activeIndex + 1}`}
-          className="w-full h-full object-contain mix-blend-multiply transition-all duration-200"
-          onError={() => handleImageError(activeIndex)}
-        />
-
-        {galleryImages.length > 1 && (
-          <>
-            {/* Prev Button */}
-            <button
-              type="button"
-              onClick={handlePrev}
-              aria-label="Previous product image"
-              className="absolute left-4 top-1/2 -translate-y-1/2 inline-flex items-center justify-center w-10 h-10 rounded-full bg-pure-white border border-outline-subtle text-on-pure-white hover:border-deep-black shadow-sm transition-colors duration-150 cursor-pointer"
-            >
-              <ChevronLeft className="w-5 h-5 text-deep-black" />
-            </button>
-
-            {/* Next Button */}
-            <button
-              type="button"
-              onClick={handleNext}
-              aria-label="Next product image"
-              className="absolute right-4 top-1/2 -translate-y-1/2 inline-flex items-center justify-center w-10 h-10 rounded-full bg-pure-white border border-outline-subtle text-on-pure-white hover:border-deep-black shadow-sm transition-colors duration-150 cursor-pointer"
-            >
-              <ChevronRight className="w-5 h-5 text-deep-black" />
-            </button>
-          </>
-        )}
+    <div className={`flex flex-col gap-space-md ${className}`}>
+      {/* Main Image Card */}
+      <div className="relative bg-surface-container-lowest rounded-2xl p-space-md sm:p-space-xl flex flex-col items-center justify-center shadow-sm border border-surface-container/60 overflow-hidden group">
+        <div className="relative w-full aspect-square max-w-[440px] my-space-sm flex items-center justify-center overflow-hidden">
+          <img
+            id="main-product-image"
+            src={activeUrl}
+            alt={`${productName} view ${activeIndex + 1}`}
+            className="w-full h-full object-contain p-2 transition-transform duration-300 ease-out group-hover:scale-105"
+            onError={() => handleImageError(activeIndex)}
+          />
+        </div>
+        <div className="text-center font-label-sm text-label-sm text-outline select-none mt-1">
+          <span>Image {Math.max(1, activeIndex + 1)} of {galleryImages.length}</span>
+        </div>
       </div>
 
       {/* Selectable Image Thumbnails */}
       {galleryImages.length > 1 && (
-        <div className="grid grid-cols-4 gap-3 sm:gap-4">
-          {galleryImages.map((imgUrl, idx) => {
-            const isSelected = idx === activeIndex;
-            const thumbUrl = failedIndices.has(idx) ? fallbackImage : imgUrl;
+        <div role="region" aria-label="Product thumbnails" className="grid grid-cols-4 sm:grid-cols-4 gap-space-sm">
+          {galleryImages.map((imgUrl, index) => {
+            const isActive = index === activeIndex;
+            const isFailed = failedIndices.has(index);
+            const thumbSrc = isFailed ? fallbackImage : imgUrl;
+
             return (
               <button
-                key={idx}
+                key={index}
                 type="button"
-                onClick={() => setActiveIndex(idx)}
-                aria-label={`View image ${idx + 1}`}
-                aria-pressed={isSelected}
-                className={`gallery-thumb aspect-square bg-light-gray rounded-sm p-2 overflow-hidden transition-all duration-150 cursor-pointer flex items-center justify-center ${
-                  isSelected
-                    ? "border-2 border-deep-black"
-                    : "border border-outline-subtle hover:border-deep-black"
+                onClick={() => setActiveIndex(index)}
+                aria-label={`Thumbnail ${index + 1}`}
+                className={`relative aspect-square rounded-xl overflow-hidden bg-surface-container-lowest p-1.5 border-2 transition-all cursor-pointer ${
+                  isActive
+                    ? "border-primary shadow-xs ring-2 ring-primary/20"
+                    : "border-surface-container hover:border-outline-variant/60"
                 }`}
               >
                 <img
-                  src={thumbUrl}
-                  alt={`${productName} thumbnail ${idx + 1}`}
-                  className="w-full h-full object-contain mix-blend-multiply"
-                  onError={() => handleImageError(idx)}
+                  src={thumbSrc}
+                  alt={`${productName} thumbnail ${index + 1}`}
+                  className="w-full h-full object-contain p-1"
+                  onError={() => handleImageError(index)}
                 />
               </button>
             );

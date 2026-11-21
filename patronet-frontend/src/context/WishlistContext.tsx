@@ -1,6 +1,7 @@
 import * as React from 'react';
 import { wishlistService } from '@/services';
 import type { WishlistState, WishlistItem } from '@/services/api/wishlistService';
+import { useAuth } from './AuthContext';
 
 interface WishlistContextValue {
   items: WishlistItem[];
@@ -18,6 +19,7 @@ interface WishlistContextValue {
 const WishlistContext = React.createContext<WishlistContextValue | undefined>(undefined);
 
 export const WishlistProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
+  const { isAuthenticated, user, loading: authLoading } = useAuth();
   const [wishlist, setWishlist] = React.useState<WishlistState>({
     items: [],
     updatedAt: new Date().toISOString(),
@@ -26,6 +28,14 @@ export const WishlistProvider: React.FC<{ children: React.ReactNode }> = ({ chil
   const [error, setError] = React.useState<string | null>(null);
 
   const refreshWishlist = React.useCallback(async () => {
+    if (authLoading) return;
+
+    if (!isAuthenticated) {
+      setWishlist({ items: [], updatedAt: new Date().toISOString() });
+      setLoading(false);
+      return;
+    }
+
     try {
       setLoading(true);
       setError(null);
@@ -36,11 +46,12 @@ export const WishlistProvider: React.FC<{ children: React.ReactNode }> = ({ chil
     } finally {
       setLoading(false);
     }
-  }, []);
+  }, [isAuthenticated, authLoading]);
 
+  // Synchronize wishlist with customer identity (ensures account isolation)
   React.useEffect(() => {
     refreshWishlist();
-  }, [refreshWishlist]);
+  }, [refreshWishlist, user?.id]);
 
   const addToWishlist = React.useCallback(async (productId: string) => {
     try {

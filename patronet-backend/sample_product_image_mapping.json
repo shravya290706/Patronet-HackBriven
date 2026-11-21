@@ -1,0 +1,203 @@
+[
+  {
+    "sku": "PN-SYN-08-0102",
+    "product_name": "Fastrack Bi-Fold Wallet Brown",
+    "brand": "Fastrack",
+    "category": "Accessories",
+    "image_url": "https://images.unsplash.com/photo-1627123424574-724758594e93?w=800&auto=format&fit=crop&q=80",
+    "image_source": "Unsplash (Unsplash License - Free commercial use)",
+    "match_type": "category-representative",
+    "match_details": "Genuine leather bi-fold brown wallet studio product photograph"
+  },
+  {
+    "sku": "PN-SYN-08-0601",
+    "product_name": "Fastrack Passport Wallet Black",
+    "brand": "Fastrack",
+    "category": "Accessories",
+    "image_url": "https://images.unsplash.com/photo-1544816155-12df9643f363?w=800&auto=format&fit=crop&q=80",
+    "image_source": "Unsplash (Unsplash License - Free commercial use)",
+    "match_type": "category-representative",
+    "match_details": "Black genuine leather travel wallet and passport holder"
+  },
+  {
+    "sku": "PN-SYN-09-0301",
+    "product_name": "Bajaj Bottom-Freezer Refrigerator 180 L",
+    "brand": "Bajaj",
+    "category": "Appliances",
+    "image_url": "https://images.unsplash.com/photo-1584992236310-6edddc08acff?w=800&auto=format&fit=crop&q=80",
+    "image_source": "Unsplash (Unsplash License - Free commercial use)",
+    "match_type": "category-representative",
+    "match_details": "Stainless steel bottom-freezer refrigerator appliance"
+  },
+  {
+    "sku": "PN-SYN-09-0101",
+    "product_name": "LG Single-Door Refrigerator 180 L",
+    "brand": "LG",
+    "category": "Appliances",
+    "image_url": "https://images.unsplash.com/photo-1571175443880-49e1d25b2bc5?w=800&auto=format&fit=crop&q=80",
+    "image_source": "Unsplash (Unsplash License - Free commercial use)",
+    "match_type": "category-representative",
+    "match_details": "Modern single-door kitchen refrigerator appliance"
+  },
+  {
+    "sku": "PN-SYN-05-0103",
+    "product_name": "Himalaya Face Cleanser 150 ml",
+    "brand": "Himalaya",
+    "category": "Beauty & Personal Care",
+    "image_url": "https://images.unsplash.com/photo-1556228720-195a672e8a03?w=800&auto=format&fit=crop&q=80",
+    "image_source": "Unsplash (Unsplash License - Free commercial use)",
+    "match_type": "category-representative",
+    "match_details": "Herbal facial skin cleanser pump bottle on clean surface"
+  },
+  {
+    "sku": "PN-SYN-07-0502",
+    "product_name": "Amar Chitra Katha Children's Storybook Hardcover English",
+    "brand": "Amar Chitra Katha",
+    "category": "Books",
+    "image_url": "https://images.unsplash.com/photo-1544716278-ca5e3f4abd8c?w=800&auto=format&fit=crop&q=80",
+    "image_source": "Unsplash (Unsplash License - Free commercial use)",
+    "match_type": "category-representative",
+    "match_details": "Illustrated children's hardcover book open on table"
+  },
+  {
+    "sku": "PN-SYN-01-0405",
+    "product_name": "Apple 2-in-1 Laptop 1 TB",
+    "brand": "Apple",
+    "category": "Electronics",
+    "image_url": "https://images.unsplash.com/photo-1517336714731-489689fd1ca8?w=800&auto=format&fit=crop&q=80",
+    "image_source": "Unsplash (Unsplash License - Free commercial use)",
+    "match_type": "category-representative",
+    "match_details": "Aluminum ultrabook laptop on clean minimal workspace"
+  },
+  {
+    "sku": "PN-SYN-01-0101",
+    "product_name": "Apple Smartphone 128 GB",
+    "brand": "Apple",
+    "category": "Electronics",
+    "image_url": "https://images.unsplash.com/photo-1511707171634-5f897ff02aa9?w=800&auto=format&fit=crop&q=80",
+    "image_source": "Unsplash (Unsplash License - Free commercial use)",
+    "match_type": "category-representative",
+    "match_details": "Modern glass and aluminum touchscreen smartphone"
+  },
+  {
+    "sku": "PN-SYN-02-0205",
+    "product_name": "Allen Solly Casual Shirt XXL Maroon",
+    "brand": "Allen Solly",
+    "category": "Fashion",
+    "image_url": "https://images.unsplash.com/photo-1596755094514-f87e34085b2c?w=800&auto=format&fit=crop&q=80",
+    "image_source": "Unsplash (Unsplash License - Free commercial use)",
+    "match_type": "category-representative",
+    "match_details": "Neatly folded cotton button-up long sleeve casual shirt"
+  },
+  {
+    "sku": "PN-SYN-04-0102",
+    "product_name": "Aashirvaad Basmati Rice 1 kg Pack",
+    "brand": "Aashirvaad",
+    "category": "Grocery",
+    "url": "https://images.unsplash.com/photo-1586201375761-83865001e31c?w=800&auto=format&fit=crop&q=80",
+    "image_url": "https://images.unsplash.com/photo-1586201375761-83865001e31c?w=800&auto=format&fit=crop&q=80",
+    "image_source": "Unsplash (Unsplash License - Free commercial use)",
+    "match_type": "category-representative",
+    "match_details": "Uncooked long-grain white basmati rice in culinary bowl"
+  },
+  {
+    "sku": "PN-SYN-13-0201",
+    "product_name": "Bajaj Fitted Bedsheet Single",
+    "brand": "Bajaj",
+    "category": "Home Furnishings",
+    "image_url": "https://images.unsplash.com/photo-1522771739844-6a9f6d5f14af?w=800&auto=format&fit=crop&q=80",
+    "image_source": "Unsplash (Unsplash License - Free commercial use)",
+    "match_type": "category-representative",
+    "match_details": "Comfortable cotton fitted bedsheet styled in bedroom"
+  },
+  {
+    "sku": "PN-SYN-03-0302",
+    "product_name": "Bajaj Airtight Canister 1.0 L",
+    "brand": "Bajaj",
+    "category": "Home & Kitchen",
+    "image_url": "https://images.unsplash.com/photo-1584308666744-24d5c474f2ae?w=800&auto=format&fit=crop&q=80",
+    "image_source": "Unsplash (Unsplash License - Free commercial use)",
+    "match_type": "category-representative",
+    "match_details": "Glass airtight kitchen storage container canister with clamp"
+  },
+  {
+    "sku": "PN-SYN-11-0603",
+    "product_name": "Allen Solly Casual Shirt L White",
+    "brand": "Allen Solly",
+    "category": "Men's Fashion",
+    "image_url": "https://images.unsplash.com/photo-1602810318383-e386cc2a3ccf?w=800&auto=format&fit=crop&q=80",
+    "image_source": "Unsplash (Unsplash License - Free commercial use)",
+    "match_type": "category-representative",
+    "match_details": "Pure white pressed men's cotton casual shirt on wooden hanger"
+  },
+  {
+    "sku": "PN-SYN-10-0102",
+    "product_name": "Apple Compact Power Bank 10000 mAh",
+    "brand": "Apple",
+    "category": "Mobile Accessories",
+    "image_url": "https://images.unsplash.com/photo-1609091839311-d5365f9ff1c5?w=800&auto=format&fit=crop&q=80",
+    "image_source": "Unsplash (Unsplash License - Free commercial use)",
+    "match_type": "category-representative",
+    "match_details": "Portable slim external battery pack power bank"
+  },
+  {
+    "sku": "PN-SYN-16-0102",
+    "product_name": "Fastrack Cabin Suitcase 30 L",
+    "brand": "Fastrack",
+    "category": "Outdoor & Travel",
+    "image_url": "https://images.unsplash.com/photo-1565538810643-b5bdb714032a?w=800&auto=format&fit=crop&q=80",
+    "image_source": "Unsplash (Unsplash License - Free commercial use)",
+    "match_type": "category-representative",
+    "match_details": "Hardshell spinner wheeled cabin trolley travel suitcase"
+  },
+  {
+    "sku": "PN-SYN-15-0602",
+    "product_name": "Himalaya Body Lotion 200 ml",
+    "brand": "Himalaya",
+    "category": "Personal Care",
+    "image_url": "https://images.unsplash.com/photo-1571781926291-c477ebfd024b?w=800&auto=format&fit=crop&q=80",
+    "image_source": "Unsplash (Unsplash License - Free commercial use)",
+    "match_type": "category-representative",
+    "match_details": "Skincare nourishing body lotion pump bottle on neutral backdrop"
+  },
+  {
+    "sku": "PN-SYN-18-0303",
+    "product_name": "Drools Adult Cat Food 2 kg Pack",
+    "brand": "Drools",
+    "category": "Pet Supplies",
+    "image_url": "https://images.unsplash.com/photo-1589924691995-400dc9ecc119?w=800&auto=format&fit=crop&q=80",
+    "image_source": "Unsplash (Unsplash License - Free commercial use)",
+    "match_type": "category-representative",
+    "match_details": "Wholesome dry pet kibble in pet bowl"
+  },
+  {
+    "sku": "PN-SYN-14-0405",
+    "product_name": "Aashirvaad Baked Chips 1 kg Pack",
+    "brand": "Aashirvaad",
+    "category": "Snacks & Beverages",
+    "image_url": "https://images.unsplash.com/photo-1566478989037-eec170784d0b?w=800&auto=format&fit=crop&q=80",
+    "image_source": "Unsplash (Unsplash License - Free commercial use)",
+    "match_type": "category-representative",
+    "match_details": "Golden crispy baked potato chips in serving bowl"
+  },
+  {
+    "sku": "PN-SYN-06-0204",
+    "product_name": "Cosco Exercise Mat 8 mm",
+    "brand": "Cosco",
+    "category": "Sports & Fitness",
+    "image_url": "https://images.unsplash.com/photo-1601925260368-ae2f83cf8b7f?w=800&auto=format&fit=crop&q=80",
+    "image_source": "Unsplash (Unsplash License - Free commercial use)",
+    "match_type": "category-representative",
+    "match_details": "Rolled yoga fitness exercise mat in fitness setting"
+  },
+  {
+    "sku": "PN-SYN-17-0601",
+    "product_name": "Funskool Art Activity Kit 3+ years",
+    "brand": "Funskool",
+    "category": "Toys & Games",
+    "image_url": "https://images.unsplash.com/photo-1513542789411-b6a5d4f31634?w=800&auto=format&fit=crop&q=80",
+    "image_source": "Unsplash (Unsplash License - Free commercial use)",
+    "match_type": "category-representative",
+    "match_details": "Art craft kit featuring colored pencils, drawing tools, and sketch paper"
+  }
+]

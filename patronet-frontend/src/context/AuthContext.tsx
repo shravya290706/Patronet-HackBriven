@@ -89,7 +89,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       setSession({
         user: result.user,
         isAuthenticated: true,
-        isDemoSession: true,
+        isDemoSession: Boolean(result.user.isDemoUser),
       });
     } else if (result.error) {
       setError(result.error);
@@ -104,7 +104,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       setSession({
         user: result.user,
         isAuthenticated: true,
-        isDemoSession: true,
+        isDemoSession: Boolean(result.user.isDemoUser),
       });
     } else if (result.error) {
       setError(result.error);

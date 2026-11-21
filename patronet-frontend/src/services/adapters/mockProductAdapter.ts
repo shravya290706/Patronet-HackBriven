@@ -1,4 +1,4 @@
-import type { Product, ProductQuery, PaginatedProducts } from '../../types';
+import type { Product, ProductQuery, PaginatedProducts, SearchSuggestions } from '../../types';
 import type { IProductService } from '../api/productService';
 import { MOCK_PRODUCTS } from '../../mocks/products';
 
@@ -33,6 +33,21 @@ export class MockProductAdapter implements IProductService {
     await new Promise((r) => setTimeout(r, 60));
     const found = MOCK_PRODUCTS.find((p) => p.id === id || p.slug === id);
     return found || null;
+  }
+
+  async getCategories(): Promise<Array<{ id: string; name: string; productCount: number }>> {
+    return [
+      { id: '1', name: 'Laptops', productCount: 12 },
+      { id: '2', name: 'Audio', productCount: 8 },
+      { id: '3', name: 'Monitors', productCount: 6 },
+      { id: '4', name: 'Wearables', productCount: 5 },
+      { id: '5', name: 'Accessories', productCount: 15 },
+      { id: '6', name: 'Gaming', productCount: 10 },
+    ];
+  }
+
+  async getSuggestions(query: string): Promise<SearchSuggestions> {
+    return { query, products: [], categories: [], brands: [], corrections: [] };
   }
 
   private filterAndSort(products: Product[], query?: ProductQuery): Product[] {

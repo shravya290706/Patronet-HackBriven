@@ -14,6 +14,8 @@ export const BestSellers: React.FC<BestSellersProps> = ({ products }) => {
   const { addItem: addCartItem } = useCart();
   const [compareIds, setCompareIds] = React.useState<Set<string>>(new Set());
 
+  const productList = Array.isArray(products) ? products : [];
+
   const handleToggleCompare = (product: Product) => {
     setCompareIds((prev) => {
       const next = new Set(prev);
@@ -58,7 +60,7 @@ export const BestSellers: React.FC<BestSellersProps> = ({ products }) => {
 
       {/* 4-Column Structured Retail Grid */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 items-stretch">
-        {products.map((product) => (
+        {productList.map((product) => (
           <ProductCard
             key={product.id}
             product={product}

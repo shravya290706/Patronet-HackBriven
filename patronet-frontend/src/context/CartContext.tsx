@@ -1,6 +1,7 @@
 import * as React from 'react';
 import { cartService } from '@/services';
 import type { CartModel } from '@/services/api/cartService';
+import { useAuth } from './AuthContext';
 
 interface CartContextValue {
   cart: CartModel;
@@ -17,12 +18,21 @@ interface CartContextValue {
 const CartContext = React.createContext<CartContextValue | undefined>(undefined);
 
 export const CartProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
+  const { isAuthenticated, user, loading: authLoading } = useAuth();
   const [cart, setCart] = React.useState<CartModel>({ items: [], updatedAt: new Date().toISOString() });
   const [loading, setLoading] = React.useState<boolean>(true);
   const [error, setError] = React.useState<string | null>(null);
 
-  // Load initial cart
+  // Load cart synchronized with authenticated customer session
   const refreshCart = React.useCallback(async () => {
+    if (authLoading) return;
+
+    if (!isAuthenticated) {
+      setCart({ items: [], updatedAt: new Date().toISOString() });
+      setLoading(false);
+      return;
+    }
+
     try {
       setLoading(true);
       setError(null);
@@ -33,11 +43,12 @@ export const CartProvider: React.FC<{ children: React.ReactNode }> = ({ children
     } finally {
       setLoading(false);
     }
-  }, []);
+  }, [isAuthenticated, authLoading]);
 
+  // Synchronize cart with customer identity (ensures account isolation)
   React.useEffect(() => {
     refreshCart();
-  }, [refreshCart]);
+  }, [refreshCart, user?.id]);
 
   const addItem = React.useCallback(async (productId: string, quantity = 1) => {
     try {

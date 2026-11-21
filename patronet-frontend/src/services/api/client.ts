@@ -19,8 +19,36 @@ export class ApiError extends Error {
   }
 }
 
+const AUTH_TOKEN_KEY = 'patronet_access_token';
+
+export function getAuthToken(): string | null {
+  try {
+    return localStorage.getItem(AUTH_TOKEN_KEY);
+  } catch {
+    return null;
+  }
+}
+
+export function setAuthToken(token: string): void {
+  try {
+    localStorage.setItem(AUTH_TOKEN_KEY, token);
+  } catch {
+    // Ignore storage errors in restricted contexts
+  }
+}
+
+export function clearAuthToken(): void {
+  try {
+    localStorage.removeItem(AUTH_TOKEN_KEY);
+  } catch {
+    // Ignore storage errors in restricted contexts
+  }
+}
+
 const getBaseUrl = (): string => {
-  return import.meta.env.VITE_API_BASE_URL || 'http://localhost:8000/api/v1';
+  const envUrl = import.meta.env.VITE_API_BASE_URL || import.meta.env.VITE_API_URL || 'http://localhost:8000';
+  const cleanUrl = envUrl.replace(/\/+$/, '');
+  return cleanUrl.endsWith('/api/v1') ? cleanUrl : `${cleanUrl}/api/v1`;
 };
 
 export async function apiClient<T>(endpoint: string, options: RequestOptions = {}): Promise<T> {
@@ -41,10 +69,15 @@ export async function apiClient<T>(endpoint: string, options: RequestOptions = {
     }
   }
 
-  const defaultHeaders: HeadersInit = {
+  const defaultHeaders: Record<string, string> = {
     'Content-Type': 'application/json',
     'Accept': 'application/json',
   };
+
+  const token = getAuthToken();
+  if (token) {
+    defaultHeaders['Authorization'] = `Bearer ${token}`;
+  }
 
   const response = await fetch(url, {
     ...restOptions,
@@ -61,9 +94,21 @@ export async function apiClient<T>(endpoint: string, options: RequestOptions = {
     } catch {
       // response might be empty or non-JSON
     }
-    const message = (errorData && typeof errorData === 'object' && 'message' in errorData)
-      ? String((errorData as { message: unknown }).message)
-      : `HTTP Error ${response.status}: ${response.statusText}`;
+
+    let message = `HTTP Error ${response.status}: ${response.statusText}`;
+    if (errorData && typeof errorData === 'object') {
+      const rec = errorData as Record<string, unknown>;
+      if (typeof rec.detail === 'string') {
+        message = rec.detail;
+      } else if (Array.isArray(rec.detail) && rec.detail.length > 0) {
+        const first = rec.detail[0];
+        if (first && typeof first === 'object' && 'msg' in first) {
+          message = String(first.msg);
+        }
+      } else if (typeof rec.message === 'string') {
+        message = rec.message;
+      }
+    }
       
     throw new ApiError(message, response.status, errorData);
   }

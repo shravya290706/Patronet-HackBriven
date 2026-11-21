@@ -48,19 +48,47 @@ class Settings:
 
     # --- Future Architecture Integrations (Phase 2+) ---
 
-    # Database (PostgreSQL) placeholder
+    # Database (PostgreSQL)
     DATABASE_URL: str = os.getenv(
         "DATABASE_URL",
         "postgresql://patronet:patronet@localhost:5432/patronet_db",
     )
 
-    # Event Streaming (Apache Kafka) placeholder
+    # Authentication & JWT
+    JWT_SECRET_KEY: str = os.getenv("JWT_SECRET_KEY", "")
+    JWT_ALGORITHM: str = os.getenv("JWT_ALGORITHM", "HS256")
+    ACCESS_TOKEN_EXPIRE_MINUTES: int = int(
+        os.getenv("ACCESS_TOKEN_EXPIRE_MINUTES", "60")
+    )
+
+    # Search Engine (OpenSearch)
+    OPENSEARCH_URL: str = os.getenv("OPENSEARCH_URL", "http://localhost:9200")
+    OPENSEARCH_HOST: str = os.getenv("OPENSEARCH_HOST", "")
+    OPENSEARCH_PORT: int = int(os.getenv("OPENSEARCH_PORT", "9200"))
+    OPENSEARCH_USERNAME: str = os.getenv("OPENSEARCH_USERNAME", "")
+    OPENSEARCH_PASSWORD: str = os.getenv("OPENSEARCH_PASSWORD", "")
+    OPENSEARCH_USE_SSL: bool = os.getenv("OPENSEARCH_USE_SSL", "true").lower() in (
+        "true",
+        "1",
+        "yes",
+    )
+    OPENSEARCH_INDEX_NAME: str = os.getenv(
+        "OPENSEARCH_INDEX_NAME", "patronet_products"
+    )
+
+    # Event Streaming (Apache Kafka)
     KAFKA_BOOTSTRAP_SERVERS: str = os.getenv(
         "KAFKA_BOOTSTRAP_SERVERS", "localhost:9092"
     )
-
-    # Search Engine (OpenSearch) placeholder
-    OPENSEARCH_URL: str = os.getenv("OPENSEARCH_URL", "http://localhost:9200")
+    KAFKA_SECURITY_PROTOCOL: str = os.getenv(
+        "KAFKA_SECURITY_PROTOCOL", "SASL_SSL"
+    )
+    KAFKA_SASL_MECHANISM: str = os.getenv("KAFKA_SASL_MECHANISM", "PLAIN")
+    KAFKA_USERNAME: str = os.getenv("KAFKA_USERNAME", "")
+    KAFKA_PASSWORD: str = os.getenv("KAFKA_PASSWORD", "")
+    KAFKA_ORDER_EVENTS_TOPIC: str = os.getenv(
+        "KAFKA_ORDER_EVENTS_TOPIC", "patronet.order.events"
+    )
 
 
 settings = Settings()

@@ -1,47 +1,26 @@
 import * as React from "react";
-import { useSearchParams, Link } from "react-router-dom";
-import { SlidersHorizontal, SearchX, X } from "lucide-react";
-import { toast } from "sonner";
+import { useSearchParams } from "react-router-dom";
+import { Filter, RotateCcw, X, Grid, ChevronDown, AlertCircle } from "lucide-react";
 import { Container } from "@/components/layout/Container";
 import { ProductCard } from "@/components/products/ProductCard";
 import { ProductFilters, type CategoryCount, type BrandCount } from "@/components/products/ProductFilters";
 import { Pagination } from "@/components/products/Pagination";
-import { ComparisonBar } from "@/components/products/ComparisonBar";
-import { LoadingSpinner } from "@/components/ui/LoadingSpinner";
-import { ErrorState } from "@/components/ui/ErrorState";
-import { useComparison } from "@/context/ComparisonContext";
-import { useCart } from "@/context/CartContext";
 import { productService } from "@/services";
 import type { Product, ProductSortOption, PaginatedProducts } from "@/types";
 
+const PAGE_SIZE = 12;
+
 export const ProductsPage: React.FC = () => {
   const [searchParams, setSearchParams] = useSearchParams();
-  const { toggleProduct, isSelected } = useComparison();
-  const { addItem: addCartItem } = useCart();
 
-  // Read URL search parameters primitive values
+  // Read URL search parameters
   const searchQuery = searchParams.get("q") || "";
-  const categoryParam = searchParams.get("category") || "";
-  const categoriesRaw = searchParams.getAll("cat").join(",");
-  const brandsRaw = searchParams.getAll("brand").join(",");
-  const minPriceParam = Number(searchParams.get("minPrice") || 0);
-  const maxPriceParam = Number(searchParams.get("maxPrice") || 150000);
-  const inStockParam = searchParams.get("inStock") === "true";
-  const sortParam = (searchParams.get("sort") as ProductSortOption) || "featured";
+  const categoryParam = searchParams.get("category") || searchParams.get("cat") || "";
+  const brandParam = searchParams.get("brand") || "";
+  const minPriceParam = searchParams.get("minPrice") ? Number(searchParams.get("minPrice")) : undefined;
+  const maxPriceParam = searchParams.get("maxPrice") ? Number(searchParams.get("maxPrice")) : undefined;
+  const sortParam = (searchParams.get("sort") as ProductSortOption) || "newest";
   const pageParam = Math.max(1, Number(searchParams.get("page") || 1));
-
-  // Stabilize array references with React.useMemo based on primitive serialized strings
-  const selectedCategories = React.useMemo(() => {
-    const list = categoriesRaw ? categoriesRaw.split(",") : [];
-    if (categoryParam && !list.includes(categoryParam)) {
-      list.push(categoryParam);
-    }
-    return list;
-  }, [categoryParam, categoriesRaw]);
-
-  const selectedBrands = React.useMemo(() => {
-    return brandsRaw ? brandsRaw.split(",") : [];
-  }, [brandsRaw]);
 
   // Mobile drawer state
   const [isMobileFiltersOpen, setIsMobileFiltersOpen] = React.useState(false);
@@ -51,51 +30,71 @@ export const ProductsPage: React.FC = () => {
     items: [],
     total: 0,
     page: 1,
-    pageSize: 9,
+    pageSize: PAGE_SIZE,
     totalPages: 1,
   });
   const [allProducts, setAllProducts] = React.useState<Product[]>([]);
   const [loading, setLoading] = React.useState<boolean>(true);
   const [error, setError] = React.useState<string | null>(null);
 
-  // Fetch all products once to dynamically derive category & brand facets
+  const [dbCategories, setDbCategories] = React.useState<CategoryCount[]>([]);
+
+  // Fetch categories from API to populate accurate categories and counts
   React.useEffect(() => {
     let isMounted = true;
-    productService.getProducts().then((data) => {
-      if (isMounted) setAllProducts(data);
-    }).catch(() => {});
-    return () => { isMounted = false; };
+    if (productService.getCategories) {
+      productService.getCategories()
+        .then((cats) => {
+          if (isMounted && Array.isArray(cats) && cats.length > 0) {
+            setDbCategories(cats.map((c) => ({ name: c.name, count: c.productCount })));
+          }
+        })
+        .catch(() => {});
+    }
+    return () => {
+      isMounted = false;
+    };
+  }, []);
+
+  // Fetch product sample across catalogue to dynamically derive brand facets
+  React.useEffect(() => {
+    let isMounted = true;
+    productService.getProducts({ pageSize: 150 })
+      .then((data) => {
+        if (isMounted) setAllProducts(Array.isArray(data) ? data : []);
+      })
+      .catch(() => {});
+    return () => {
+      isMounted = false;
+    };
   }, []);
 
   // Compute dynamic facets
   const categoryFacets: CategoryCount[] = React.useMemo(() => {
-    const counts: Record<string, number> = {
-      Laptops: 0,
-      Audio: 0,
-      Monitors: 0,
-      Wearables: 0,
-      Accessories: 0,
-      Gaming: 0,
-    };
+    if (dbCategories.length > 0) {
+      return dbCategories;
+    }
+    const counts: Record<string, number> = {};
     allProducts.forEach((p) => {
-      const cat = String(p.category?.name || p.specifications?.['Category'] || '');
-      if (counts[cat] !== undefined) {
-        counts[cat] += 1;
+      const cat = String(p.category?.name || p.specifications?.Category || "");
+      if (cat) {
+        counts[cat] = (counts[cat] || 0) + 1;
+      }
+    });
+    return Object.entries(counts).map(([name, count]) => ({ name, count }));
+  }, [dbCategories, allProducts]);
+
+  const brandFacets: BrandCount[] = React.useMemo(() => {
+    const counts: Record<string, number> = {};
+    allProducts.forEach((p) => {
+      if (p.brand) {
+        counts[p.brand] = (counts[p.brand] || 0) + 1;
       }
     });
     return Object.entries(counts).map(([name, count]) => ({ name, count }));
   }, [allProducts]);
 
-  const brandFacets: BrandCount[] = React.useMemo(() => {
-    const counts: Record<string, number> = {};
-    allProducts.forEach((p) => {
-      if (!counts[p.brand]) counts[p.brand] = 0;
-      counts[p.brand] += 1;
-    });
-    return Object.entries(counts).map(([name, count]) => ({ name, count }));
-  }, [allProducts]);
-
-  // Load paginated & filtered products on query state changes with request cancellation guard
+  // Load paginated & filtered products on query state changes
   React.useEffect(() => {
     let active = true;
 
@@ -106,14 +105,13 @@ export const ProductsPage: React.FC = () => {
 
         const res = await productService.getPaginatedProducts({
           search: searchQuery,
-          categories: selectedCategories,
-          brands: selectedBrands,
-          minPrice: minPriceParam > 0 ? minPriceParam : undefined,
-          maxPrice: maxPriceParam < 150000 ? maxPriceParam : undefined,
-          inStockOnly: inStockParam,
+          categories: categoryParam ? [categoryParam] : undefined,
+          brands: brandParam ? [brandParam] : undefined,
+          minPrice: minPriceParam,
+          maxPrice: maxPriceParam,
           sort: sortParam,
           page: pageParam,
-          pageSize: 9,
+          pageSize: PAGE_SIZE,
         });
 
         if (active) {
@@ -133,26 +131,14 @@ export const ProductsPage: React.FC = () => {
     return () => {
       active = false;
     };
-  }, [
-    searchQuery,
-    selectedCategories,
-    selectedBrands,
-    minPriceParam,
-    maxPriceParam,
-    inStockParam,
-    sortParam,
-    pageParam,
-  ]);
+  }, [searchQuery, categoryParam, brandParam, minPriceParam, maxPriceParam, sortParam, pageParam]);
 
   // URL State Mutators
-  const updateParams = (newParams: Record<string, string | string[] | null>) => {
+  const updateParams = (newParams: Record<string, string | null>) => {
     const next = new URLSearchParams(searchParams);
     Object.entries(newParams).forEach(([key, value]) => {
       if (value === null) {
         next.delete(key);
-      } else if (Array.isArray(value)) {
-        next.delete(key);
-        value.forEach((v) => next.append(key, v));
       } else {
         next.set(key, value);
       }
@@ -160,27 +146,17 @@ export const ProductsPage: React.FC = () => {
     setSearchParams(next, { replace: true });
   };
 
-  const handleToggleCategory = (catName: string) => {
-    const exists = selectedCategories.includes(catName);
-    const updated = exists
-      ? selectedCategories.filter((c) => c !== catName)
-      : [...selectedCategories, catName];
-
+  const handleSelectCategory = (catName: string) => {
     updateParams({
-      category: null, // clear single category in favor of multi
-      cat: updated.length > 0 ? updated : null,
+      category: catName || null,
+      cat: null,
       page: "1",
     });
   };
 
-  const handleToggleBrand = (brandName: string) => {
-    const exists = selectedBrands.includes(brandName);
-    const updated = exists
-      ? selectedBrands.filter((b) => b !== brandName)
-      : [...selectedBrands, brandName];
-
+  const handleSelectBrand = (brandName: string) => {
     updateParams({
-      brand: updated.length > 0 ? updated : null,
+      brand: brandName || null,
       page: "1",
     });
   };
@@ -189,13 +165,6 @@ export const ProductsPage: React.FC = () => {
     updateParams({
       minPrice: min > 0 ? String(min) : null,
       maxPrice: max < 150000 ? String(max) : null,
-      page: "1",
-    });
-  };
-
-  const handleToggleInStock = (inStock: boolean) => {
-    updateParams({
-      inStock: inStock ? "true" : null,
       page: "1",
     });
   };
@@ -216,212 +185,325 @@ export const ProductsPage: React.FC = () => {
     setSearchParams(new URLSearchParams(), { replace: true });
   };
 
-  const handleAddToCart = async (product: Product) => {
-    try {
-      await addCartItem(product.id, 1);
-      toast.success(`Added 1 × ${product.name} to cart.`);
-    } catch {
-      toast.error(`Failed to add ${product.name} to cart.`);
-    }
-  };
+  // Active filter count
+  const activeFilterCount =
+    (categoryParam ? 1 : 0) +
+    (brandParam ? 1 : 0) +
+    (minPriceParam !== undefined || maxPriceParam !== undefined ? 1 : 0);
+
+  const priceFilterLabel =
+    minPriceParam !== undefined && maxPriceParam !== undefined
+      ? `Price: ₹${minPriceParam} - ₹${maxPriceParam}`
+      : minPriceParam !== undefined
+      ? `Price: > ₹${minPriceParam}`
+      : maxPriceParam !== undefined
+      ? `Price: < ₹${maxPriceParam}`
+      : null;
+
+  const startItem = paginatedData.total === 0 ? 0 : (paginatedData.page - 1) * PAGE_SIZE + 1;
+  const endItem = Math.min(paginatedData.page * PAGE_SIZE, paginatedData.total);
 
   return (
-    <div className="w-full pb-16">
-      <Container className="py-8">
-        {/* Breadcrumb Navigation */}
-        <nav aria-label="Breadcrumb" className="flex items-center gap-2 font-label text-sm text-muted-gray mb-4">
-          <Link to="/" className="hover:text-on-pure-white transition-colors duration-150">Home</Link>
-          <span aria-hidden="true">/</span>
-          <Link to="/products" className="hover:text-on-pure-white transition-colors duration-150">Shop All</Link>
-          <span aria-hidden="true">/</span>
-          <span className="text-on-pure-white font-medium">
-            {selectedCategories.length === 1 ? selectedCategories[0] : "Electronics"}
-          </span>
-        </nav>
-
-        {/* Catalogue Header Bar */}
-        <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 pb-6 border-b border-outline-subtle mb-8">
-          <div className="flex flex-col gap-1">
-            <div className="flex flex-wrap items-center gap-3">
-              <h1 className="font-headline text-2xl md:text-3xl font-bold text-on-pure-white">
-                Explore products.
+    <div className="w-full py-space-sm pb-space-xl">
+      <Container>
+        {/* 1. Header Banner */}
+        <div className="w-full bg-gradient-to-r from-surface-container-low via-surface-container to-surface-container-low rounded-2xl p-space-lg sm:p-space-xl border border-surface-container/80 relative overflow-hidden mb-space-md">
+          <div className="flex flex-col md:flex-row md:items-center justify-between gap-space-md relative z-10">
+            <div className="space-y-space-xs max-w-2xl">
+              <div className="flex items-center gap-2 mb-1">
+                <span className="px-2.5 py-0.5 rounded-full bg-primary-fixed text-on-primary-fixed-variant font-label-sm text-label-sm font-semibold">
+                  Catalog
+                </span>
+                <span className="px-2.5 py-0.5 rounded-full bg-secondary-fixed text-on-secondary-fixed-variant font-label-sm text-label-sm font-semibold">
+                  Pan-India Delivery
+                </span>
+              </div>
+              <h1 className="font-headline-lg text-headline-lg text-primary tracking-tight font-bold">
+                {categoryParam || (searchQuery ? `Search: "${searchQuery}"` : "All Products & Tech Accessories")}
               </h1>
-              <span className="font-label text-sm text-muted-gray tabular-nums">
-                {paginatedData.total} {paginatedData.total === 1 ? "product" : "products"}
-              </span>
+              <p className="font-body-md text-body-md text-on-surface-variant">
+                {searchQuery
+                  ? `Showing results for query "${searchQuery}" across verified marketplace catalog.`
+                  : "Explore our collection of consumer tech, computing hardware, audio wearables and lifestyle accessories."}
+              </p>
             </div>
-            <p className="font-body text-sm md:text-base text-muted-gray">
-              {searchQuery ? `Search results for "${searchQuery}"` : "Find the right technology for every need."}
-            </p>
-          </div>
 
-          <div className="flex items-center justify-between md:justify-end gap-4 shrink-0">
-            {/* Mobile / Tablet Filter Drawer Trigger */}
-            <button
-              type="button"
-              onClick={() => setIsMobileFiltersOpen(true)}
-              className="lg:hidden inline-flex items-center gap-1.5 px-3.5 py-2 rounded-sm border border-outline-subtle bg-pure-white font-label text-sm text-on-pure-white hover:border-deep-black transition-colors duration-150 cursor-pointer"
-            >
-              <SlidersHorizontal className="w-4 h-4 text-muted-gray" aria-hidden="true" />
-              <span>Filters</span>
-            </button>
-
-            {/* Compact Sorting Dropdown */}
-            <div className="flex items-center gap-2">
-              <label htmlFor="sort-select" className="font-label text-sm text-muted-gray whitespace-nowrap">
-                Sort by
-              </label>
-              <select
-                id="sort-select"
-                value={sortParam}
-                onChange={handleSortChange}
-                className="px-3 py-2 pr-8 rounded-sm bg-light-gray border border-outline-subtle font-label text-sm text-on-pure-white focus:border-deep-black focus:outline-none cursor-pointer"
-              >
-                <option value="featured">Featured</option>
-                <option value="price-asc">Price: Low to High</option>
-                <option value="price-desc">Price: High to Low</option>
-                <option value="newest">Newest</option>
-              </select>
+            <div className="flex flex-col items-start md:items-end flex-shrink-0 relative z-10">
+              <span className="font-label-md text-label-md text-outline">Available Items</span>
+              <div className="flex items-baseline gap-1.5">
+                <span className="font-headline-sm text-headline-sm text-primary font-bold">
+                  {paginatedData.total}
+                </span>
+                <span className="font-body-sm text-body-sm text-on-surface-variant">
+                  Products Listed
+                </span>
+              </div>
             </div>
           </div>
         </div>
 
-        {/* Main Catalogue Layout: 272px Sidebar + 3-Column Grid */}
-        <div className="grid grid-cols-1 lg:grid-cols-[272px_minmax(0,1fr)] gap-8 xl:gap-12 items-start">
-          {/* Desktop Filter Sidebar */}
-          <ProductFilters
-            categories={categoryFacets}
-            selectedCategories={selectedCategories}
-            onToggleCategory={handleToggleCategory}
-            brands={brandFacets}
-            selectedBrands={selectedBrands}
-            onToggleBrand={handleToggleBrand}
-            minPrice={minPriceParam}
-            maxPrice={maxPriceParam}
-            onPriceChange={handlePriceChange}
-            inStockOnly={inStockParam}
-            onToggleInStock={handleToggleInStock}
-            onClearAll={handleClearAll}
-            className="hidden lg:block"
-          />
-
-          {/* Product Grid & States */}
-          <div className="flex flex-col gap-8 min-w-0">
-            {loading ? (
-              <div className="py-24">
-                <LoadingSpinner label="Calibrating product catalogue..." />
-              </div>
-            ) : error ? (
-              <ErrorState
-                title="Catalogue unavailable"
-                message={error}
-                onRetry={() => {
-                  setLoading(true);
-                  productService.getPaginatedProducts({
-                    search: searchQuery,
-                    categories: selectedCategories,
-                    brands: selectedBrands,
-                    minPrice: minPriceParam > 0 ? minPriceParam : undefined,
-                    maxPrice: maxPriceParam < 150000 ? maxPriceParam : undefined,
-                    inStockOnly: inStockParam,
-                    sort: sortParam,
-                    page: pageParam,
-                    pageSize: 9,
-                  }).then((res) => {
-                    setPaginatedData(res);
-                    setLoading(false);
-                  }).catch((e) => {
-                    setError(e instanceof Error ? e.message : "Failed to load catalogue");
-                    setLoading(false);
-                  });
-                }}
-              />
-            ) : paginatedData.items.length === 0 ? (
-              <div className="py-16 text-center flex flex-col items-center gap-4 border border-outline-subtle rounded-sm bg-light-gray p-8">
-                <SearchX className="w-10 h-10 text-muted-gray" aria-hidden="true" />
-                <div className="flex flex-col gap-1">
-                  <h2 className="font-headline text-xl font-bold text-on-light-gray">
-                    No products match your filters.
-                  </h2>
-                  <p className="font-body text-sm text-muted-gray max-w-md">
-                    Try widening your price range, clearing brand selections, or checking back soon.
-                  </p>
-                </div>
-                <button
-                  type="button"
-                  onClick={handleClearAll}
-                  className="px-6 py-2.5 rounded-sm bg-primary-orange text-deep-black font-label text-sm font-semibold hover:bg-primary-orange-hover transition-colors duration-150 cursor-pointer"
-                >
-                  Clear filters
-                </button>
-              </div>
-            ) : (
-              <>
-                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 items-stretch">
-                  {paginatedData.items.map((product) => (
-                    <ProductCard
-                      key={product.id}
-                      product={product}
-                      isCompared={isSelected(product.id)}
-                      onToggleCompare={() => toggleProduct(product)}
-                      onAddToCart={handleAddToCart}
-                    />
-                  ))}
-                </div>
-
-                {/* Minimal Pagination */}
-                <Pagination
-                  currentPage={paginatedData.page}
-                  totalPages={paginatedData.totalPages}
-                  onPageChange={handlePageChange}
-                />
-              </>
+        {/* 2. Active Filters Bar */}
+        <div className="flex items-center justify-between flex-wrap gap-space-sm pt-space-xs pb-space-md">
+          <div className="flex items-center flex-wrap gap-space-xs text-body-sm font-body-sm">
+            <span className="font-label-md text-label-md text-outline mr-1">Active filters:</span>
+            {activeFilterCount === 0 && (
+              <span className="text-on-surface-variant text-body-sm italic">
+                None (showing full catalog)
+              </span>
+            )}
+            {categoryParam && (
+              <button
+                type="button"
+                onClick={() => handleSelectCategory("")}
+                className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-primary text-on-primary font-label-md text-label-md hover:bg-primary-container transition-all shadow-xs cursor-pointer"
+                title="Remove category filter"
+              >
+                <span>Category: {categoryParam}</span>
+                <X className="w-3.5 h-3.5" />
+              </button>
+            )}
+            {brandParam && (
+              <button
+                type="button"
+                onClick={() => handleSelectBrand("")}
+                className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-primary-container text-on-primary font-label-md text-label-md hover:bg-primary transition-all shadow-xs cursor-pointer"
+                title="Remove brand filter"
+              >
+                <span>Brand: {brandParam}</span>
+                <X className="w-3.5 h-3.5" />
+              </button>
+            )}
+            {priceFilterLabel && (
+              <button
+                type="button"
+                onClick={() => handlePriceChange(0, 150000)}
+                className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-surface-container text-on-surface font-label-md text-label-md hover:bg-surface-variant transition-all shadow-xs cursor-pointer"
+                title="Remove price filter"
+              >
+                <span>{priceFilterLabel}</span>
+                <X className="w-3.5 h-3.5" />
+              </button>
             )}
           </div>
-        </div>
-      </Container>
 
-      {/* Floating Comparison Bar matching Stitch reference */}
-      <ComparisonBar />
+          {activeFilterCount > 0 && (
+            <button
+              type="button"
+              onClick={handleClearAll}
+              className="font-label-md text-label-md text-secondary hover:text-on-secondary-container transition-colors font-semibold flex items-center gap-1 cursor-pointer"
+            >
+              <RotateCcw className="w-4 h-4" />
+              <span>Clear All Filters</span>
+            </button>
+          )}
+        </div>
+
+        {/* 3. Main Grid Layout (Filters Sidebar + Product Grid) */}
+        <section className="py-space-sm pb-space-xl">
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-gutter items-start">
+            {/* Desktop Filters Panel */}
+            <div className="hidden lg:block lg:col-span-3 sticky top-[136px]">
+              <ProductFilters
+                categories={categoryFacets}
+                selectedCategory={categoryParam}
+                onSelectCategory={handleSelectCategory}
+                brands={brandFacets}
+                selectedBrand={brandParam}
+                onSelectBrand={handleSelectBrand}
+                minPrice={minPriceParam}
+                maxPrice={maxPriceParam}
+                onPriceChange={handlePriceChange}
+                onResetFilters={handleClearAll}
+                activeFilterCount={activeFilterCount}
+              />
+            </div>
+
+            {/* Main Products Grid & Controls */}
+            <main className="lg:col-span-9 flex flex-col space-y-space-md">
+              {/* Controls bar */}
+              <div className="bg-surface-container-lowest p-3 px-5 rounded-xl shadow-sm flex flex-col sm:flex-row items-center justify-between gap-space-sm border border-surface-container/60">
+                <div className="flex items-center justify-between w-full sm:w-auto gap-space-sm text-body-sm font-body-sm">
+                  <span className="text-on-surface-variant">
+                    Showing{" "}
+                    <span className="font-semibold text-primary">
+                      {startItem}–{endItem}
+                    </span>{" "}
+                    of <span className="font-semibold text-primary">{paginatedData.total}</span> items ·{" "}
+                    <span className="text-outline">
+                      Page {paginatedData.page} ({PAGE_SIZE} per page)
+                    </span>
+                  </span>
+
+                  {/* Mobile Filters trigger button */}
+                  <button
+                    type="button"
+                    onClick={() => setIsMobileFiltersOpen(true)}
+                    className="lg:hidden flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-surface-container-low hover:bg-surface-variant text-primary font-label-md text-label-md border border-outline-variant/40 cursor-pointer"
+                  >
+                    <Filter className="w-4 h-4" />
+                    <span>Filters</span>
+                    {activeFilterCount > 0 && (
+                      <span className="ml-1 w-5 h-5 rounded-full bg-primary text-on-primary text-label-sm font-bold flex items-center justify-center">
+                        {activeFilterCount}
+                      </span>
+                    )}
+                  </button>
+                </div>
+
+                {/* Sort dropdown and View Mode */}
+                <div className="flex items-center gap-space-md w-full sm:w-auto justify-between sm:justify-end">
+                  <div className="flex items-center gap-1.5 text-body-sm font-body-sm">
+                    <span className="text-outline hidden md:inline">Sort by:</span>
+                    <div className="relative">
+                      <select
+                        value={sortParam}
+                        onChange={handleSortChange}
+                        className="bg-surface-container-low font-label-md text-label-md text-primary font-semibold py-1.5 pl-3 pr-8 rounded-lg border-0 focus:ring-2 focus:ring-primary/20 cursor-pointer appearance-none"
+                      >
+                        <option value="newest">Newest First</option>
+                        <option value="price_asc">Price: Low to High</option>
+                        <option value="price_desc">Price: High to Low</option>
+                      </select>
+                      <ChevronDown className="w-4 h-4 text-outline pointer-events-none absolute right-2 top-2.5" />
+                    </div>
+                  </div>
+
+                  <div className="flex items-center bg-surface-container-low p-1 rounded-lg gap-1">
+                    <div
+                      className="p-1.5 rounded bg-surface-container-lowest text-primary shadow-xs"
+                      title="Grid View Active"
+                    >
+                      <Grid className="w-4 h-4" />
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              {/* Products Area */}
+              {loading ? (
+                <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-4 gap-gutter">
+                  {Array.from({ length: PAGE_SIZE }).map((_, t) => (
+                    <div
+                      key={`skeleton-${t}`}
+                      className="bg-surface-container-lowest rounded-xl p-space-md border border-surface-container/60 animate-pulse space-y-3"
+                    >
+                      <div className="w-full aspect-square bg-surface-container-low rounded-lg" />
+                      <div className="h-4 bg-surface-container-low rounded w-1/3" />
+                      <div className="h-5 bg-surface-container-low rounded w-5/6" />
+                      <div className="h-4 bg-surface-container-low rounded w-1/2" />
+                      <div className="h-6 bg-surface-container-low rounded w-2/5 pt-2" />
+                      <div className="grid grid-cols-2 gap-2 pt-2">
+                        <div className="h-8 bg-surface-container-low rounded" />
+                        <div className="h-8 bg-surface-container-low rounded" />
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              ) : error ? (
+                <div className="bg-surface-container-lowest rounded-xl p-space-xl border border-error/20 text-center space-y-3 my-4">
+                  <div className="w-12 h-12 rounded-full bg-error-container text-error mx-auto flex items-center justify-center">
+                    <AlertCircle className="w-6 h-6" />
+                  </div>
+                  <h3 className="font-headline-sm text-headline-sm text-on-surface font-semibold">
+                    Failed to Load Products
+                  </h3>
+                  <p className="font-body-md text-body-md text-on-surface-variant max-w-md mx-auto">
+                    {error}
+                  </p>
+                  <button
+                    type="button"
+                    onClick={() => handlePageChange(1)}
+                    className="px-4 py-2 bg-primary text-on-primary rounded-lg font-label-md text-label-md hover:bg-primary-container transition-colors shadow-xs cursor-pointer"
+                  >
+                    Try Again
+                  </button>
+                </div>
+              ) : paginatedData.items.length === 0 ? (
+                <div className="bg-surface-container-lowest rounded-xl p-space-xl border border-surface-container/60 text-center space-y-3 my-4">
+                  <div className="w-14 h-14 rounded-full bg-surface-container-low text-outline mx-auto flex items-center justify-center">
+                    <Filter className="w-7 h-7" />
+                  </div>
+                  <h3 className="font-headline-sm text-headline-sm text-on-surface font-semibold">
+                    No Products Found
+                  </h3>
+                  <p className="font-body-md text-body-md text-on-surface-variant max-w-md mx-auto">
+                    We couldn't find any products matching your selected filters. Try adjusting your
+                    price range, category, or brand selection.
+                  </p>
+                  <button
+                    type="button"
+                    onClick={handleClearAll}
+                    className="px-4 py-2 bg-primary text-on-primary rounded-lg font-label-md text-label-md hover:bg-primary-container transition-colors shadow-xs cursor-pointer inline-flex items-center gap-1.5"
+                  >
+                    <RotateCcw className="w-4 h-4" />
+                    <span>Reset All Filters</span>
+                  </button>
+                </div>
+              ) : (
+                <>
+                  <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-4 gap-gutter">
+                    {paginatedData.items.map((product) => (
+                      <ProductCard key={product.id} product={product} />
+                    ))}
+                  </div>
+
+                  {/* Clean Pagination */}
+                  <div className="pt-space-md">
+                    <Pagination
+                      currentPage={paginatedData.page}
+                      totalPages={paginatedData.totalPages}
+                      onPageChange={handlePageChange}
+                    />
+                  </div>
+                </>
+              )}
+            </main>
+          </div>
+        </section>
+      </Container>
 
       {/* Mobile Drawer Filter Modal */}
       {isMobileFiltersOpen && (
-        <div className="fixed inset-0 z-50 flex lg:hidden bg-deep-black/60 backdrop-blur-xs animate-in fade-in duration-200">
-          <div className="w-full max-w-xs bg-pure-white h-full p-6 overflow-y-auto flex flex-col justify-between shadow-2xl ml-auto animate-in slide-in-from-right duration-200">
+        <div className="fixed inset-0 z-50 lg:hidden flex">
+          <div
+            className="fixed inset-0 bg-black/50 transition-opacity backdrop-blur-xs"
+            onClick={() => setIsMobileFiltersOpen(false)}
+          />
+          <div className="relative ml-auto w-full max-w-xs bg-surface-container-lowest h-full shadow-2xl p-space-md flex flex-col justify-between overflow-y-auto z-10">
             <div>
-              <div className="flex items-center justify-between pb-4 border-b border-outline-subtle">
-                <h3 className="font-headline text-lg font-bold">Filters</h3>
+              <div className="flex items-center justify-between pb-space-sm border-b border-surface-container/60 mb-space-sm">
+                <div className="flex items-center gap-2">
+                  <Filter className="w-5 h-5 text-primary" />
+                  <h3 className="font-headline-sm text-headline-sm text-primary font-bold">Filters</h3>
+                </div>
                 <button
                   type="button"
                   onClick={() => setIsMobileFiltersOpen(false)}
-                  className="p-1 rounded-sm text-muted-gray hover:text-deep-black"
+                  className="p-1 rounded-lg text-outline hover:text-on-surface cursor-pointer"
                 >
                   <X className="w-5 h-5" />
                 </button>
               </div>
+
               <ProductFilters
                 categories={categoryFacets}
-                selectedCategories={selectedCategories}
-                onToggleCategory={handleToggleCategory}
+                selectedCategory={categoryParam}
+                onSelectCategory={(cat) => {
+                  handleSelectCategory(cat);
+                  setIsMobileFiltersOpen(false);
+                }}
                 brands={brandFacets}
-                selectedBrands={selectedBrands}
-                onToggleBrand={handleToggleBrand}
+                selectedBrand={brandParam}
+                onSelectBrand={(br) => {
+                  handleSelectBrand(br);
+                  setIsMobileFiltersOpen(false);
+                }}
                 minPrice={minPriceParam}
                 maxPrice={maxPriceParam}
                 onPriceChange={handlePriceChange}
-                inStockOnly={inStockParam}
-                onToggleInStock={handleToggleInStock}
-                onClearAll={handleClearAll}
+                onResetFilters={handleClearAll}
+                activeFilterCount={activeFilterCount}
               />
-            </div>
-            <div className="pt-6 border-t border-outline-subtle mt-6">
-              <button
-                type="button"
-                onClick={() => setIsMobileFiltersOpen(false)}
-                className="w-full py-3 rounded-sm bg-primary-orange text-deep-black font-label text-sm font-semibold hover:bg-primary-orange-hover"
-              >
-                Apply &amp; View Results
-              </button>
             </div>
           </div>
         </div>

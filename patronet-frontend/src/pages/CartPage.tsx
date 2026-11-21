@@ -1,6 +1,6 @@
 import * as React from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { Minus, Plus, AlertCircle, ShoppingCart } from "lucide-react";
+import { Minus, Plus, AlertCircle, ShoppingCart, Trash2, ArrowRight } from "lucide-react";
 import { Container } from "@/components/layout/Container";
 import { LoadingSpinner } from "@/components/ui/LoadingSpinner";
 import { useCart } from "@/context/CartContext";
@@ -117,33 +117,16 @@ export const CartPage: React.FC = () => {
     };
   }, [cart.items]);
 
-  // Frontend estimated calculations in integer paise
-  const { subtotalPaise, hasUnresolvedPrices, hasOutOfStockItems } = React.useMemo(() => {
-    let sumPaise = 0;
-    let unresolved = false;
-    let oos = false;
-
-    for (const line of enrichedLines) {
-      if (!line.product || line.error) {
-        unresolved = true;
-      }
-      if (!line.isAvailable) {
-        oos = true;
-      }
-      sumPaise += line.lineTotalPaise;
-    }
-
-    return {
-      subtotalPaise: sumPaise,
-      hasUnresolvedPrices: unresolved,
-      hasOutOfStockItems: oos,
-    };
-  }, [enrichedLines]);
-
-  const handleQtyChange = async (productId: string, currentQty: number, delta: number, limit?: number) => {
+  // Handle quantity changes
+  const handleQtyChange = async (productId: string, currentQty: number, delta: number, maxLimit?: number) => {
     const nextQty = currentQty + delta;
-    if (nextQty < 1) return;
-    if (limit !== undefined && nextQty > limit) return;
+    if (nextQty <= 0) {
+      await removeItem(productId);
+      return;
+    }
+    if (maxLimit !== undefined && nextQty > maxLimit) {
+      return;
+    }
     await updateQuantity(productId, nextQty);
   };
 
@@ -152,283 +135,229 @@ export const CartPage: React.FC = () => {
   };
 
   const handleProceedToCheckout = () => {
-    if (enrichedLines.length === 0 || hasUnresolvedPrices) return;
     navigate("/checkout");
   };
+
+  // Derive subtotal safely
+  const subtotalPaise = enrichedLines.reduce((acc, line) => acc + line.lineTotalPaise, 0);
+  const hasOutOfStockItems = enrichedLines.some((line) => !line.isAvailable);
+  const hasUnresolvedPrices = enrichedLines.some((line) => !line.product);
 
   const isLoading = cartLoading || loadingProducts;
 
   return (
-    <Container className="py-8">
-      {/* 1. Breadcrumb Navigation */}
-      <nav aria-label="Breadcrumb" className="flex items-center gap-2 font-label text-sm text-muted-gray mb-4">
-        <Link to="/" className="hover:text-deep-black transition-colors duration-150">
-          Home
-        </Link>
-        <span aria-hidden="true" className="text-outline-subtle">
-          /
-        </span>
-        <span className="text-deep-black font-medium">Shopping Cart</span>
-      </nav>
-
-      {/* 2. Cart Page Header */}
-      <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4 pb-6 border-b border-outline-subtle mb-8">
-        <div className="flex flex-wrap items-baseline gap-3">
-          <h1 className="font-headline text-3xl md:text-4xl font-bold text-deep-black tracking-tight">
-            Your cart.
-          </h1>
-          <span className="font-label text-sm text-muted-gray tabular-nums">
-            {itemCount} {itemCount === 1 ? "item" : "items"}
-          </span>
+    <div className="py-space-xl">
+      <Container>
+        {/* Header */}
+        <div className="mb-space-lg">
+          <h1 className="font-headline-lg text-headline-lg text-primary font-bold">Shopping Cart</h1>
+          <p className="font-body-md text-body-md text-on-surface-variant mt-1">
+            Review your selected items and proceed to checkout.
+          </p>
         </div>
-        <Link
-          to="/products"
-          className="inline-flex items-center gap-1.5 font-label text-sm md:text-base font-semibold text-deep-black hover:text-accent-orange-text transition-colors duration-150 shrink-0"
-        >
-          <span>Continue shopping</span>
-          <span className="text-lg">→</span>
-        </Link>
-      </div>
 
-      {/* Error Banner (if connection or lookup issue) */}
-      {loadError && (
-        <div
-          role="alert"
-          className="mb-8 p-4 rounded-sm border border-outline-subtle bg-light-gray flex flex-col sm:flex-row sm:items-center justify-between gap-4"
-        >
-          <div className="flex items-start gap-3">
-            <AlertCircle className="w-5 h-5 text-accent-orange-text shrink-0 mt-0.5" />
-            <div>
-              <p className="font-label text-sm font-semibold text-deep-black">Unable to sync cart updates</p>
-              <p className="font-body text-sm text-muted-gray">
-                Please check your connection and try again. Your local selections are preserved.
-              </p>
+        {/* Global Cart Error Banner */}
+        {loadError && (
+          <div className="mb-space-md p-space-md bg-error-container text-error rounded-xl flex items-center justify-between">
+            <div className="flex items-center gap-2">
+              <AlertCircle className="w-5 h-5" />
+              <span className="font-body-md text-body-md">{loadError}</span>
             </div>
+            <button
+              type="button"
+              onClick={() => refreshCart()}
+              className="text-label-md font-bold underline cursor-pointer"
+            >
+              Retry
+            </button>
           </div>
-          <button
-            type="button"
-            onClick={() => refreshCart()}
-            className="px-4 py-2 rounded-sm bg-deep-black text-white font-label text-sm hover:bg-surface-dark-elevated transition-colors shrink-0 cursor-pointer"
-          >
-            Retry
-          </button>
-        </div>
-      )}
+        )}
 
-      {/* Loading Cart Contents State */}
-      {isLoading ? (
-        <div className="py-20 flex flex-col items-center justify-center min-h-[40vh] border-y border-outline-subtle">
-          <LoadingSpinner size="lg" label="Updating your cart..." />
-        </div>
-      ) : enrichedLines.length === 0 ? (
-        /* 3. Empty Cart State matching Stitch specifications */
-        <section
-          id="empty-cart-state"
-          className="py-16 text-center flex flex-col items-center justify-center gap-4 border-y border-outline-subtle"
-        >
-          <div className="w-16 h-16 rounded-full bg-light-gray flex items-center justify-center text-muted-gray mb-2">
-            <ShoppingCart className="w-8 h-8" />
+        {/* Loading Spinner */}
+        {isLoading ? (
+          <div className="py-20 flex flex-col items-center justify-center">
+            <LoadingSpinner size="lg" label="Synchronizing cart..." />
           </div>
-          <div className="flex flex-col gap-1 max-w-md">
-            <h2 className="font-headline text-2xl md:text-3xl font-bold text-deep-black">
-              Your cart is empty.
+        ) : enrichedLines.length === 0 ? (
+          /* Empty Cart State */
+          <div className="rounded-xl border border-surface-container bg-surface-container-lowest p-space-xl text-center max-w-xl mx-auto shadow-xs">
+            <ShoppingCart className="h-12 w-12 mx-auto text-outline" />
+            <h2 className="font-title-md text-title-md text-on-surface font-semibold mt-space-sm">
+              Your shopping cart is empty
             </h2>
-            <p className="font-body text-base text-muted-gray">
-              Discover something worth adding from our calibrated hardware collection.
+            <p className="font-body-md text-body-md text-on-surface-variant mt-1">
+              Explore our catalogue to discover electronics and everyday essentials.
             </p>
+            <Link
+              to="/products"
+              className="mt-space-md inline-flex items-center justify-center gap-2 px-space-lg py-3 rounded-lg bg-primary text-on-primary font-label-md text-label-md font-bold hover:bg-primary-container shadow-xs transition-colors"
+            >
+              <span>Explore Products</span>
+              <ArrowRight className="w-4 h-4" />
+            </Link>
           </div>
-          <Link
-            to="/products"
-            className="mt-4 inline-flex items-center justify-center px-8 py-3.5 rounded-sm bg-primary-orange text-deep-black font-label text-base font-semibold hover:bg-primary-orange-hover active:scale-[0.99] transition-all duration-150"
-          >
-            Explore products
-          </Link>
-        </section>
-      ) : (
-        /* 4. Main Two-Column Cart Layout (~65% Items / ~35% Order Summary) */
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-start">
-          {/* LEFT COLUMN: Cart Items List (~65% -> 8 cols) */}
-          <div className="lg:col-span-8">
-            <div className="divide-y divide-outline-subtle border-b border-outline-subtle">
-              {enrichedLines.map((line) => {
-                const product = line.product;
-                const imgUrl = product ? getProductPrimaryImageUrl(product) : DEFAULT_PRODUCT_FALLBACK_IMAGE;
+        ) : (
+          /* Main Two-Column Cart Layout (Items + Summary) */
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-gutter items-start">
+            {/* Items Column (8 cols) */}
+            <div className="lg:col-span-8 space-y-space-md">
+              <div className="space-y-space-sm">
+                {enrichedLines.map((line) => {
+                  const product = line.product;
+                  const imgUrl = product ? getProductPrimaryImageUrl(product) : DEFAULT_PRODUCT_FALLBACK_IMAGE;
 
-                return (
-                  <article
-                    key={line.productId}
-                    className="py-6 flex flex-col sm:flex-row gap-6 items-start sm:items-center justify-between"
-                  >
-                    {/* Thumbnail and Info */}
-                    <div className="flex items-start gap-4 flex-1">
-                      {/* Product Thumbnail */}
-                      <Link
-                        to={product ? `/products/${product.id}` : "#"}
-                        className="w-24 h-24 sm:w-28 sm:h-28 bg-light-gray rounded-sm p-3 shrink-0 flex items-center justify-center overflow-hidden border border-outline-subtle hover:border-deep-black transition-colors"
-                      >
-                        <img
-                          src={imgUrl}
-                          alt={product ? product.name : "Cart hardware"}
-                          className="w-full h-full object-contain mix-blend-multiply"
-                          onError={(e) => {
-                            if (e.currentTarget.src !== DEFAULT_PRODUCT_FALLBACK_IMAGE) {
-                              e.currentTarget.src = DEFAULT_PRODUCT_FALLBACK_IMAGE;
-                            }
-                          }}
-                        />
-                      </Link>
+                  return (
+                    <article
+                      key={line.productId}
+                      className="bg-surface-container-lowest rounded-xl p-space-md border border-surface-container/60 shadow-xs flex flex-col sm:flex-row items-start sm:items-center justify-between gap-space-md"
+                    >
+                      {/* Product Thumbnail & Details */}
+                      <div className="flex items-start gap-space-md flex-1 min-w-0">
+                        <Link
+                          to={product ? `/products/${product.id}` : "#"}
+                          className="w-24 h-24 sm:w-28 sm:h-28 rounded-lg bg-surface-container-low shrink-0 flex items-center justify-center p-2 border border-surface-container"
+                        >
+                          <img
+                            src={imgUrl}
+                            alt={product ? product.name : "Product"}
+                            className="w-full h-full object-contain"
+                            onError={(e) => {
+                              if (e.currentTarget.src !== DEFAULT_PRODUCT_FALLBACK_IMAGE) {
+                                e.currentTarget.src = DEFAULT_PRODUCT_FALLBACK_IMAGE;
+                              }
+                            }}
+                          />
+                        </Link>
 
-                      {/* Product Details */}
-                      <div className="flex flex-col gap-1 flex-1">
-                        {product ? (
-                          <>
-                            <span className="font-label text-xs uppercase tracking-wider text-muted-gray">
-                              {product.brand}
-                            </span>
-                            <Link
-                              to={`/products/${product.id}`}
-                              className="font-title text-base sm:text-lg font-semibold text-deep-black hover:text-accent-orange-text transition-colors"
-                            >
-                              {product.name}
-                            </Link>
-                            <span className="font-body text-xs sm:text-sm text-muted-gray tabular-nums">
-                              Unit price: {formatInr(product.price)}
-                            </span>
-
-                            {/* Out-of-stock warning notice if applicable */}
-                            {!line.isAvailable && (
-                              <p className="inline-flex items-center gap-1 font-label text-xs text-accent-orange-text pt-1">
-                                <AlertCircle className="w-3.5 h-3.5" />
-                                <span>Currently out of stock — remove to proceed to checkout</span>
+                        <div className="flex-1 min-w-0">
+                          {product ? (
+                            <>
+                              <Link
+                                to={`/products/${product.id}`}
+                                className="font-title-md text-title-md text-on-surface font-semibold hover:text-primary transition-colors line-clamp-2"
+                              >
+                                {product.name}
+                              </Link>
+                              <p className="text-body-sm text-outline mt-0.5">
+                                {product.brand || product.sku}
                               </p>
-                            )}
+                              <p className="font-title-md text-primary font-bold mt-1.5">
+                                {formatInr(product.price)}
+                              </p>
+                              <p className="text-body-sm text-on-surface-variant">
+                                Line total: {formatPaise(line.lineTotalPaise)}
+                              </p>
 
-                            {/* Stock limit note */}
-                            {line.stockLimit !== undefined && line.quantity >= line.stockLimit && (
-                              <span className="font-label text-xs text-muted-gray">
-                                (Max {line.stockLimit} available units)
-                              </span>
-                            )}
-                          </>
-                        ) : (
-                          <>
-                            <span className="font-label text-xs text-red-500 font-semibold">
-                              Product lookup unavailable
-                            </span>
-                            <span className="font-body text-xs text-muted-gray">
-                              ID: {line.productId}
-                            </span>
-                          </>
-                        )}
+                              {!line.isAvailable && (
+                                <p className="inline-flex items-center gap-1 text-xs text-error font-medium pt-1">
+                                  <AlertCircle className="w-3.5 h-3.5" />
+                                  <span>Currently out of stock — remove to proceed to checkout</span>
+                                </p>
+                              )}
+                            </>
+                          ) : (
+                            <div>
+                              <p className="text-xs text-error font-semibold">Product lookup unavailable</p>
+                              <p className="text-xs text-outline">ID: {line.productId}</p>
+                            </div>
+                          )}
+                        </div>
                       </div>
-                    </div>
 
-                    {/* Quantity controls and Line Subtotal */}
-                    <div className="flex sm:flex-col items-center sm:items-end justify-between w-full sm:w-auto gap-4">
-                      {/* Price subtotal formatted with Intl currency */}
-                      <p className="font-headline text-lg sm:text-xl font-bold text-deep-black tabular-nums">
-                        {formatPaise(line.lineTotalPaise)}
-                      </p>
-
-                      <div className="flex items-center gap-4">
-                        {/* Compact Quantity Selector matching Stitch specifications */}
-                        <div className="inline-flex items-center border border-outline-subtle rounded-sm bg-light-gray h-9 px-1">
+                      {/* Quantity Controls & Delete */}
+                      <div className="flex items-center justify-between sm:justify-end gap-space-md w-full sm:w-auto pt-2 sm:pt-0 border-t sm:border-t-0 border-surface-container/60">
+                        <div className="flex items-center rounded-lg border border-surface-container bg-surface-container-low">
                           <button
                             type="button"
-                            onClick={() => handleQtyChange(line.productId, line.quantity, -1)}
+                            aria-label="Decrease quantity"
                             disabled={line.quantity <= 1}
-                            aria-label={`Decrease quantity of ${product?.name || "item"}`}
-                            className="w-7 h-7 inline-flex items-center justify-center text-deep-black hover:text-accent-orange-text disabled:opacity-40 disabled:cursor-not-allowed transition-colors cursor-pointer"
+                            onClick={() => handleQtyChange(line.productId, line.quantity, -1)}
+                            className="p-2 text-primary hover:bg-surface-variant rounded-l-lg disabled:opacity-40 cursor-pointer"
                           >
-                            <Minus className="w-3.5 h-3.5" />
+                            <Minus className="h-4 w-4" />
                           </button>
-                          <span className="w-8 text-center font-label text-sm tabular-nums text-deep-black font-medium">
+                          <span className="min-w-8 text-center font-label-md text-label-md font-semibold text-on-surface px-1">
                             {line.quantity}
                           </span>
                           <button
                             type="button"
-                            onClick={() => handleQtyChange(line.productId, line.quantity, 1, line.stockLimit)}
+                            aria-label="Increase quantity"
                             disabled={line.stockLimit !== undefined && line.quantity >= line.stockLimit}
-                            aria-label={`Increase quantity of ${product?.name || "item"}`}
-                            className="w-7 h-7 inline-flex items-center justify-center text-deep-black hover:text-accent-orange-text disabled:opacity-40 disabled:cursor-not-allowed transition-colors cursor-pointer"
+                            onClick={() => handleQtyChange(line.productId, line.quantity, 1, line.stockLimit)}
+                            className="p-2 text-primary hover:bg-surface-variant rounded-r-lg disabled:opacity-40 cursor-pointer"
                           >
-                            <Plus className="w-3.5 h-3.5" />
+                            <Plus className="h-4 w-4" />
                           </button>
                         </div>
 
-                        {/* Remove Action Button */}
                         <button
                           type="button"
+                          aria-label={`Remove ${product?.name || "item"}`}
                           onClick={() => handleRemove(line.productId)}
-                          className="font-label text-sm text-muted-gray hover:text-accent-orange-text transition-colors cursor-pointer"
+                          className="p-2 text-error hover:bg-error-container/40 rounded-lg transition-colors cursor-pointer"
                         >
-                          Remove
+                          <Trash2 className="h-4 w-4" />
                         </button>
                       </div>
-                    </div>
-                  </article>
-                );
-              })}
-            </div>
-
-            {/* Clear Cart Trigger */}
-            <div className="pt-4 flex justify-end">
-              <button
-                type="button"
-                onClick={() => clearCart()}
-                className="font-label text-xs text-muted-gray hover:text-deep-black underline transition-colors cursor-pointer"
-              >
-                Clear all items
-              </button>
-            </div>
-          </div>
-
-          {/* RIGHT COLUMN: Order Summary Card (~35% -> 4 cols) */}
-          <aside
-            aria-label="Order summary"
-            className="lg:col-span-4 bg-light-gray rounded-sm p-6 lg:p-8 flex flex-col gap-6 border border-outline-subtle sticky top-24"
-          >
-            <h2 className="font-headline text-xl font-bold text-deep-black">
-              Order summary
-            </h2>
-
-            <div className="flex flex-col gap-3 pb-6 border-b border-outline-subtle">
-              <div className="flex items-baseline justify-between gap-4">
-                <span className="font-body text-sm text-muted-gray">Subtotal</span>
-                <span className="font-title text-base font-semibold text-deep-black tabular-nums">
-                  {formatPaise(subtotalPaise)}
-                </span>
+                    </article>
+                  );
+                })}
               </div>
-              <div className="flex items-baseline justify-between gap-4">
-                <span className="font-body text-sm text-muted-gray">Shipping</span>
-                <span className="font-body text-sm text-muted-gray">Calculated at checkout</span>
+
+              {/* Clear Cart Trigger */}
+              <div className="pt-space-xs flex justify-end">
+                <button
+                  type="button"
+                  onClick={() => clearCart()}
+                  className="font-label-md text-body-sm text-outline hover:text-error transition-colors cursor-pointer underline"
+                >
+                  Clear all items
+                </button>
               </div>
             </div>
 
-            <div className="flex items-baseline justify-between gap-4">
-              <span className="font-title text-lg font-bold text-deep-black">Estimated Total</span>
-              <span className="font-headline text-2xl font-bold text-deep-black tabular-nums">
-                {formatPaise(subtotalPaise)}
-              </span>
-            </div>
+            {/* Order Summary Sidebar (4 cols) */}
+            <aside className="lg:col-span-4 rounded-xl border border-surface-container bg-surface-container-lowest p-space-md sm:p-space-lg space-y-space-md shadow-xs sticky top-[136px]">
+              <h2 className="font-title-md text-title-md font-bold text-primary pb-2 border-b border-surface-container">
+                Order Summary
+              </h2>
 
-            <div className="flex flex-col gap-2">
+              <div className="space-y-2 py-2">
+                <div className="flex justify-between text-body-md text-on-surface">
+                  <span>Subtotal ({itemCount} {itemCount === 1 ? "item" : "items"})</span>
+                  <strong className="text-primary font-bold">{formatPaise(subtotalPaise)}</strong>
+                </div>
+                <div className="flex justify-between text-body-sm text-outline">
+                  <span>Estimated Delivery</span>
+                  <span>Free</span>
+                </div>
+              </div>
+
+              <div className="border-t border-surface-container pt-space-sm">
+                <div className="flex justify-between items-baseline">
+                  <span className="font-title-md font-bold text-on-surface">Estimated Total</span>
+                  <span className="font-headline-sm text-headline-sm font-bold text-primary">
+                    {formatPaise(subtotalPaise)}
+                  </span>
+                </div>
+                <p className="text-body-sm text-on-surface-variant mt-2 leading-relaxed">
+                  Shipping and any applicable charges are confirmed at checkout.
+                </p>
+              </div>
+
               <button
                 type="button"
                 id="checkout-btn"
                 onClick={handleProceedToCheckout}
                 disabled={hasUnresolvedPrices || hasOutOfStockItems || enrichedLines.length === 0}
-                className="w-full py-3.5 px-6 rounded-sm bg-primary-orange text-deep-black font-label text-base font-semibold hover:bg-primary-orange-hover active:scale-[0.99] transition-all duration-150 disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer shadow-sm text-center"
+                className="w-full rounded-lg bg-primary px-space-md py-3 text-on-primary font-label-md text-label-md font-bold hover:bg-primary-container shadow-xs transition-colors cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
               >
                 Proceed to Checkout
               </button>
-              <p className="font-body text-xs text-muted-gray leading-normal">
-                Final availability, taxes, and total will be calculated and confirmed at checkout by the backend.
-              </p>
-            </div>
-          </aside>
-        </div>
-      )}
-    </Container>
+            </aside>
+          </div>
+        )}
+      </Container>
+    </div>
   );
 };

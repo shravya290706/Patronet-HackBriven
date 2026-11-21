@@ -1,5 +1,5 @@
 import * as React from "react";
-import { ArrowLeft, ArrowRight } from "lucide-react";
+import { ChevronLeft, ChevronRight } from "lucide-react";
 
 export interface PaginationProps {
   currentPage: number;
@@ -16,49 +16,72 @@ export const Pagination: React.FC<PaginationProps> = ({
 }) => {
   if (totalPages <= 1) return null;
 
-  const pages = Array.from({ length: totalPages }, (_, i) => i + 1);
+  const pages = (() => {
+    const list: (number | string)[] = [];
+    for (let r = 1; r <= totalPages; r++) {
+      if (r === 1 || r === totalPages || (r >= currentPage - 1 && r <= currentPage + 1)) {
+        list.push(r);
+      } else if (list[list.length - 1] !== "ellipsis") {
+        list.push("ellipsis");
+      }
+    }
+    return list;
+  })();
 
   return (
-    <nav aria-label="Catalogue pagination" className={`flex items-center justify-between pt-6 border-t border-outline-subtle ${className}`}>
+    <nav
+      aria-label="Pagination Navigation"
+      className={`flex items-center justify-center gap-1.5 py-space-md ${className}`}
+    >
       <button
         type="button"
         disabled={currentPage <= 1}
         onClick={() => onPageChange(currentPage - 1)}
-        className="inline-flex items-center gap-1.5 font-label text-sm text-on-pure-white hover:text-accent-orange-text disabled:text-muted-gray disabled:cursor-not-allowed transition-colors duration-150 cursor-pointer"
+        className="px-3 py-1.5 rounded-lg bg-surface-container-low hover:bg-surface-variant text-on-surface disabled:opacity-40 disabled:cursor-not-allowed flex items-center gap-1 font-label-md text-label-md transition-colors cursor-pointer"
+        aria-label="Previous Page"
       >
-        <ArrowLeft className="w-4 h-4" aria-hidden="true" />
-        <span>Previous</span>
+        <ChevronLeft className="h-4 w-4" />
+        <span className="hidden sm:inline">Previous</span>
       </button>
 
-      <div className="flex items-center gap-1">
-        {pages.map((p) => {
-          const isActive = p === currentPage;
+      {pages.map((p, idx) => {
+        if (p === "ellipsis") {
           return (
-            <button
-              key={p}
-              type="button"
-              aria-current={isActive ? "page" : undefined}
-              onClick={() => onPageChange(p)}
-              className={`w-8 h-8 rounded-sm font-label text-sm tabular-nums transition-colors duration-150 cursor-pointer ${
-                isActive
-                  ? "bg-deep-black text-on-deep-black font-semibold"
-                  : "text-on-pure-white hover:bg-light-gray"
-              }`}
+            <span
+              key={`ellipsis-${idx}`}
+              className="px-2 text-outline font-label-md select-none"
             >
-              {p}
-            </button>
+              ...
+            </span>
           );
-        })}
-      </div>
+        }
+        const isActive = p === currentPage;
+        return (
+          <button
+            key={p}
+            type="button"
+            onClick={() => onPageChange(p as number)}
+            aria-current={isActive ? "page" : undefined}
+            className={`w-9 h-9 rounded-lg font-label-md text-label-md transition-colors cursor-pointer flex items-center justify-center ${
+              isActive
+                ? "bg-primary text-on-primary font-bold shadow-xs"
+                : "bg-surface-container-low hover:bg-surface-variant text-on-surface"
+            }`}
+          >
+            {p}
+          </button>
+        );
+      })}
 
       <button
         type="button"
         disabled={currentPage >= totalPages}
         onClick={() => onPageChange(currentPage + 1)}
-        className="inline-flex items-center gap-1.5 font-label text-sm text-on-pure-white hover:text-accent-orange-text disabled:text-muted-gray disabled:cursor-not-allowed transition-colors duration-150 cursor-pointer"
+        className="px-3 py-1.5 rounded-lg bg-surface-container-low hover:bg-surface-variant text-on-surface disabled:opacity-40 disabled:cursor-not-allowed flex items-center gap-1 font-label-md text-label-md transition-colors cursor-pointer"
+        aria-label="Next Page"
       >
-        <span>Next</span>
-        <ArrowRight className="w-4 h-4" aria-hidden="true" />
+        <span className="hidden sm:inline">Next</span>
+        <ChevronRight className="h-4 w-4" />
       </button>
     </nav>
   );

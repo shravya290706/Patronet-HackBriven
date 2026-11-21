@@ -1,208 +1,397 @@
 import * as React from "react";
-import { Search } from "lucide-react";
+import { SlidersHorizontal, Search, X } from "lucide-react";
+import { categoryService, type CategoryItem } from "@/services/api/categoryService";
 
 export interface CategoryCount {
   name: string;
-  count: number;
+  count?: number;
 }
 
 export interface BrandCount {
   name: string;
-  count: number;
+  count?: number;
+}
+
+export interface FilterState {
+  categoryId?: string;
+  categoryName?: string;
+  minPrice?: number;
+  maxPrice?: number;
+  brand?: string;
 }
 
 export interface ProductFiltersProps {
-  categories: CategoryCount[];
-  selectedCategories: string[];
-  onToggleCategory: (category: string) => void;
-  brands: BrandCount[];
-  selectedBrands: string[];
-  onToggleBrand: (brand: string) => void;
-  minPrice: number;
-  maxPrice: number;
-  onPriceChange: (min: number, max: number) => void;
-  inStockOnly: boolean;
-  onToggleInStock: (inStock: boolean) => void;
-  onClearAll: () => void;
+  filters?: FilterState;
+  onFilterChange?: (newFilters: FilterState) => void;
+  onResetFilters: () => void;
+  availableBrands?: string[];
   className?: string;
+
+  // Direct props alternative
+  categories?: CategoryCount[];
+  selectedCategory?: string;
+  onSelectCategory?: (cat: string) => void;
+  brands?: BrandCount[];
+  selectedBrand?: string;
+  onSelectBrand?: (brand: string) => void;
+  minPrice?: number;
+  maxPrice?: number;
+  onPriceChange?: (min: number, max: number) => void;
+  activeFilterCount?: number;
 }
 
 export const ProductFilters: React.FC<ProductFiltersProps> = ({
-  categories,
-  selectedCategories,
-  onToggleCategory,
-  brands,
-  selectedBrands,
-  onToggleBrand,
-  minPrice,
-  maxPrice,
-  onPriceChange,
-  inStockOnly,
-  onToggleInStock,
-  onClearAll,
+  filters: propFilters,
+  onFilterChange,
+  onResetFilters,
+  availableBrands: propBrands,
   className = "",
+  categories: propCategoryList,
+  selectedCategory,
+  onSelectCategory,
+  brands: propBrandList,
+  selectedBrand,
+  onSelectBrand,
+  minPrice: propMinPrice,
+  maxPrice: propMaxPrice,
+  onPriceChange,
+  activeFilterCount: propActiveCount,
 }) => {
+  // Unify props into state/getters
+  const currentCategory = selectedCategory !== undefined ? selectedCategory : (propFilters?.categoryName || propFilters?.categoryId || "");
+  const currentBrand = selectedBrand !== undefined ? selectedBrand : (propFilters?.brand || "");
+  const currentMinPrice = propMinPrice !== undefined ? propMinPrice : propFilters?.minPrice;
+  const currentMaxPrice = propMaxPrice !== undefined ? propMaxPrice : propFilters?.maxPrice;
+
+  const [categories, setCategories] = React.useState<CategoryItem[]>([]);
+  const [minPriceInput, setMinPriceInput] = React.useState<string>(
+    currentMinPrice !== undefined ? String(currentMinPrice) : ""
+  );
+  const [maxPriceInput, setMaxPriceInput] = React.useState<string>(
+    currentMaxPrice !== undefined ? String(currentMaxPrice) : ""
+  );
+  const [priceError, setPriceError] = React.useState<string | null>(null);
   const [brandSearch, setBrandSearch] = React.useState("");
 
+  React.useEffect(() => {
+    let active = true;
+    categoryService
+      .getCategories()
+      .then((cats: CategoryItem[]) => {
+        if (active) {
+          setCategories(cats);
+        }
+      })
+      .catch(() => {});
+    return () => {
+      active = false;
+    };
+  }, []);
+
+  React.useEffect(() => {
+    setMinPriceInput(currentMinPrice !== undefined ? String(currentMinPrice) : "");
+    setMaxPriceInput(currentMaxPrice !== undefined ? String(currentMaxPrice) : "");
+  }, [currentMinPrice, currentMaxPrice]);
+
+  const activeFilterCount =
+    propActiveCount !== undefined
+      ? propActiveCount
+      : (currentCategory ? 1 : 0) +
+        (currentMinPrice !== undefined || currentMaxPrice !== undefined ? 1 : 0) +
+        (currentBrand ? 1 : 0);
+
+  // Derive brand options
+  const brandNames = React.useMemo(() => {
+    if (propBrandList && propBrandList.length > 0) {
+      return propBrandList.map((b) => b.name);
+    }
+    if (propBrands && propBrands.length > 0) {
+      return propBrands;
+    }
+    return [
+      "Apple", "Samsung", "Sony", "Bajaj", "Allen Solly", "Aashirvaad",
+      "Fastrack", "Wildcraft", "Himalaya", "Drools", "Amul", "Cosco",
+      "Funskool", "Biba", "Skybags"
+    ];
+  }, [propBrandList, propBrands]);
+
   const filteredBrands = React.useMemo(() => {
-    if (!brandSearch.trim()) return brands;
-    const q = brandSearch.trim().toLowerCase();
-    return brands.filter((b) => b.name.toLowerCase().includes(q));
-  }, [brands, brandSearch]);
+    if (!brandSearch.trim()) return brandNames;
+    const q = brandSearch.toLowerCase();
+    return brandNames.filter((b) => b.toLowerCase().includes(q));
+  }, [brandNames, brandSearch]);
 
-  const handleMinPriceInput = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const val = Number(e.target.value) || 0;
-    if (val >= 0 && val <= maxPrice) {
-      onPriceChange(val, maxPrice);
+  const handleCategorySelect = (catName: string) => {
+    if (onSelectCategory) {
+      onSelectCategory(catName);
+    } else if (onFilterChange && propFilters) {
+      onFilterChange({
+        ...propFilters,
+        categoryName: catName || undefined,
+        categoryId: undefined,
+      });
     }
   };
 
-  const handleMaxPriceInput = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const val = Number(e.target.value) || 0;
-    if (val >= minPrice) {
-      onPriceChange(minPrice, val);
+  const handleBrandSelect = (brandName: string) => {
+    const nextBrand = currentBrand === brandName ? "" : brandName;
+    if (onSelectBrand) {
+      onSelectBrand(nextBrand);
+    } else if (onFilterChange && propFilters) {
+      onFilterChange({
+        ...propFilters,
+        brand: nextBrand || undefined,
+      });
     }
   };
 
-  const handleSliderChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const val = Number(e.target.value) || 0;
-    onPriceChange(minPrice, Math.max(minPrice, val));
+  const handlePriceSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    setPriceError(null);
+    const min = minPriceInput.trim() === "" ? 0 : Number(minPriceInput);
+    const max = maxPriceInput.trim() === "" ? 150000 : Number(maxPriceInput);
+
+    if (isNaN(min) || min < 0) {
+      setPriceError("Minimum price must be positive.");
+      return;
+    }
+    if (isNaN(max) || max < 0) {
+      setPriceError("Maximum price must be positive.");
+      return;
+    }
+    if (min > max) {
+      setPriceError("Min price cannot exceed Max price.");
+      return;
+    }
+
+    if (onPriceChange) {
+      onPriceChange(min, max);
+    } else if (onFilterChange && propFilters) {
+      onFilterChange({
+        ...propFilters,
+        minPrice: min > 0 ? min : undefined,
+        maxPrice: max < 150000 ? max : undefined,
+      });
+    }
   };
+
+  // Category list items
+  const categoryOptions = React.useMemo(() => {
+    if (propCategoryList && propCategoryList.length > 0) {
+      return propCategoryList.map((c) => ({ id: c.name.toLowerCase(), name: c.name, count: c.count }));
+    }
+    return categories.map((c) => ({ id: c.id, name: c.name, count: c.productCount }));
+  }, [propCategoryList, categories]);
 
   return (
-    <aside aria-label="Product filters" className={className}>
-      <div className="flex items-center justify-between pb-4 border-b border-outline-subtle">
-        <h2 className="font-title text-base font-semibold text-on-pure-white">Filters</h2>
-        <button
-          type="button"
-          onClick={onClearAll}
-          className="font-label text-sm text-muted-gray hover:text-accent-orange-text transition-colors duration-150 cursor-pointer"
-        >
-          Clear filters
-        </button>
+    <aside
+      className={`space-y-space-md bg-surface-container-lowest rounded-xl p-space-md shadow-sm border border-surface-container/60 ${className}`}
+      aria-label="Filter products"
+    >
+      {/* Header: Filters + Active Count */}
+      <div className="flex items-center justify-between pb-space-xs border-b border-surface-container/60">
+        <div className="flex items-center gap-2">
+          <SlidersHorizontal className="w-5 h-5 text-primary" />
+          <h2 className="font-headline-sm text-headline-sm text-primary font-bold">
+            Filters
+          </h2>
+        </div>
+        {activeFilterCount > 0 ? (
+          <span className="px-2 py-0.5 rounded-full bg-surface-container-low font-label-sm text-label-sm text-outline font-medium">
+            {activeFilterCount} Active
+          </span>
+        ) : (
+          <button
+            type="button"
+            onClick={onResetFilters}
+            className="font-label-sm text-label-sm text-outline hover:text-primary transition-colors cursor-pointer"
+          >
+            Reset
+          </button>
+        )}
       </div>
 
-      <div className="divide-y divide-outline-subtle">
-        {/* Category Filter */}
-        <section className="py-6 flex flex-col gap-3">
-          <h3 className="font-label text-sm font-semibold text-on-pure-white">Category</h3>
-          <div className="flex flex-col gap-2.5 pt-1">
-            {categories.map((cat) => {
-              const isChecked = selectedCategories.includes(cat.name);
-              return (
-                <label key={cat.name} className="flex items-center justify-between gap-2 cursor-pointer select-none">
-                  <span className="inline-flex items-center gap-2.5">
-                    <input
-                      type="checkbox"
-                      checked={isChecked}
-                      onChange={() => onToggleCategory(cat.name)}
-                      className="rounded-sm border-outline-subtle text-deep-black focus:ring-deep-black cursor-pointer"
-                    />
-                    <span className="font-body text-sm text-on-pure-white">{cat.name}</span>
-                  </span>
-                  <span className="font-label text-xs text-muted-gray tabular-nums">{cat.count}</span>
-                </label>
-              );
-            })}
-          </div>
-        </section>
+      {/* Categories Filter (Radio-list with scrollbar matching Screenshot 3) */}
+      <div className="space-y-space-xs pt-space-xs">
+        <div className="flex items-center justify-between">
+          <h3 className="font-label-md text-label-md text-on-surface uppercase tracking-wider font-bold">
+            Categories
+          </h3>
+          {currentCategory && (
+            <button
+              type="button"
+              onClick={() => handleCategorySelect("")}
+              className="font-label-sm text-label-sm text-primary font-semibold hover:underline cursor-pointer"
+            >
+              Reset
+            </button>
+          )}
+        </div>
 
-        {/* Brand Filter (Searchable) */}
-        <section className="py-6 flex flex-col gap-3">
-          <h3 className="font-label text-sm font-semibold text-on-pure-white">Brand</h3>
-          <div className="flex items-center gap-2 px-2.5 py-1.5 rounded-sm bg-light-gray border border-outline-subtle focus-within:border-deep-black">
-            <Search className="w-3.5 h-3.5 text-muted-gray shrink-0" aria-hidden="true" />
+        <div className="max-h-56 overflow-y-auto space-y-1 pr-1 border-b border-surface-container/60 pb-space-sm custom-scrollbar">
+          {/* All Categories Option */}
+          <label className="flex items-center gap-2.5 py-1 px-2 rounded-lg hover:bg-surface-container-low cursor-pointer transition-colors text-body-sm font-body-sm text-on-surface">
             <input
-              type="text"
-              value={brandSearch}
-              onChange={(e) => setBrandSearch(e.target.value)}
-              placeholder="Filter brands"
-              aria-label="Search brands"
-              className="w-full bg-transparent border-0 p-0 font-body text-sm text-on-pure-white placeholder:text-muted-gray focus:outline-none"
+              type="radio"
+              name="category_filter"
+              checked={!currentCategory}
+              onChange={() => handleCategorySelect("")}
+              className="accent-primary w-4 h-4 cursor-pointer"
             />
-          </div>
-          <div className="flex flex-col gap-2.5 pt-1 max-h-48 overflow-y-auto">
-            {filteredBrands.length === 0 ? (
-              <span className="text-xs text-muted-gray py-1">No brands found</span>
-            ) : (
-              filteredBrands.map((brand) => {
-                const isChecked = selectedBrands.includes(brand.name);
-                return (
-                  <label key={brand.name} className="flex items-center justify-between gap-2 cursor-pointer select-none">
-                    <span className="inline-flex items-center gap-2.5">
-                      <input
-                        type="checkbox"
-                        checked={isChecked}
-                        onChange={() => onToggleBrand(brand.name)}
-                        className="rounded-sm border-outline-subtle text-deep-black focus:ring-deep-black cursor-pointer"
-                      />
-                      <span className="font-body text-sm text-on-pure-white">{brand.name}</span>
-                    </span>
-                    <span className="font-label text-xs text-muted-gray tabular-nums">{brand.count}</span>
-                  </label>
-                );
-              })
-            )}
-          </div>
-        </section>
-
-        {/* Price Range (INR) */}
-        <section className="py-6 flex flex-col gap-3">
-          <h3 className="font-label text-sm font-semibold text-on-pure-white">Price range (₹)</h3>
-          <div className="grid grid-cols-2 gap-3 pt-1">
-            <div className="flex flex-col gap-1">
-              <label htmlFor="price-min" className="font-label text-xs text-muted-gray">Min</label>
-              <input
-                id="price-min"
-                type="number"
-                value={minPrice}
-                min={0}
-                max={150000}
-                step={1000}
-                onChange={handleMinPriceInput}
-                className="w-full px-2.5 py-1.5 rounded-sm bg-light-gray border border-outline-subtle font-body text-sm tabular-nums text-on-pure-white focus:border-deep-black focus:outline-none"
-              />
-            </div>
-            <div className="flex flex-col gap-1">
-              <label htmlFor="price-max" className="font-label text-xs text-muted-gray">Max</label>
-              <input
-                id="price-max"
-                type="number"
-                value={maxPrice}
-                min={minPrice}
-                max={150000}
-                step={1000}
-                onChange={handleMaxPriceInput}
-                className="w-full px-2.5 py-1.5 rounded-sm bg-light-gray border border-outline-subtle font-body text-sm tabular-nums text-on-pure-white focus:border-deep-black focus:outline-none"
-              />
-            </div>
-          </div>
-          <input
-            id="price-range-slider"
-            type="range"
-            min={0}
-            max={120000}
-            step={1000}
-            value={maxPrice}
-            aria-label="Maximum price slider"
-            onChange={handleSliderChange}
-            className="w-full accent-primary-orange mt-2 cursor-pointer"
-          />
-        </section>
-
-        {/* Availability Toggle */}
-        <section className="py-6 flex items-center justify-between gap-3">
-          <span className="font-label text-sm font-medium text-on-pure-white">In stock only</span>
-          <label className="relative inline-flex items-center cursor-pointer select-none">
-            <input
-              type="checkbox"
-              checked={inStockOnly}
-              onChange={(e) => onToggleInStock(e.target.checked)}
-              className="sr-only peer"
-            />
-            <div className="w-10 h-5 bg-outline-subtle rounded-full peer peer-checked:bg-primary-orange transition-colors duration-150 after:content-[''] after:absolute after:top-0.5 after:left-0.5 after:bg-pure-white after:rounded-full after:h-4 after:w-4 after:transition-transform after:duration-150 peer-checked:after:translate-x-5"></div>
+            <span className={!currentCategory ? "font-semibold text-primary" : ""}>
+              All Categories
+            </span>
           </label>
-        </section>
+
+          {/* Individual Categories */}
+          {categoryOptions.map((cat) => {
+            const isSelected =
+              currentCategory.toLowerCase() === cat.name.toLowerCase() ||
+              currentCategory.toLowerCase() === cat.id.toLowerCase();
+
+            return (
+              <label
+                key={cat.id}
+                className={`flex items-center justify-between py-1 px-2 rounded-lg cursor-pointer transition-colors text-body-sm font-body-sm ${
+                  isSelected
+                    ? "bg-primary-fixed/30 text-primary font-semibold"
+                    : "hover:bg-surface-container-low text-on-surface"
+                }`}
+              >
+                <div className="flex items-center gap-2.5 truncate">
+                  <input
+                    type="radio"
+                    name="category_filter"
+                    checked={isSelected}
+                    onChange={() => handleCategorySelect(cat.name)}
+                    className="accent-primary w-4 h-4 cursor-pointer"
+                  />
+                  <span className="truncate">{cat.name}</span>
+                </div>
+                {cat.count !== undefined && cat.count > 0 && (
+                  <span className="text-outline text-xs tabular-nums ml-1">
+                    {cat.count}
+                  </span>
+                )}
+              </label>
+            );
+          })}
+        </div>
+      </div>
+
+      {/* Price Range Filter (Min - Max inputs + Apply Price button matching Screenshot 3) */}
+      <div className="space-y-space-xs pt-space-xs border-b border-surface-container/60 pb-space-md">
+        <h3 className="font-label-md text-label-md text-on-surface uppercase tracking-wider font-bold">
+          Price Range (₹)
+        </h3>
+
+        <form onSubmit={handlePriceSubmit} className="space-y-space-xs mt-2">
+          <div className="grid grid-cols-2 gap-2">
+            <div>
+              <label className="block font-label-sm text-xs text-outline mb-1">Min Price</label>
+              <div className="relative">
+                <span className="absolute left-2.5 top-2 text-outline text-body-sm">₹</span>
+                <input
+                  type="number"
+                  min="0"
+                  step="100"
+                  value={minPriceInput}
+                  onChange={(e) => setMinPriceInput(e.target.value)}
+                  placeholder="0"
+                  className="w-full pl-6 pr-2 py-1.5 rounded-lg bg-surface-container-low border border-surface-container text-body-sm font-body-sm text-on-surface focus:outline-none focus:border-primary"
+                />
+              </div>
+            </div>
+            <div>
+              <label className="block font-label-sm text-xs text-outline mb-1">Max Price</label>
+              <div className="relative">
+                <span className="absolute left-2.5 top-2 text-outline text-body-sm">₹</span>
+                <input
+                  type="number"
+                  min="0"
+                  step="100"
+                  value={maxPriceInput}
+                  onChange={(e) => setMaxPriceInput(e.target.value)}
+                  placeholder="50000"
+                  className="w-full pl-6 pr-2 py-1.5 rounded-lg bg-surface-container-low border border-surface-container text-body-sm font-body-sm text-on-surface focus:outline-none focus:border-primary"
+                />
+              </div>
+            </div>
+          </div>
+
+          {priceError && (
+            <p className="text-error text-xs font-medium">{priceError}</p>
+          )}
+
+          <button
+            type="submit"
+            className="w-full py-2 bg-primary hover:bg-primary-container text-on-primary rounded-lg font-label-md text-label-md font-bold transition-colors cursor-pointer shadow-xs mt-2"
+          >
+            Apply Price
+          </button>
+        </form>
+      </div>
+
+      {/* Brand Filter (Search input + Checkboxes matching Screenshot 3) */}
+      <div className="space-y-space-xs pt-space-xs">
+        <div className="flex items-center justify-between">
+          <h3 className="font-label-md text-label-md text-on-surface uppercase tracking-wider font-bold">
+            Brand
+          </h3>
+          {currentBrand && (
+            <button
+              type="button"
+              onClick={() => handleBrandSelect("")}
+              className="font-label-sm text-label-sm text-primary font-semibold hover:underline cursor-pointer"
+            >
+              Reset
+            </button>
+          )}
+        </div>
+
+        {/* Brand search box */}
+        <div className="relative my-2">
+          <Search className="w-4 h-4 text-outline absolute left-2.5 top-2.5" />
+          <input
+            type="text"
+            value={brandSearch}
+            onChange={(e) => setBrandSearch(e.target.value)}
+            placeholder="Filter brands..."
+            className="w-full pl-8 pr-3 py-1.5 rounded-lg bg-surface-container-low border border-surface-container text-body-sm font-body-sm text-on-surface placeholder:text-outline focus:outline-none focus:border-primary"
+          />
+          {brandSearch && (
+            <button
+              type="button"
+              onClick={() => setBrandSearch("")}
+              className="absolute right-2 top-2 text-outline hover:text-on-surface"
+            >
+              <X className="w-3.5 h-3.5" />
+            </button>
+          )}
+        </div>
+
+        {/* Brand Checkboxes */}
+        <div className="max-h-52 overflow-y-auto space-y-1 pr-1 custom-scrollbar">
+          {filteredBrands.map((brand) => {
+            const isChecked = currentBrand.toLowerCase() === brand.toLowerCase();
+            return (
+              <label
+                key={brand}
+                className="flex items-center gap-2.5 py-1 px-2 rounded-lg hover:bg-surface-container-low cursor-pointer transition-colors text-body-sm font-body-sm text-on-surface"
+              >
+                <input
+                  type="checkbox"
+                  checked={isChecked}
+                  onChange={() => handleBrandSelect(brand)}
+                  className="accent-primary w-4 h-4 rounded cursor-pointer"
+                />
+                <span className={isChecked ? "font-semibold text-primary" : ""}>
+                  {brand}
+                </span>
+              </label>
+            );
+          })}
+        </div>
       </div>
     </aside>
   );

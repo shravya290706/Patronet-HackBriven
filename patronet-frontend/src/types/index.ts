@@ -86,6 +86,30 @@ export interface PaginatedProducts {
   totalPages: number;
 }
 
+export interface SuggestProduct {
+  id: string;
+  name: string;
+  brand?: string | null;
+  category_name?: string | null;
+  sku?: string | null;
+  price: number;
+  primary_image_url?: string | null;
+}
+
+export interface SuggestCategory {
+  id?: string | null;
+  name: string;
+}
+
+export interface SearchSuggestions {
+  query: string;
+  products: SuggestProduct[];
+  categories: SuggestCategory[];
+  brands: string[];
+  corrections: string[];
+  fallback_used?: boolean;
+}
+
 export interface Address {
   id: string; // UUID
   customerId?: string;

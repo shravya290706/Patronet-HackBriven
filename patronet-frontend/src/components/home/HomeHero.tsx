@@ -1,74 +1,222 @@
 import * as React from "react";
-import { ArrowRight } from "lucide-react";
+import { Link, useNavigate } from "react-router-dom";
+import {
+  ChevronLeft,
+  ChevronRight,
+  ArrowRight,
+  Truck,
+  RotateCcw,
+  ShieldCheck,
+  Store,
+} from "lucide-react";
+
+export interface HeroSlide {
+  id: string;
+  tag: string;
+  title: string;
+  subtitle: string;
+  description: string;
+  imageUrl: string;
+  ctaPrimaryText: string;
+  ctaSecondaryText: string;
+  targetCategory?: string;
+}
+
+const HERO_SLIDES: HeroSlide[] = [
+  {
+    id: "slide-1",
+    tag: "Seasonal Selection",
+    title: "Living & Tech Essentials",
+    subtitle: "Explore Curated Home & Personal Electronics",
+    description:
+      "Discover verified electronics, computing accessories, and everyday essentials delivered across supported regions.",
+    imageUrl:
+      "https://images.unsplash.com/photo-1546435770-a3e426bf472b?auto=format&fit=crop&w=700&q=80",
+    ctaPrimaryText: "Explore Catalog",
+    ctaSecondaryText: "View Categories",
+    targetCategory: "electronics",
+  },
+  {
+    id: "slide-2",
+    tag: "Audio Collection",
+    title: "Studio Audio & Sound",
+    subtitle: "Acoustic Hardware & Headphones",
+    description:
+      "Explore wireless noise-cancelling headphones and studio monitoring equipment from featured audio brands.",
+    imageUrl:
+      "https://images.unsplash.com/photo-1505740420928-5e560c06d30e?auto=format&fit=crop&w=700&q=80",
+    ctaPrimaryText: "View Details",
+    ctaSecondaryText: "Audio Collection",
+    targetCategory: "electronics",
+  },
+];
 
 export const HomeHero: React.FC = () => {
-  const [heroSrc, setHeroSrc] = React.useState<string>("/images/hero/hero.png");
+  const [currentSlideIndex, setCurrentSlideIndex] = React.useState(0);
+  const navigate = useNavigate();
+  const currentSlide = HERO_SLIDES[currentSlideIndex];
 
-  const handleScrollToBestsellers = (e: React.MouseEvent<HTMLAnchorElement>) => {
-    e.preventDefault();
-    const el = document.getElementById("bestsellers");
-    if (el) {
-      el.scrollIntoView({ behavior: "smooth" });
-    }
+  const handlePrev = () => {
+    setCurrentSlideIndex((prev) => (prev === 0 ? HERO_SLIDES.length - 1 : prev - 1));
   };
 
-  const handleScrollToAiDiscovery = (e: React.MouseEvent<HTMLAnchorElement>) => {
-    e.preventDefault();
-    const el = document.getElementById("ai-discovery");
+  const handleNext = () => {
+    setCurrentSlideIndex((prev) => (prev === HERO_SLIDES.length - 1 ? 0 : prev + 1));
+  };
+
+  const handleScrollToCategories = () => {
+    const el = document.getElementById("popular-categories");
     if (el) {
       el.scrollIntoView({ behavior: "smooth" });
+    } else {
+      navigate("/products");
     }
   };
 
   return (
-    <section className="w-full bg-deep-black text-on-deep-black">
-      <div className="max-w-[1360px] mx-auto px-4 md:px-6 xl:px-12 grid grid-cols-1 lg:grid-cols-12 items-center gap-6 lg:gap-8 py-6 md:py-8 lg:py-12">
-        {/* Left 5 Columns: Confident Display Typography & CTAs */}
-        <div className="lg:col-span-5 flex flex-col gap-5">
-          <div className="flex flex-col gap-3">
-            <h1 className="font-display text-3xl md:text-5xl lg:text-[56px] lg:leading-[60px] font-bold text-on-deep-black tracking-tight text-balance">
-              Built for your <span className="text-primary-orange">next upgrade.</span>
+    <div className="space-y-space-md">
+      {/* Hero Carousel Banner Card */}
+      <div className="relative w-full rounded-2xl bg-gradient-to-r from-[#EBF2FA] via-[#F4F7FB] to-[#FAF7F2] p-space-lg sm:p-space-xl overflow-hidden min-h-[380px] flex flex-col justify-between border border-surface-container/70 shadow-sm">
+        {/* Ambient Glow */}
+        <div className="absolute right-0 top-0 w-96 h-96 rounded-full bg-primary-fixed/20 blur-3xl pointer-events-none" />
+
+        <div className="relative z-10 grid grid-cols-1 lg:grid-cols-12 gap-6 items-center">
+          {/* Left Text Block */}
+          <div className="lg:col-span-7 max-w-xl space-y-space-xs">
+            <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-primary text-on-primary font-label-sm text-label-sm font-semibold shadow-xs">
+              <span>{currentSlide.tag}</span>
+            </div>
+            <h1 className="font-display-sm sm:font-display-lg text-display-sm sm:text-display-lg text-primary font-bold tracking-tight pt-1">
+              {currentSlide.title}
             </h1>
-            <p className="font-body text-base lg:text-lg text-on-surface-dark-elevated max-w-md text-pretty opacity-90">
-              Precision-engineered laptops, studio audio, and desktop hardware for work, play, and everything in between.
+            <p className="font-headline-sm text-headline-sm text-secondary-container font-semibold">
+              {currentSlide.subtitle}
             </p>
+            <p className="font-body-md text-body-md text-on-surface-variant max-w-md pt-1">
+              {currentSlide.description}
+            </p>
+
+            {/* CTA Buttons */}
+            <div className="flex flex-wrap items-center gap-space-sm sm:gap-space-md pt-space-md">
+              <Link
+                to="/products"
+                className="inline-flex items-center gap-space-xs px-space-lg py-2.5 rounded-lg bg-secondary-container hover:bg-secondary text-on-secondary font-label-md text-label-md font-bold transition-all shadow-sm cursor-pointer"
+              >
+                <span>{currentSlide.ctaPrimaryText}</span>
+                <ArrowRight className="h-4 w-4" />
+              </Link>
+              <button
+                type="button"
+                onClick={handleScrollToCategories}
+                className="inline-flex items-center gap-space-xs px-space-lg py-2.5 rounded-lg border border-surface-container/80 bg-surface-container-lowest/80 hover:bg-surface-container-lowest text-primary font-label-md text-label-md font-bold transition-all shadow-xs cursor-pointer"
+              >
+                <span>{currentSlide.ctaSecondaryText}</span>
+              </button>
+            </div>
           </div>
 
-          <div className="flex flex-wrap items-center gap-5 pt-1">
-            {/* Primary Orange CTA */}
-            <a
-              href="#bestsellers"
-              onClick={handleScrollToBestsellers}
-              className="inline-flex items-center justify-center px-7 py-3 rounded-sm bg-primary-orange text-deep-black font-label text-base font-semibold hover:bg-primary-orange-hover active:scale-[0.99] transition-all duration-150 cursor-pointer"
-            >
-              Shop Now
-            </a>
+          {/* Right Product Plinth Card with Carousel Controls */}
+          <div className="lg:col-span-5 flex justify-center lg:justify-end">
+            <div className="relative w-full max-w-[340px] aspect-[4/3] sm:aspect-square bg-surface-container-lowest/90 rounded-2xl p-4 shadow-md border border-surface-container/60 flex items-center justify-center overflow-hidden">
+              <img
+                src={currentSlide.imageUrl}
+                alt={currentSlide.title}
+                className="w-full h-full object-contain p-2 rounded-xl transition-all duration-300"
+              />
 
-            {/* Understated Secondary CTA */}
-            <a
-              href="#ai-discovery"
-              onClick={handleScrollToAiDiscovery}
-              className="inline-flex items-center gap-1.5 font-label text-base font-medium text-on-deep-black border-b border-outline-dark pb-0.5 hover:border-on-deep-black transition-colors duration-150 cursor-pointer"
-            >
-              <span>Explore AI Shopping</span>
-              <ArrowRight className="w-4 h-4" aria-hidden="true" />
-            </a>
+              {/* Navigation Arrows */}
+              <button
+                type="button"
+                onClick={handlePrev}
+                aria-label="Previous slide"
+                className="absolute left-2.5 top-1/2 -translate-y-1/2 w-8 h-8 rounded-full bg-surface-container-lowest/90 border border-surface-container shadow-sm flex items-center justify-center text-primary hover:bg-surface-container transition-colors cursor-pointer"
+              >
+                <ChevronLeft className="h-4 w-4" />
+              </button>
+              <button
+                type="button"
+                onClick={handleNext}
+                aria-label="Next slide"
+                className="absolute right-2.5 top-1/2 -translate-y-1/2 w-8 h-8 rounded-full bg-surface-container-lowest/90 border border-surface-container shadow-sm flex items-center justify-center text-primary hover:bg-surface-container transition-colors cursor-pointer"
+              >
+                <ChevronRight className="h-4 w-4" />
+              </button>
+            </div>
           </div>
         </div>
 
-        {/* Right 7 Columns: Studio Campaign Photography */}
-        <div className="lg:col-span-7 flex justify-center">
-          <div className="aspect-[16/10] max-h-[420px] w-full overflow-hidden bg-deep-black rounded-sm flex items-center justify-center">
-            <img
-              src={heroSrc}
-              onError={() => setHeroSrc("/images/categories/laptops.svg")}
-              alt="PATRONET matte-black aluminum laptop and studio headphones photographed on dark charcoal plinth with subtle orange rim reflection"
-              className="w-full h-full object-cover object-center mix-blend-lighten"
-              loading="eager"
+        {/* Carousel Indicator Dots */}
+        <div className="relative z-10 flex items-center gap-1.5 pt-space-md">
+          {HERO_SLIDES.map((slide, idx) => (
+            <button
+              key={slide.id}
+              type="button"
+              onClick={() => setCurrentSlideIndex(idx)}
+              aria-label={`Go to slide ${idx + 1}`}
+              className={`h-2 rounded-full transition-all duration-200 cursor-pointer ${
+                idx === currentSlideIndex
+                  ? "w-6 bg-primary"
+                  : "w-2 bg-surface-container-highest hover:bg-outline"
+              }`}
             />
+          ))}
+        </div>
+      </div>
+
+      {/* 4 Feature Badges in a Row */}
+      <div className="grid grid-cols-2 md:grid-cols-4 gap-space-sm sm:gap-space-md">
+        {/* Badge 1 */}
+        <div className="flex items-center gap-space-sm p-space-md rounded-xl bg-surface-container-lowest border border-surface-container/60 shadow-xs">
+          <Truck className="h-5 w-5 text-primary flex-shrink-0" />
+          <div className="min-w-0">
+            <h4 className="font-label-md text-label-md font-bold text-on-surface truncate">
+              Order Delivery
+            </h4>
+            <p className="font-body-sm text-body-sm text-outline truncate">
+              Standard shipping
+            </p>
+          </div>
+        </div>
+
+        {/* Badge 2 */}
+        <div className="flex items-center gap-space-sm p-space-md rounded-xl bg-surface-container-lowest border border-surface-container/60 shadow-xs">
+          <RotateCcw className="h-5 w-5 text-primary flex-shrink-0" />
+          <div className="min-w-0">
+            <h4 className="font-label-md text-label-md font-bold text-on-surface truncate">
+              Return Policy
+            </h4>
+            <p className="font-body-sm text-body-sm text-outline truncate">
+              Eligible product returns
+            </p>
+          </div>
+        </div>
+
+        {/* Badge 3 */}
+        <div className="flex items-center gap-space-sm p-space-md rounded-xl bg-surface-container-lowest border border-surface-container/60 shadow-xs">
+          <ShieldCheck className="h-5 w-5 text-primary flex-shrink-0" />
+          <div className="min-w-0">
+            <h4 className="font-label-md text-label-md font-bold text-on-surface truncate">
+              Direct Brands
+            </h4>
+            <p className="font-body-sm text-body-sm text-outline truncate">
+              Catalog products
+            </p>
+          </div>
+        </div>
+
+        {/* Badge 4 */}
+        <div className="flex items-center gap-space-sm p-space-md rounded-xl bg-surface-container-lowest border border-surface-container/60 shadow-xs">
+          <Store className="h-5 w-5 text-primary flex-shrink-0" />
+          <div className="min-w-0">
+            <h4 className="font-label-md text-label-md font-bold text-on-surface truncate">
+              Store Partners
+            </h4>
+            <p className="font-body-sm text-body-sm text-outline truncate">
+              Registered sellers
+            </p>
           </div>
         </div>
       </div>
-    </section>
+    </div>
   );
 };
