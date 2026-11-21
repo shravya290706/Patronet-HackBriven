@@ -43,7 +43,7 @@ export const Navbar: React.FC = () => {
             <button
               type="button"
               onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-              className="lg:hidden inline-flex items-center justify-center w-8 h-8 text-on-pure-white hover:text-muted-gray focus:outline-none cursor-pointer"
+              className="lg:hidden inline-flex items-center justify-center w-8 h-8 text-on-pure-white hover:text-muted-gray focus:outline-none focus-visible:ring-2 focus-visible:ring-primary-orange rounded-sm cursor-pointer"
               aria-label={isMobileMenuOpen ? "Close navigation menu" : "Open navigation menu"}
               aria-expanded={isMobileMenuOpen}
             >
@@ -51,7 +51,7 @@ export const Navbar: React.FC = () => {
             </button>
             <Link
               to="/"
-              className="font-headline text-lg md:text-xl font-bold tracking-tight text-on-pure-white hover:opacity-90 transition-opacity"
+              className="font-headline text-lg md:text-xl font-bold tracking-tight text-on-pure-white hover:opacity-90 transition-opacity focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-orange rounded-xs"
             >
               PATRONET
             </Link>
@@ -64,7 +64,7 @@ export const Navbar: React.FC = () => {
                 key={link.label}
                 to={link.href}
                 className={({ isActive }) =>
-                  `font-label text-sm font-medium transition-colors duration-150 ${
+                  `font-label text-sm font-medium transition-colors duration-150 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-orange rounded-xs ${
                     link.isDeal
                       ? "text-accent-orange-text hover:text-primary-orange-hover"
                       : isActive
@@ -82,7 +82,7 @@ export const Navbar: React.FC = () => {
           <div className="flex items-center gap-3 shrink-0">
             <form
               onSubmit={handleSearchSubmit}
-              className="hidden md:flex items-center gap-2 px-3 py-1.5 rounded-sm bg-light-gray border border-outline-subtle focus-within:border-deep-black w-48 lg:w-56 transition-colors duration-150"
+              className="hidden md:flex items-center gap-2 px-3 py-1.5 rounded-sm bg-light-gray border border-outline-subtle focus-within:border-deep-black focus-within:ring-2 focus-within:ring-primary-orange/20 w-48 lg:w-56 transition-colors duration-150"
               role="search"
             >
               <Search className="w-3.5 h-3.5 text-muted-gray shrink-0" aria-hidden="true" />
@@ -103,7 +103,7 @@ export const Navbar: React.FC = () => {
                   <Link
                     to="/account"
                     aria-label="My Account"
-                    className="inline-flex items-center gap-1.5 h-8 px-2 rounded-sm text-on-pure-white hover:bg-light-gray border border-outline-subtle transition-colors duration-150"
+                    className="inline-flex items-center gap-1.5 h-8 px-2 rounded-sm text-on-pure-white hover:bg-light-gray border border-outline-subtle transition-colors duration-150 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-orange"
                   >
                     <User className="w-4 h-4 text-primary-orange shrink-0" aria-hidden="true" />
                     <span className="font-label text-xs font-semibold max-w-[80px] sm:max-w-[110px] truncate hidden sm:inline">
@@ -115,7 +115,7 @@ export const Navbar: React.FC = () => {
                     onClick={handleSignOut}
                     aria-label="Sign out"
                     title="Sign out of demo session"
-                    className="inline-flex items-center justify-center w-8 h-8 text-muted-gray hover:text-accent-orange-text transition-colors duration-150 rounded-sm"
+                    className="inline-flex items-center justify-center w-8 h-8 text-muted-gray hover:text-accent-orange-text transition-colors duration-150 rounded-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-orange cursor-pointer"
                   >
                     <LogOut className="w-4 h-4" />
                   </button>
@@ -124,34 +124,38 @@ export const Navbar: React.FC = () => {
                 <Link
                   to="/login"
                   aria-label="Sign In"
-                  className="inline-flex items-center justify-center w-8 h-8 text-on-pure-white hover:text-muted-gray transition-colors duration-150 rounded-sm"
+                  className="inline-flex items-center justify-center w-8 h-8 text-on-pure-white hover:text-muted-gray transition-colors duration-150 rounded-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-orange"
                 >
                   <User className="w-4.5 h-4.5" aria-hidden="true" />
                 </Link>
               )}
 
+              {/* Wishlist Link with pill count badge */}
               <Link
                 to="/wishlist"
                 aria-label="Wishlist"
-                className="inline-flex items-center justify-center w-8 h-8 text-on-pure-white hover:text-muted-gray transition-colors duration-150 rounded-sm relative"
+                className="inline-flex items-center justify-center w-8 h-8 text-on-pure-white hover:text-muted-gray transition-colors duration-150 rounded-sm relative focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-orange"
               >
                 <Heart className="w-4.5 h-4.5" aria-hidden="true" />
                 {wishlistCount > 0 && (
-                  <span className="absolute -top-1 -right-1 w-4 h-4 bg-primary-orange text-deep-black text-[10px] font-bold rounded-full flex items-center justify-center tabular-nums shadow-xs">
-                    {wishlistCount}
+                  <span className="absolute -top-1.5 -right-1.5 min-w-[18px] h-4.5 px-1 bg-primary-orange text-deep-black text-[10px] font-bold rounded-full flex items-center justify-center tabular-nums shadow-xs leading-none">
+                    {wishlistCount > 99 ? "99+" : wishlistCount}
                   </span>
                 )}
               </Link>
 
+              {/* Cart Link with pill count badge */}
               <Link
                 to="/cart"
                 aria-label="Shopping cart"
-                className="inline-flex items-center gap-1 h-8 px-1.5 text-on-pure-white hover:text-muted-gray transition-colors duration-150 rounded-sm shrink-0"
+                className="inline-flex items-center justify-center w-8 h-8 text-on-pure-white hover:text-muted-gray transition-colors duration-150 rounded-sm relative focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-orange"
               >
                 <ShoppingCart className="w-4.5 h-4.5" aria-hidden="true" />
-                <span className="font-label text-xs tabular-nums whitespace-nowrap text-muted-gray">
-                  ({itemCount})
-                </span>
+                {itemCount > 0 && (
+                  <span className="absolute -top-1.5 -right-1.5 min-w-[18px] h-4.5 px-1 bg-primary-orange text-deep-black text-[10px] font-bold rounded-full flex items-center justify-center tabular-nums shadow-xs leading-none">
+                    {itemCount > 99 ? "99+" : itemCount}
+                  </span>
+                )}
               </Link>
             </div>
           </div>
@@ -160,7 +164,7 @@ export const Navbar: React.FC = () => {
         {/* Mobile Navigation Drawer */}
         {isMobileMenuOpen && (
           <div className="lg:hidden border-t border-outline-subtle py-3 px-2 space-y-3 bg-pure-white animate-in slide-in-from-top-2 duration-150">
-            <form onSubmit={handleSearchSubmit} className="flex items-center gap-2 px-3 py-1.5 rounded-sm bg-light-gray border border-outline-subtle">
+            <form onSubmit={handleSearchSubmit} className="flex items-center gap-2 px-3 py-1.5 rounded-sm bg-light-gray border border-outline-subtle focus-within:ring-2 focus-within:ring-primary-orange">
               <Search className="w-4 h-4 text-muted-gray shrink-0" aria-hidden="true" />
               <input
                 type="search"

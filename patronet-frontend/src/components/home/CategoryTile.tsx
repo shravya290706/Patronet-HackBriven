@@ -22,26 +22,26 @@ export const CategoryTile: React.FC<CategoryTileProps> = ({
   className = "",
   isLargeTitle = false,
 }) => {
-  const [imgSrc, setImgSrc] = React.useState<string>(imageUrl);
   const [hasError, setHasError] = React.useState<boolean>(false);
+  const [prevImageUrl, setPrevImageUrl] = React.useState<string>(imageUrl);
 
-  React.useEffect(() => {
-    setImgSrc(imageUrl);
+  // Derived state adjustment pattern recommended by React docs for props change:
+  if (imageUrl !== prevImageUrl) {
+    setPrevImageUrl(imageUrl);
     setHasError(false);
-  }, [imageUrl]);
+  }
 
   const handleError = () => {
-    if (!hasError) {
-      setHasError(true);
-      setImgSrc("/images/products/placeholder.svg");
-    }
+    setHasError(true);
   };
+
+  const currentSrc = hasError ? "/images/products/placeholder.svg" : imageUrl;
 
   return (
     <Link to={to} className={`group flex flex-col gap-2 ${className}`}>
       <div className={`${aspectClass} w-full bg-light-gray rounded-sm overflow-hidden flex items-center justify-center`}>
         <img
-          src={imgSrc}
+          src={currentSrc}
           alt={imageAlt}
           onError={handleError}
           className="w-full h-full object-cover group-hover:scale-[1.02] transition-transform duration-200"

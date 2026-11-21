@@ -31,12 +31,14 @@ export const ProductGallery: React.FC<ProductGalleryProps> = ({
 
   const [activeIndex, setActiveIndex] = React.useState<number>(0);
   const [failedIndices, setFailedIndices] = React.useState<Set<number>>(new Set());
+  const [prevGalleryKey, setPrevGalleryKey] = React.useState<string>(() => galleryImages.join("|"));
 
-  // Reset index when gallery changes
-  React.useEffect(() => {
+  const currentGalleryKey = galleryImages.join("|");
+  if (currentGalleryKey !== prevGalleryKey) {
+    setPrevGalleryKey(currentGalleryKey);
     setActiveIndex(0);
     setFailedIndices(new Set());
-  }, [galleryImages]);
+  }
 
   const handlePrev = () => {
     setActiveIndex((prev) => (prev > 0 ? prev - 1 : galleryImages.length - 1));
@@ -79,7 +81,7 @@ export const ProductGallery: React.FC<ProductGalleryProps> = ({
               aria-label="Previous product image"
               className="absolute left-4 top-1/2 -translate-y-1/2 inline-flex items-center justify-center w-10 h-10 rounded-full bg-pure-white border border-outline-subtle text-on-pure-white hover:border-deep-black shadow-sm transition-colors duration-150 cursor-pointer"
             >
-              <ChevronLeft className="w-5 h-5 text-deep-black" />
+              <ChevronLeft className="w-5 h-5" />
             </button>
 
             {/* Next Button */}
@@ -89,34 +91,36 @@ export const ProductGallery: React.FC<ProductGalleryProps> = ({
               aria-label="Next product image"
               className="absolute right-4 top-1/2 -translate-y-1/2 inline-flex items-center justify-center w-10 h-10 rounded-full bg-pure-white border border-outline-subtle text-on-pure-white hover:border-deep-black shadow-sm transition-colors duration-150 cursor-pointer"
             >
-              <ChevronRight className="w-5 h-5 text-deep-black" />
+              <ChevronRight className="w-5 h-5" />
             </button>
           </>
         )}
       </div>
 
-      {/* Selectable Image Thumbnails */}
+      {/* Thumbnails Row */}
       {galleryImages.length > 1 && (
-        <div className="grid grid-cols-4 gap-3 sm:gap-4">
+        <div className="grid grid-cols-4 sm:grid-cols-5 md:grid-cols-6 gap-3">
           {galleryImages.map((imgUrl, idx) => {
+            const isFailed = failedIndices.has(idx);
+            const thumbSrc = isFailed ? fallbackImage : imgUrl;
             const isSelected = idx === activeIndex;
-            const thumbUrl = failedIndices.has(idx) ? fallbackImage : imgUrl;
+
             return (
               <button
-                key={idx}
+                key={`${thumbSrc}-${idx}`}
                 type="button"
                 onClick={() => setActiveIndex(idx)}
                 aria-label={`View image ${idx + 1}`}
-                aria-pressed={isSelected}
-                className={`gallery-thumb aspect-square bg-light-gray rounded-sm p-2 overflow-hidden transition-all duration-150 cursor-pointer flex items-center justify-center ${
+                aria-current={isSelected ? "true" : undefined}
+                className={`aspect-square w-full bg-light-gray rounded-sm overflow-hidden p-2 border-2 transition-all duration-150 cursor-pointer flex items-center justify-center ${
                   isSelected
-                    ? "border-2 border-deep-black"
-                    : "border border-outline-subtle hover:border-deep-black"
+                    ? "border-primary-orange shadow-xs"
+                    : "border-outline-subtle hover:border-deep-black"
                 }`}
               >
                 <img
-                  src={thumbUrl}
-                  alt={`${productName} thumbnail ${idx + 1}`}
+                  src={thumbSrc}
+                  alt={`Thumbnail ${idx + 1}`}
                   className="w-full h-full object-contain mix-blend-multiply"
                   onError={() => handleImageError(idx)}
                 />

@@ -2,6 +2,7 @@ import { MockAuthAdapter } from '../services/adapters/mockAuthAdapter';
 import { MockCheckoutAdapter } from '../services/adapters/mockCheckoutAdapter';
 import { MockProductAdapter } from '../services/adapters/mockProductAdapter';
 import type { CartModel } from '../services/api/cartService';
+import { MOCK_PRODUCTS } from '../mocks/products';
 
 // Mock storage in Node
 const mockSessionStorage: Record<string, string> = {};
@@ -135,8 +136,9 @@ async function runAuthAndAccountTests() {
   console.assert(emptyOrders.length === 0, 'Initially zero mock orders');
 
   // Create mock order
+  const product1 = MOCK_PRODUCTS[0];
   const testCart: CartModel = {
-    items: [{ productId: 'gamebook-15', quantity: 1 }],
+    items: [{ productId: product1.id, quantity: 1 }],
     updatedAt: new Date().toISOString(),
   };
   const orderRes = await checkoutAdapter.createOrder(

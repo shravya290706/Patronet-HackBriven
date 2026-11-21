@@ -38,10 +38,11 @@ export const ProductDetailPage: React.FC = () => {
 
   const isWishlisted = product ? contextIsWishlisted(product.id) : false;
 
-  // Reset quantity whenever id changes
-  React.useEffect(() => {
+  const [prevId, setPrevId] = React.useState<string | undefined>(id);
+  if (id !== prevId) {
+    setPrevId(id);
     setQuantity(1);
-  }, [id]);
+  }
 
   // Fetch Product Details and Related Products
   React.useEffect(() => {
