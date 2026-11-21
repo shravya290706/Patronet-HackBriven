@@ -1,0 +1,643 @@
+<!DOCTYPE html><html lang="en"><head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>PATRONET — AI Shopping Assistant</title>
+  <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+  <script id="tailwind-config">/** @type {import('tailwindcss').Config} */
+globalThis.tailwind = globalThis.tailwind || {};
+globalThis.tailwind.config = {
+  darkMode: 'class',
+  theme: {
+    extend: {
+      colors: {
+        'primary-orange': '#FF6B00',
+        'on-primary-orange': '#111111',
+        'primary-orange-hover': '#E05E00',
+        'primary-orange-tint': '#FFEDE6',
+        'accent-orange-text': '#BF4E00',
+        'deep-black': '#111111',
+        'on-deep-black': '#FFFFFF',
+        'surface-dark-elevated': '#1A1A1A',
+        'on-surface-dark-elevated': '#F5F5F5',
+        'pure-white': '#FFFFFF',
+        'on-pure-white': '#111111',
+        'light-gray': '#F5F5F5',
+        'on-light-gray': '#111111',
+        'muted-gray': '#666666',
+        'outline-subtle': '#E5E5E5',
+        'outline-dark': '#2E2E2E',
+      },
+      borderRadius: {
+        'sm': '4px',
+        'DEFAULT': '6px',
+        'md': '8px',
+        'lg': '12px',
+        'xl': '16px',
+        'full': '9999px',
+      },
+      spacing: {
+        'gutter-xs': '4px',
+        'gutter-sm': '8px',
+        'gutter-md': '16px',
+        'gutter-lg': '24px',
+        'gutter-xl': '32px',
+        'section': '64px',
+        'page-margin': '48px',
+      },
+      fontFamily: {
+        'display': ['"Inter"', 'sans-serif'],
+        'headline': ['"Inter"', 'sans-serif'],
+        'title': ['"Inter"', 'sans-serif'],
+        'body': ['"Inter"', 'sans-serif'],
+        'label': ['"Inter"', 'sans-serif'],
+      },
+      fontSize: {
+        'display-xl': ['60px', { lineHeight: '64px', letterSpacing: '-1.6px', fontWeight: '700' }],
+        'display-xl-mobile': ['32px', { lineHeight: '38px', letterSpacing: '-0.6px', fontWeight: '700' }],
+        'headline-lg': ['36px', { lineHeight: '42px', letterSpacing: '-0.8px', fontWeight: '700' }],
+        'headline-lg-mobile': ['28px', { lineHeight: '34px', letterSpacing: '-0.5px', fontWeight: '700' }],
+        'headline-md': ['24px', { lineHeight: '30px', letterSpacing: '-0.4px', fontWeight: '700' }],
+        'title-lg': ['20px', { lineHeight: '26px', letterSpacing: '-0.2px', fontWeight: '600' }],
+        'title-md': ['16px', { lineHeight: '22px', letterSpacing: '-0.1px', fontWeight: '600' }],
+        'body-lg': ['16px', { lineHeight: '24px', letterSpacing: '0px', fontWeight: '400' }],
+        'body-md': ['14px', { lineHeight: '20px', letterSpacing: '0px', fontWeight: '400' }],
+        'label-lg': ['14px', { lineHeight: '20px', letterSpacing: '0px', fontWeight: '600' }],
+        'label-md': ['13px', { lineHeight: '18px', letterSpacing: '0px', fontWeight: '500' }],
+        'label-sm': ['12px', { lineHeight: '16px', letterSpacing: '0.2px', fontWeight: '500' }],
+      },
+      transitionDuration: {
+        'state-change': '150ms',
+        'surface-enter': '240ms',
+      },
+      transitionDelay: {
+        'state-change': '0ms',
+        'surface-enter': '0ms',
+      },
+      transitionTimingFunction: {
+        'state-change': 'ease-out',
+        'surface-enter': 'cubic-bezier(0.2, 0, 0, 1)',
+      },
+    },
+  },
+};
+if (typeof module !== 'undefined') module.exports = globalThis.tailwind.config;
+</script>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=block" rel="stylesheet">
+  <style>
+    .material-symbols-outlined, .material-symbols-rounded, .material-symbols-sharp, .material-icons {
+      display: inline-block;
+      width: 1em;
+      height: 1em;
+      line-height: 1 !important;
+      box-sizing: content-box;
+      overflow: hidden;
+      white-space: nowrap;
+      direction: ltr;
+      vertical-align: middle;
+    }
+  </style>
+</head>
+<body class="bg-pure-white text-on-pure-white font-body antialiased">
+  <div class="min-h-[1024px] flex flex-col bg-pure-white" data-stitch-vh="min-h-[1024px]===min-h-screen">
+
+    <!-- 1. Navigation Bar (Shared Shell) -->
+    <header class="sticky top-0 z-40 bg-pure-white border-b border-outline-subtle">
+      <div class="max-w-[1360px] mx-auto px-gutter-md md:px-gutter-lg xl:px-page-margin h-[72px] flex items-center justify-between gap-gutter-xl">
+        <a href="../patronet-homepage-refined/PatronetHomepageRefined.html" class="font-headline text-title-lg tracking-tight text-on-pure-white shrink-0" data-design-text-token="title-lg">
+          PATRONET
+        </a>
+
+        <nav aria-label="Primary navigation" class="hidden lg:flex items-center gap-10">
+          <a href="../patronet-catalogue/PatronetCatalogue.html" class="font-label text-label-lg text-on-pure-white hover:text-muted-gray transition-colors duration-state-change ease-state-change" data-design-text-token="label-lg">Shop All</a>
+          <a href="../patronet-catalogue/PatronetCatalogue.html" class="font-label text-label-lg text-on-pure-white hover:text-muted-gray transition-colors duration-state-change ease-state-change" data-design-text-token="label-lg">Electronics</a>
+          <a href="../patronet-catalogue/PatronetCatalogue.html" class="font-label text-label-lg text-on-pure-white hover:text-muted-gray transition-colors duration-state-change ease-state-change" data-design-text-token="label-lg">Computers</a>
+          <a href="../patronet-catalogue/PatronetCatalogue.html" class="font-label text-label-lg text-on-pure-white hover:text-muted-gray transition-colors duration-state-change ease-state-change" data-design-text-token="label-lg">Audio</a>
+          <a href="../patronet-catalogue/PatronetCatalogue.html" class="font-label text-label-lg text-accent-orange-text hover:text-primary-orange-hover transition-colors duration-state-change ease-state-change" data-design-text-token="label-lg">Deals</a>
+        </nav>
+
+        <div class="flex items-center gap-gutter-lg shrink-0">
+          <form class="hidden md:flex items-center gap-gutter-sm px-3.5 py-2 rounded-sm bg-light-gray border border-outline-subtle focus-within:border-deep-black w-64 lg:w-72 transition-colors duration-state-change" role="search" onsubmit="return false;">
+            <span class="material-symbols-outlined text-[18px] text-muted-gray shrink-0" aria-hidden="true">search</span>
+            <input type="search" placeholder="Search catalog" aria-label="Search PATRONET catalog" class="w-full bg-transparent border-0 p-0 font-body text-body-md text-on-pure-white placeholder:text-muted-gray focus:ring-0">
+          </form>
+
+          <div class="flex items-center gap-gutter-sm">
+            <a href="../patronet-account/PatronetAccount.html" aria-label="Account" class="inline-flex items-center justify-center w-9 h-9 text-on-pure-white hover:text-muted-gray transition-colors duration-state-change ease-state-change">
+              <span class="material-symbols-outlined text-[20px]" aria-hidden="true">person</span>
+            </a>
+
+            <button type="button" aria-label="Wishlist" class="inline-flex items-center justify-center w-9 h-9 text-on-pure-white hover:text-muted-gray transition-colors duration-state-change ease-state-change">
+              <span class="material-symbols-outlined text-[20px]" aria-hidden="true">favorite</span>
+            </button>
+
+            <a href="../patronet-cart/PatronetCart.html" aria-label="Shopping cart" class="inline-flex items-center gap-gutter-xs h-9 pl-gutter-xs text-on-pure-white hover:text-muted-gray transition-colors duration-state-change shrink-0">
+              <span class="material-symbols-outlined text-[20px] shrink-0" aria-hidden="true">shopping_cart</span>
+              <span id="ai-header-cart-count" class="font-label text-label-md tabular-nums whitespace-nowrap" data-design-text-token="label-md">(3)</span>
+            </a>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <main class="flex-1">
+      <div class="max-w-[1360px] mx-auto px-gutter-md md:px-gutter-lg xl:px-page-margin py-gutter-xl">
+
+        <!-- 2. AI Shopping Hero -->
+        <section aria-labelledby="ai-hero-heading" class="pt-gutter-md pb-gutter-xl">
+          <div class="max-w-3xl flex flex-col gap-gutter-md">
+            <span class="font-label text-label-md tracking-wider uppercase text-accent-orange-text" data-design-text-token="label-md">
+              AI SHOPPING
+            </span>
+            <h1 id="ai-hero-heading" class="font-display text-display-xl-mobile md:text-display-xl text-on-pure-white text-balance" data-design-text-token="display-xl">
+              Tell us what you <span class="text-accent-orange-text">need.</span>
+            </h1>
+            <p class="font-body text-body-lg text-muted-gray max-w-2xl text-pretty" data-design-text-token="body-lg">
+              Describe your requirements in your own words. We&#39;ll help you discover products that fit.
+            </p>
+          </div>
+        </section>
+
+        <!-- 3. Conversational Search Field (Visual Focal Point) -->
+        <section aria-label="Natural language product search" class="pb-gutter-xl border-b border-outline-subtle">
+          <form id="ai-search-form" class="p-gutter-lg rounded-sm border border-outline-subtle bg-light-gray focus-within:border-deep-black transition-colors duration-state-change flex flex-col gap-gutter-md" onsubmit="handleAISearch(event)">
+            <label for="ai-query-input" class="sr-only">Describe what you are looking for</label>
+            <textarea id="ai-query-input" rows="3" placeholder="I need a laptop for programming and gaming under ₹80,000." class="w-full bg-pure-white border border-outline-subtle rounded-sm p-gutter-md font-body text-body-lg text-on-pure-white placeholder:text-muted-gray focus:border-deep-black focus:ring-0 resize-none">I need a laptop for programming and gaming under ₹80,000 with good battery life.</textarea>
+
+            <!-- Validation / Unclear Requirements Message -->
+            <p id="ai-input-error" class="hidden font-label text-label-md text-accent-orange-text" data-design-text-token="label-md">
+              Please describe what you are looking for in a bit more detail (for example, product type, use case, or budget).
+            </p>
+
+            <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-gutter-md">
+              <p class="font-body text-body-md text-muted-gray" data-design-text-token="body-md">
+                Include your budget, primary use, or preferred form factor.
+              </p>
+
+              <div class="flex items-center gap-gutter-sm shrink-0">
+                <button type="button" onclick="clearAISearch()" class="px-gutter-md py-3 rounded-sm border border-outline-subtle bg-pure-white font-label text-label-lg text-on-pure-white hover:border-deep-black transition-colors duration-state-change">
+                  <span data-design-text-token="label-lg">Clear</span>
+                </button>
+                <button id="ai-find-btn" type="submit" class="px-gutter-xl py-3 rounded-sm bg-primary-orange text-on-primary-orange font-label text-label-lg hover:bg-primary-orange-hover transition-colors duration-state-change inline-flex items-center justify-center gap-gutter-sm">
+                  <span id="ai-find-spinner" class="hidden material-symbols-outlined text-[18px] animate-spin" aria-hidden="true">progress_activity</span>
+                  <span id="ai-find-label" data-design-text-token="label-lg">Find Products</span>
+                </button>
+              </div>
+            </div>
+          </form>
+
+          <!-- Suggestion Chips -->
+          <div class="mt-gutter-md flex flex-wrap items-center gap-gutter-sm">
+            <span class="font-label text-label-md text-muted-gray mr-gutter-xs" data-design-text-token="label-md">Try asking:</span>
+            <button type="button" onclick="applySuggestion(&#39;Laptop for coding under ₹80,000&#39;)" class="px-3.5 py-2 rounded-sm border border-outline-subtle bg-pure-white font-label text-label-md text-on-pure-white hover:border-deep-black transition-colors duration-state-change">
+              <span data-design-text-token="label-md">Laptop for coding</span>
+            </button>
+            <button type="button" onclick="applySuggestion(&#39;Gaming setup under ₹60,000&#39;)" class="px-3.5 py-2 rounded-sm border border-outline-subtle bg-pure-white font-label text-label-md text-on-pure-white hover:border-deep-black transition-colors duration-state-change">
+              <span data-design-text-token="label-md">Gaming setup under ₹60,000</span>
+            </button>
+            <button type="button" onclick="applySuggestion(&#39;Headphones for meetings with noise cancellation&#39;)" class="px-3.5 py-2 rounded-sm border border-outline-subtle bg-pure-white font-label text-label-md text-on-pure-white hover:border-deep-black transition-colors duration-state-change">
+              <span data-design-text-token="label-md">Headphones for meetings</span>
+            </button>
+            <button type="button" onclick="applySuggestion(&#39;Budget office accessories under ₹10,000&#39;)" class="px-3.5 py-2 rounded-sm border border-outline-subtle bg-pure-white font-label text-label-md text-on-pure-white hover:border-deep-black transition-colors duration-state-change">
+              <span data-design-text-token="label-md">Budget office accessories</span>
+            </button>
+          </div>
+        </section>
+
+        <!-- Loading State (Hidden by default) -->
+        <section id="ai-loading-state" class="hidden py-section flex flex-col items-center justify-center gap-gutter-md border-b border-outline-subtle">
+          <span class="material-symbols-outlined text-[28px] text-accent-orange-text animate-spin" aria-hidden="true">progress_activity</span>
+          <p class="font-body text-body-lg text-muted-gray" data-design-text-token="body-lg">Matching your requirements against the PATRONET catalogue...</p>
+        </section>
+
+        <!-- Service Unavailable Banner (Hidden by default) -->
+        <section id="ai-service-error" class="hidden my-gutter-xl p-gutter-lg rounded-sm border border-primary-orange bg-primary-orange-tint flex flex-col sm:flex-row sm:items-center justify-between gap-gutter-md" role="alert">
+          <div class="flex items-start gap-gutter-sm">
+            <span class="material-symbols-outlined text-[20px] text-accent-orange-text shrink-0 mt-0.5" aria-hidden="true">error</span>
+            <div class="flex flex-col gap-gutter-xs">
+              <p class="font-label text-label-lg text-on-pure-white" data-design-text-token="label-lg">AI assistant is temporarily unavailable</p>
+              <p class="font-body text-body-md text-on-pure-white" data-design-text-token="body-md">You can retry your search or browse our full product catalogue directly.</p>
+            </div>
+          </div>
+          <a href="../patronet-catalogue/PatronetCatalogue.html" class="px-gutter-lg py-2.5 rounded-sm bg-deep-black text-on-deep-black font-label text-label-md hover:bg-surface-dark-elevated shrink-0">
+            <span data-design-text-token="label-md">Browse Catalogue</span>
+          </a>
+        </section>
+
+        <!-- No Matching Products State (Hidden by default) -->
+        <section id="ai-empty-state" class="hidden py-section text-center flex flex-col items-center gap-gutter-md border-b border-outline-subtle">
+          <span class="material-symbols-outlined text-[36px] text-muted-gray" aria-hidden="true">search_off</span>
+          <div class="flex flex-col gap-gutter-xs">
+            <h2 class="font-headline text-headline-md text-on-pure-white" data-design-text-token="headline-md">
+              No matching products found.
+            </h2>
+            <p class="font-body text-body-lg text-muted-gray max-w-md text-pretty" data-design-text-token="body-lg">
+              Try broadening your budget or adjusting one of your requirements to see available catalogue options.
+            </p>
+          </div>
+          <button type="button" onclick="resetToDefaultQuery()" class="mt-gutter-xs px-gutter-xl py-3 rounded-sm bg-deep-black text-on-deep-black font-label text-label-lg hover:bg-surface-dark-elevated transition-colors duration-state-change">
+            <span data-design-text-token="label-lg">Reset requirements</span>
+          </button>
+        </section>
+
+        <!-- Results Container -->
+        <div id="ai-results-container" class="flex flex-col gap-section pt-gutter-xl">
+
+          <!-- 4. AI Understanding Panel -->
+          <section aria-labelledby="ai-understood-heading" class="p-gutter-lg rounded-sm border border-outline-subtle bg-light-gray flex flex-col gap-gutter-md">
+            <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-gutter-sm">
+              <h2 id="ai-understood-heading" class="font-headline text-headline-md text-on-light-gray" data-design-text-token="headline-md">
+                Here&#39;s what we understood.
+              </h2>
+              <span class="font-label text-label-sm text-muted-gray" data-design-text-token="label-sm">Click any criterion to remove</span>
+            </div>
+
+            <div id="criteria-chips" class="flex flex-wrap items-center gap-gutter-sm">
+              <button type="button" onclick="removeCriterion(this)" class="criterion-chip inline-flex items-center gap-gutter-xs px-3 py-1.5 rounded-sm border border-outline-subtle bg-pure-white font-label text-label-md text-on-pure-white hover:border-deep-black transition-colors duration-state-change">
+                <span class="text-muted-gray" data-design-text-token="label-md">Category:</span>
+                <span data-design-text-token="label-md">Laptop</span>
+                <span class="material-symbols-outlined text-[15px] text-muted-gray ml-1" aria-hidden="true">close</span>
+              </button>
+              <button type="button" onclick="removeCriterion(this)" class="criterion-chip inline-flex items-center gap-gutter-xs px-3 py-1.5 rounded-sm border border-outline-subtle bg-pure-white font-label text-label-md text-on-pure-white hover:border-deep-black transition-colors duration-state-change">
+                <span class="text-muted-gray" data-design-text-token="label-md">Budget:</span>
+                <span data-design-text-token="label-md">Under ₹80,000</span>
+                <span class="material-symbols-outlined text-[15px] text-muted-gray ml-1" aria-hidden="true">close</span>
+              </button>
+              <button type="button" onclick="removeCriterion(this)" class="criterion-chip inline-flex items-center gap-gutter-xs px-3 py-1.5 rounded-sm border border-outline-subtle bg-pure-white font-label text-label-md text-on-pure-white hover:border-deep-black transition-colors duration-state-change">
+                <span class="text-muted-gray" data-design-text-token="label-md">Primary use:</span>
+                <span data-design-text-token="label-md">Programming</span>
+                <span class="material-symbols-outlined text-[15px] text-muted-gray ml-1" aria-hidden="true">close</span>
+              </button>
+              <button type="button" onclick="removeCriterion(this)" class="criterion-chip inline-flex items-center gap-gutter-xs px-3 py-1.5 rounded-sm border border-outline-subtle bg-pure-white font-label text-label-md text-on-pure-white hover:border-deep-black transition-colors duration-state-change">
+                <span class="text-muted-gray" data-design-text-token="label-md">Secondary use:</span>
+                <span data-design-text-token="label-md">Gaming</span>
+                <span class="material-symbols-outlined text-[15px] text-muted-gray ml-1" aria-hidden="true">close</span>
+              </button>
+              <button type="button" onclick="removeCriterion(this)" class="criterion-chip inline-flex items-center gap-gutter-xs px-3 py-1.5 rounded-sm border border-outline-subtle bg-pure-white font-label text-label-md text-on-pure-white hover:border-deep-black transition-colors duration-state-change">
+                <span class="text-muted-gray" data-design-text-token="label-md">Priority:</span>
+                <span data-design-text-token="label-md">Battery life</span>
+                <span class="material-symbols-outlined text-[15px] text-muted-gray ml-1" aria-hidden="true">close</span>
+              </button>
+            </div>
+          </section>
+
+          <!-- 5. Recommended Products Grid (3 per row on Desktop) -->
+          <section aria-labelledby="recommended-heading" class="flex flex-col gap-gutter-lg">
+            <div class="flex flex-col sm:flex-row sm:items-end justify-between gap-gutter-sm">
+              <h2 id="recommended-heading" class="font-headline text-headline-lg-mobile md:text-headline-lg text-on-pure-white" data-design-text-token="headline-lg">
+                Recommended for you.
+              </h2>
+              <span class="font-label text-label-md text-muted-gray tabular-nums" data-design-text-token="label-md">
+                3 catalogue matches
+              </span>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-gutter-lg items-stretch">
+
+              <!-- Card 1 -->
+              <article class="h-full rounded-sm border border-outline-subtle bg-pure-white flex flex-col justify-between overflow-hidden">
+                <div>
+                  <a href="../patronet-product-details/PatronetProductDetails.html" class="block bg-light-gray aspect-[4/3] p-gutter-lg flex items-center justify-center overflow-hidden">
+                    <img src="https://lh3.googleusercontent.com/aida/ALJJyrBXD-CNoNZHD3kHM90bvNoHvJjAHYSjT6okGqGkmBlT3kOOUPB9pjT2hBYcJvZLQk28_umF06nUyN2EsFEXoS9-bD_qkgGHNnqsVMhzNx8KYa1R-UTMxYKpzFoojDQxfiA1MWzy5usMZJS-60ogq-Eac_H96J1qQXxdD5vwW4WOSEb6WG5GWH8Fg0mFGkCDwnBATJrxvaiRUd76IYlNGCz-UhCPHBvWq1B7bJvTAOSVJna1oeyU6rPoYBOXzmHMh5CK" alt="PATRONET ProBook 14 Developer Edition" class="w-full h-full object-contain">
+                  </a>
+                  <div class="p-gutter-lg flex flex-col gap-gutter-md">
+                    <div class="flex flex-col gap-gutter-xs">
+                      <span class="font-label text-label-md text-muted-gray" data-design-text-token="label-md">PATRONET</span>
+                      <a href="../patronet-product-details/PatronetProductDetails.html" class="font-title text-title-lg text-on-pure-white hover:text-accent-orange-text transition-colors duration-state-change" data-design-text-token="title-lg">
+                        ProBook 14 Developer Edition
+                      </a>
+                      <p class="font-headline text-headline-md text-on-pure-white tabular-nums" data-design-text-token="headline-md">₹74,990</p>
+                    </div>
+
+                    <ul class="flex flex-col gap-gutter-xs pt-gutter-sm border-t border-outline-subtle font-body text-body-md text-muted-gray">
+                      <li class="flex items-start gap-gutter-xs">
+                        <span class="material-symbols-outlined text-[16px] text-accent-orange-text shrink-0 mt-0.5" aria-hidden="true">check</span>
+                        <span data-design-text-token="body-md">16GB RAM &amp; 512GB NVMe SSD for fast builds</span>
+                      </li>
+                      <li class="flex items-start gap-gutter-xs">
+                        <span class="material-symbols-outlined text-[16px] text-accent-orange-text shrink-0 mt-0.5" aria-hidden="true">check</span>
+                        <span data-design-text-token="body-md">Up to 10-hour battery life for all-day coding</span>
+                      </li>
+                      <li class="flex items-start gap-gutter-xs">
+                        <span class="material-symbols-outlined text-[16px] text-accent-orange-text shrink-0 mt-0.5" aria-hidden="true">check</span>
+                        <span data-design-text-token="body-md">Within your ₹80,000 budget ceiling</span>
+                      </li>
+                    </ul>
+                  </div>
+                </div>
+
+                <div class="px-gutter-lg pb-gutter-lg flex flex-col gap-gutter-sm">
+                  <button type="button" onclick="addRecommendedToCart(this)" class="w-full py-3 px-gutter-md rounded-sm bg-deep-black text-on-deep-black font-label text-label-lg hover:bg-surface-dark-elevated transition-colors duration-state-change">
+                    <span data-design-text-token="label-lg">Add to Cart</span>
+                  </button>
+                  <div class="grid grid-cols-2 gap-gutter-sm">
+                    <button type="button" onclick="toggleCompare(this)" class="py-2.5 px-gutter-sm rounded-sm border border-outline-subtle bg-pure-white font-label text-label-md text-on-pure-white hover:border-deep-black transition-colors duration-state-change">
+                      <span data-design-text-token="label-md">Compare</span>
+                    </button>
+                    <a href="../patronet-product-details/PatronetProductDetails.html" class="py-2.5 px-gutter-sm rounded-sm border border-outline-subtle bg-pure-white font-label text-label-md text-on-pure-white hover:border-deep-black transition-colors duration-state-change text-center">
+                      <span data-design-text-token="label-md">View Details</span>
+                    </a>
+                  </div>
+                </div>
+              </article>
+
+              <!-- Card 2 -->
+              <article class="h-full rounded-sm border border-outline-subtle bg-pure-white flex flex-col justify-between overflow-hidden">
+                <div>
+                  <a href="../patronet-product-details/PatronetProductDetails.html" class="block bg-light-gray aspect-[4/3] p-gutter-lg flex items-center justify-center overflow-hidden">
+                    <img src="https://lh3.googleusercontent.com/aida/ALJJyrDiK48nkB5nc39ENn71KKa0NGyy5-rVdYk8Vu1ZnfeuBpxKtvutGqH3o6C-gpCjNTWsSJ_Hp4HMW3lbbNpjGSLJka8K7gPBXtJY5_Pb6RkFnYfwJ94o5DKQWlMCT2HfloilyiLgSqJ8ovDb5RWSZ1CVHQvRvrMg3T1Fw3hkhA7kFf3VMjm8L8BZbnlmJBNRTfpSi-RvqsiDLKv4j1qMs6auOjKy-Sv6TlgdLj5B0NRxmbIC_dh13EjE9mZmZhw" alt="PATRONET GameBook 15 Essential" class="w-full h-full object-contain">
+                  </a>
+                  <div class="p-gutter-lg flex flex-col gap-gutter-md">
+                    <div class="flex flex-col gap-gutter-xs">
+                      <span class="font-label text-label-md text-muted-gray" data-design-text-token="label-md">PATRONET</span>
+                      <a href="../patronet-product-details/PatronetProductDetails.html" class="font-title text-title-lg text-on-pure-white hover:text-accent-orange-text transition-colors duration-state-change" data-design-text-token="title-lg">
+                        GameBook 15 Essential
+                      </a>
+                      <p class="font-headline text-headline-md text-on-pure-white tabular-nums" data-design-text-token="headline-md">₹79,490</p>
+                    </div>
+
+                    <ul class="flex flex-col gap-gutter-xs pt-gutter-sm border-t border-outline-subtle font-body text-body-md text-muted-gray">
+                      <li class="flex items-start gap-gutter-xs">
+                        <span class="material-symbols-outlined text-[16px] text-accent-orange-text shrink-0 mt-0.5" aria-hidden="true">check</span>
+                        <span data-design-text-token="body-md">Dedicated RTX graphics for 1080p gaming</span>
+                      </li>
+                      <li class="flex items-start gap-gutter-xs">
+                        <span class="material-symbols-outlined text-[16px] text-accent-orange-text shrink-0 mt-0.5" aria-hidden="true">check</span>
+                        <span data-design-text-token="body-md">16GB DDR5 RAM for compilers and containers</span>
+                      </li>
+                      <li class="flex items-start gap-gutter-xs">
+                        <span class="material-symbols-outlined text-[16px] text-accent-orange-text shrink-0 mt-0.5" aria-hidden="true">check</span>
+                        <span data-design-text-token="body-md">Dual-fan cooling under sustained workloads</span>
+                      </li>
+                    </ul>
+                  </div>
+                </div>
+
+                <div class="px-gutter-lg pb-gutter-lg flex flex-col gap-gutter-sm">
+                  <button type="button" onclick="addRecommendedToCart(this)" class="w-full py-3 px-gutter-md rounded-sm bg-deep-black text-on-deep-black font-label text-label-lg hover:bg-surface-dark-elevated transition-colors duration-state-change">
+                    <span data-design-text-token="label-lg">Add to Cart</span>
+                  </button>
+                  <div class="grid grid-cols-2 gap-gutter-sm">
+                    <button type="button" onclick="toggleCompare(this)" class="py-2.5 px-gutter-sm rounded-sm border border-outline-subtle bg-pure-white font-label text-label-md text-on-pure-white hover:border-deep-black transition-colors duration-state-change">
+                      <span data-design-text-token="label-md">Compare</span>
+                    </button>
+                    <a href="../patronet-product-details/PatronetProductDetails.html" class="py-2.5 px-gutter-sm rounded-sm border border-outline-subtle bg-pure-white font-label text-label-md text-on-pure-white hover:border-deep-black transition-colors duration-state-change text-center">
+                      <span data-design-text-token="label-md">View Details</span>
+                    </a>
+                  </div>
+                </div>
+              </article>
+
+              <!-- Card 3 -->
+              <article class="h-full rounded-sm border border-outline-subtle bg-pure-white flex flex-col justify-between overflow-hidden">
+                <div>
+                  <a href="../patronet-product-details/PatronetProductDetails.html" class="block bg-light-gray aspect-[4/3] p-gutter-lg flex items-center justify-center overflow-hidden">
+                    <img src="https://lh3.googleusercontent.com/aida/ALJJyrDClJI8x0J-zdU1ldO7nkHq7mvVnn95wbuMl3vBpSjPazckGr6JcxlAeslSTnaw6dyciBKAO0HH8TPuwaH25I66hcSCpoiorxtaQFeyqi_Iae485usQbgtfnDAGt5G_Dle6B8ZWpcQqOJ6MRJSi0ksHEgIRn7bVHzgCCQZxbqxIqKh9cLHOXP3UuNv7UhR8mOiGegqGDl7m3UmAHq3mWGlDlDWusvA7RAodj2vLy1A7l301Vkzw1z2Du5g" alt="PATRONET StudioBook 15" class="w-full h-full object-contain">
+                  </a>
+                  <div class="p-gutter-lg flex flex-col gap-gutter-md">
+                    <div class="flex flex-col gap-gutter-xs">
+                      <span class="font-label text-label-md text-muted-gray" data-design-text-token="label-md">PATRONET</span>
+                      <a href="../patronet-product-details/PatronetProductDetails.html" class="font-title text-title-lg text-on-pure-white hover:text-accent-orange-text transition-colors duration-state-change" data-design-text-token="title-lg">
+                        StudioBook 15 OLED
+                      </a>
+                      <p class="font-headline text-headline-md text-on-pure-white tabular-nums" data-design-text-token="headline-md">₹68,990</p>
+                    </div>
+
+                    <ul class="flex flex-col gap-gutter-xs pt-gutter-sm border-t border-outline-subtle font-body text-body-md text-muted-gray">
+                      <li class="flex items-start gap-gutter-xs">
+                        <span class="material-symbols-outlined text-[16px] text-accent-orange-text shrink-0 mt-0.5" aria-hidden="true">check</span>
+                        <span data-design-text-token="body-md">High-efficiency CPU with 11-hour battery life</span>
+                      </li>
+                      <li class="flex items-start gap-gutter-xs">
+                        <span class="material-symbols-outlined text-[16px] text-accent-orange-text shrink-0 mt-0.5" aria-hidden="true">check</span>
+                        <span data-design-text-token="body-md">Crisp 15.6-inch display for long coding sessions</span>
+                      </li>
+                      <li class="flex items-start gap-gutter-xs">
+                        <span class="material-symbols-outlined text-[16px] text-accent-orange-text shrink-0 mt-0.5" aria-hidden="true">check</span>
+                        <span data-design-text-token="body-md">Lightweight chassis for daily commuting</span>
+                      </li>
+                    </ul>
+                  </div>
+                </div>
+
+                <div class="px-gutter-lg pb-gutter-lg flex flex-col gap-gutter-sm">
+                  <button type="button" onclick="addRecommendedToCart(this)" class="w-full py-3 px-gutter-md rounded-sm bg-deep-black text-on-deep-black font-label text-label-lg hover:bg-surface-dark-elevated transition-colors duration-state-change">
+                    <span data-design-text-token="label-lg">Add to Cart</span>
+                  </button>
+                  <div class="grid grid-cols-2 gap-gutter-sm">
+                    <button type="button" onclick="toggleCompare(this)" class="py-2.5 px-gutter-sm rounded-sm border border-outline-subtle bg-pure-white font-label text-label-md text-on-pure-white hover:border-deep-black transition-colors duration-state-change">
+                      <span data-design-text-token="label-md">Compare</span>
+                    </button>
+                    <a href="../patronet-product-details/PatronetProductDetails.html" class="py-2.5 px-gutter-sm rounded-sm border border-outline-subtle bg-pure-white font-label text-label-md text-on-pure-white hover:border-deep-black transition-colors duration-state-change text-center">
+                      <span data-design-text-token="label-md">View Details</span>
+                    </a>
+                  </div>
+                </div>
+              </article>
+
+            </div>
+          </section>
+
+          <!-- 6. Recommendation Explanation -->
+          <section aria-labelledby="why-products-heading" class="p-gutter-lg rounded-sm border border-outline-subtle bg-pure-white flex flex-col gap-gutter-sm">
+            <h2 id="why-products-heading" class="font-headline text-headline-md text-on-pure-white" data-design-text-token="headline-md">
+              Why these products?
+            </h2>
+            <p class="font-body text-body-lg text-on-pure-white max-w-4xl text-pretty" data-design-text-token="body-lg">
+              These three laptops stay under your ₹80,000 budget while balancing programming performance and casual-to-moderate gaming. GameBook 15 Essential prioritizes dedicated graphics, while ProBook 14 Developer Edition and StudioBook 15 OLED lean toward longer battery life and portability.
+            </p>
+            <p class="font-body text-body-md text-muted-gray" data-design-text-token="body-md">
+              Recommendations are based on available PATRONET catalogue specifications and current pricing.
+            </p>
+          </section>
+
+          <!-- 7. Refine Your Search -->
+          <section aria-label="Refine your search" class="pt-gutter-lg border-t border-outline-subtle flex flex-col gap-gutter-sm">
+            <label for="ai-refine-input" class="font-label text-label-lg text-on-pure-white" data-design-text-token="label-lg">
+              Refine your search
+            </label>
+            <form class="flex flex-col sm:flex-row gap-gutter-sm" onsubmit="handleRefineSearch(event)">
+              <input id="ai-refine-input" type="text" placeholder="Show options with better battery life." class="flex-1 px-3.5 py-3 rounded-sm border border-outline-subtle bg-pure-white font-body text-body-md text-on-pure-white placeholder:text-muted-gray focus:border-deep-black focus:ring-0">
+              <button type="submit" class="px-gutter-xl py-3 rounded-sm bg-deep-black text-on-deep-black font-label text-label-lg hover:bg-surface-dark-elevated transition-colors duration-state-change shrink-0">
+                <span data-design-text-token="label-lg">Refine</span>
+              </button>
+            </form>
+          </section>
+
+        </div>
+      </div>
+    </main>
+
+    <!-- Footer (Shared Shell) -->
+    <footer id="footer" class="bg-deep-black text-on-deep-black">
+      <div class="max-w-[1360px] mx-auto px-gutter-md md:px-gutter-lg xl:px-page-margin py-section">
+        <div class="grid grid-cols-1 md:grid-cols-12 gap-gutter-xl pb-12 border-b border-outline-dark">
+          <div class="md:col-span-4 flex flex-col gap-gutter-md">
+            <span class="font-headline text-headline-md tracking-tight text-on-deep-black" data-design-text-token="headline-md">PATRONET</span>
+            <p class="font-body text-body-md text-on-surface-dark-elevated max-w-xs text-pretty" data-design-text-token="body-md">
+              Precision electronics and AI-assisted hardware discovery for creators, gamers, and teams across India.
+            </p>
+          </div>
+
+          <div class="md:col-span-2 flex flex-col gap-gutter-md">
+            <h3 class="font-label text-label-lg text-on-deep-black" data-design-text-token="label-lg">Shop</h3>
+            <ul class="flex flex-col gap-gutter-sm font-body text-body-md text-on-surface-dark-elevated">
+              <li><a href="../patronet-catalogue/PatronetCatalogue.html" class="hover:text-primary-orange transition-colors duration-state-change">Laptops</a></li>
+              <li><a href="../patronet-catalogue/PatronetCatalogue.html" class="hover:text-primary-orange transition-colors duration-state-change">Audio</a></li>
+              <li><a href="../patronet-catalogue/PatronetCatalogue.html" class="hover:text-primary-orange transition-colors duration-state-change">Monitors</a></li>
+              <li><a href="../patronet-catalogue/PatronetCatalogue.html" class="hover:text-primary-orange transition-colors duration-state-change">Wearables</a></li>
+              <li><a href="../patronet-catalogue/PatronetCatalogue.html" class="hover:text-primary-orange transition-colors duration-state-change">Gaming</a></li>
+            </ul>
+          </div>
+
+          <div class="md:col-span-2 flex flex-col gap-gutter-md">
+            <h3 class="font-label text-label-lg text-on-deep-black" data-design-text-token="label-lg">Support</h3>
+            <ul class="flex flex-col gap-gutter-sm font-body text-body-md text-on-surface-dark-elevated">
+              <li><a href="#" class="hover:text-primary-orange transition-colors duration-state-change">Help Center</a></li>
+              <li><a href="../patronet-orders/PatronetOrders.html" class="hover:text-primary-orange transition-colors duration-state-change">Track Order</a></li>
+              <li><a href="#" class="hover:text-primary-orange transition-colors duration-state-change">Warranty &amp; Service</a></li>
+              <li><a href="#" class="hover:text-primary-orange transition-colors duration-state-change">Bulk Procurement</a></li>
+            </ul>
+          </div>
+
+          <div class="md:col-span-2 flex flex-col gap-gutter-md">
+            <h3 class="font-label text-label-lg text-on-deep-black" data-design-text-token="label-lg">Account</h3>
+            <ul class="flex flex-col gap-gutter-sm font-body text-body-md text-on-surface-dark-elevated">
+              <li><a href="../patronet-account/PatronetAccount.html" class="hover:text-primary-orange transition-colors duration-state-change">My Account</a></li>
+              <li><a href="#" class="hover:text-primary-orange transition-colors duration-state-change">Wishlist</a></li>
+              <li><a href="#" class="hover:text-primary-orange transition-colors duration-state-change">Compare Studio</a></li>
+              <li><a href="../patronet-cart/PatronetCart.html" class="hover:text-primary-orange transition-colors duration-state-change">Shopping Cart</a></li>
+            </ul>
+          </div>
+
+          <div class="md:col-span-2 flex flex-col gap-gutter-md">
+            <h3 class="font-label text-label-lg text-on-deep-black" data-design-text-token="label-lg">Policies</h3>
+            <ul class="flex flex-col gap-gutter-sm font-body text-body-md text-on-surface-dark-elevated">
+              <li><a href="#" class="hover:text-primary-orange transition-colors duration-state-change">Privacy Policy</a></li>
+              <li><a href="#" class="hover:text-primary-orange transition-colors duration-state-change">Terms of Service</a></li>
+              <li><a href="#" class="hover:text-primary-orange transition-colors duration-state-change">Shipping Policy</a></li>
+              <li><a href="#" class="hover:text-primary-orange transition-colors duration-state-change">Returns &amp; Refunds</a></li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="pt-gutter-lg flex flex-col sm:flex-row items-start sm:items-center justify-between gap-gutter-sm font-label text-label-md text-on-surface-dark-elevated">
+          <span data-design-text-token="label-md">© 2026 PATRONET. All rights reserved.</span>
+          <span data-design-text-token="label-md">Prices inclusive of GST · Pan-India Delivery</span>
+        </div>
+      </div>
+    </footer>
+  </div>
+
+  <script>
+    let cartCount = 3;
+
+    function handleAISearch(event) {
+      event.preventDefault();
+      const input = document.getElementById('ai-query-input');
+      const errorEl = document.getElementById('ai-input-error');
+      const query = input.value.trim();
+
+      errorEl.classList.add('hidden');
+      if (query.length < 4) {
+        errorEl.classList.remove('hidden');
+        return;
+      }
+
+      runSearchTransition(query);
+    }
+
+    function runSearchTransition(query) {
+      const resultsEl = document.getElementById('ai-results-container');
+      const loadingEl = document.getElementById('ai-loading-state');
+      const emptyEl = document.getElementById('ai-empty-state');
+      const btn = document.getElementById('ai-find-btn');
+      const spinner = document.getElementById('ai-find-spinner');
+      const label = document.getElementById('ai-find-label');
+
+      resultsEl.classList.add('hidden');
+      emptyEl.classList.add('hidden');
+      loadingEl.classList.remove('hidden');
+
+      btn.setAttribute('aria-busy', 'true');
+      spinner.classList.remove('hidden');
+      label.textContent = 'Searching...';
+
+      setTimeout(() => {
+        loadingEl.classList.add('hidden');
+        btn.removeAttribute('aria-busy');
+        spinner.classList.add('hidden');
+        label.textContent = 'Find Products';
+
+        if (query.toLowerCase().includes('5,000') || query.toLowerCase().includes('5000')) {
+          emptyEl.classList.remove('hidden');
+        } else {
+          resultsEl.classList.remove('hidden');
+        }
+      }, 600);
+    }
+
+    function clearAISearch() {
+      document.getElementById('ai-query-input').value = '';
+      document.getElementById('ai-input-error').classList.add('hidden');
+      document.getElementById('ai-results-container').classList.add('hidden');
+      document.getElementById('ai-empty-state').classList.add('hidden');
+      document.getElementById('ai-query-input').focus();
+    }
+
+    function applySuggestion(text) {
+      document.getElementById('ai-query-input').value = text;
+      document.getElementById('ai-input-error').classList.add('hidden');
+      runSearchTransition(text);
+    }
+
+    function resetToDefaultQuery() {
+      const defaultQuery = 'I need a laptop for programming and gaming under ₹80,000 with good battery life.';
+      document.getElementById('ai-query-input').value = defaultQuery;
+      runSearchTransition(defaultQuery);
+    }
+
+    function removeCriterion(btn) {
+      btn.remove();
+      const remaining = document.querySelectorAll('.criterion-chip').length;
+      if (remaining === 0) {
+        document.getElementById('ai-results-container').classList.add('hidden');
+        document.getElementById('ai-empty-state').classList.remove('hidden');
+      }
+    }
+
+    function handleRefineSearch(event) {
+      event.preventDefault();
+      const refineInput = document.getElementById('ai-refine-input');
+      const text = refineInput.value.trim();
+      if (!text) return;
+      const mainInput = document.getElementById('ai-query-input');
+      mainInput.value = mainInput.value.trim() + ' ' + text;
+      refineInput.value = '';
+      runSearchTransition(mainInput.value);
+    }
+
+    function addRecommendedToCart(btn) {
+      const span = btn.querySelector('span');
+      if (span.textContent === 'Added to Cart') return;
+      cartCount += 1;
+      document.getElementById('ai-header-cart-count').textContent = `(${cartCount})`;
+      span.textContent = 'Added to Cart';
+      btn.classList.remove('bg-deep-black', 'text-on-deep-black');
+      btn.classList.add('bg-primary-orange', 'text-on-primary-orange');
+    }
+
+    function toggleCompare(btn) {
+      const span = btn.querySelector('span');
+      if (span.textContent === 'Compare') {
+        span.textContent = 'Added to Compare';
+        btn.classList.add('border-primary-orange', 'text-accent-orange-text');
+      } else {
+        span.textContent = 'Compare';
+        btn.classList.remove('border-primary-orange', 'text-accent-orange-text');
+      }
+    }
+  </script>
+
+
+</body></html>

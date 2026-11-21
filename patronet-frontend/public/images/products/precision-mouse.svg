@@ -1,0 +1,41 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 600" width="100%" height="100%">
+  <defs>
+    <radialGradient id="mouse-aura" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="#FF6B00" stop-opacity="0.08"/>
+      <stop offset="100%" stop-color="#FF6B00" stop-opacity="0"/>
+    </radialGradient>
+    <linearGradient id="mouse-body" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#2a2a34"/>
+      <stop offset="50%" stop-color="#1c1c24"/>
+      <stop offset="100%" stop-color="#121218"/>
+    </linearGradient>
+  </defs>
+
+  <rect width="600" height="600" fill="#f8f8f8"/>
+  <circle cx="300" cy="300" r="220" fill="url(#mouse-aura)"/>
+
+  <!-- Ergonomic Mouse Silhouette -->
+  <g transform="translate(300, 300)">
+    <path d="M 0 -150 C -75 -150, -110 -50, -110 50 C -110 150, -65 190, 0 190 C 65 190, 110 150, 110 50 C 110 -50, 75 -150, 0 -150 Z" fill="url(#mouse-body)" stroke="#3e3e4e" stroke-width="2.5"/>
+
+    <!-- Left / Right Split -->
+    <line x1="0" y1="-140" x2="0" y2="-30" stroke="#101014" stroke-width="3"/>
+
+    <!-- Scroll Wheel (Machined Aluminum with Orange Knurled Center) -->
+    <rect x="-12" y="-105" width="24" height="45" rx="6" fill="#252530" stroke="#FF6B00" stroke-width="2"/>
+    <line x1="-12" y1="-85" x2="12" y2="-85" stroke="#FF6B00" stroke-width="2"/>
+
+    <!-- DPI Switch Button -->
+    <rect x="-8" y="-45" width="16" height="12" rx="3" fill="#15151c"/>
+
+    <!-- Ergonomic Thumb Rest Wing (Left side) -->
+    <path d="M -105 10 C -135 45, -135 100, -95 130" fill="#181822" stroke="#353545" stroke-width="2"/>
+
+    <!-- Subtle Palm Rest Logo Arc -->
+    <circle cx="0" cy="85" r="20" fill="none" stroke="#FF6B00" stroke-width="2" opacity="0.6"/>
+    <circle cx="0" cy="85" r="6" fill="#FF6B00" opacity="0.8"/>
+  </g>
+
+  <!-- Shadow -->
+  <ellipse cx="300" cy="510" rx="150" ry="16" fill="#000000" opacity="0.12"/>
+</svg>

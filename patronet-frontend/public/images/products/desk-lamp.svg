@@ -1,0 +1,42 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 600" width="100%" height="100%">
+  <defs>
+    <radialGradient id="lamp-aura" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="#FF6B00" stop-opacity="0.12"/>
+      <stop offset="100%" stop-color="#FF6B00" stop-opacity="0"/>
+    </radialGradient>
+    <linearGradient id="lamp-metal" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#383844"/>
+      <stop offset="50%" stop-color="#24242d"/>
+      <stop offset="100%" stop-color="#16161b"/>
+    </linearGradient>
+  </defs>
+
+  <rect width="600" height="600" fill="#f8f8f8"/>
+  <circle cx="340" cy="240" r="220" fill="url(#lamp-aura)"/>
+
+  <!-- Minimalist Architectural LED Desk Lamp -->
+  <!-- Heavy Circular Aluminum Base -->
+  <ellipse cx="220" cy="450" rx="95" ry="32" fill="url(#lamp-metal)" stroke="#3e3e4a" stroke-width="2"/>
+  <ellipse cx="220" cy="445" rx="85" ry="26" fill="#181820"/>
+  <!-- Touch brightness slider on base -->
+  <rect x="180" y="440" width="80" height="4" rx="2" fill="#2d2d38"/>
+  <circle cx="230" cy="442" r="5" fill="#FF6B00"/>
+
+  <!-- Vertical Articulated Mast -->
+  <line x1="220" y1="440" x2="220" y2="200" stroke="url(#lamp-metal)" stroke-width="14" stroke-linecap="round"/>
+
+  <!-- Precision Hinge Joint -->
+  <circle cx="220" cy="200" r="14" fill="#141418" stroke="#FF6B00" stroke-width="2"/>
+  <circle cx="220" cy="200" r="4" fill="#FF6B00"/>
+
+  <!-- Horizontal Cantilever LED Bar -->
+  <line x1="210" y1="200" x2="460" y2="175" stroke="url(#lamp-metal)" stroke-width="12" stroke-linecap="round"/>
+
+  <!-- LED Light Strip Underside (Diffused warm light) -->
+  <line x1="250" y1="206" x2="450" y2="183" stroke="#fff3e0" stroke-width="4" stroke-linecap="round"/>
+  <!-- Subtle Light Beam Angle -->
+  <polygon points="250,206 450,183 500,430 180,450" fill="#FF6B00" opacity="0.04"/>
+
+  <!-- Base Shadow -->
+  <ellipse cx="220" cy="485" rx="120" ry="14" fill="#000000" opacity="0.14"/>
+</svg>

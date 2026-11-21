@@ -1,0 +1,538 @@
+<!DOCTYPE html><html lang="en"><head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>PATRONET — Shopping Cart</title>
+  <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+  <script id="tailwind-config">/** @type {import('tailwindcss').Config} */
+globalThis.tailwind = globalThis.tailwind || {};
+globalThis.tailwind.config = {
+  darkMode: 'class',
+  theme: {
+    extend: {
+      colors: {
+        'primary-orange': '#FF6B00',
+        'on-primary-orange': '#111111',
+        'primary-orange-hover': '#E05E00',
+        'primary-orange-tint': '#FFEDE6',
+        'accent-orange-text': '#BF4E00',
+        'deep-black': '#111111',
+        'on-deep-black': '#FFFFFF',
+        'surface-dark-elevated': '#1A1A1A',
+        'on-surface-dark-elevated': '#F5F5F5',
+        'pure-white': '#FFFFFF',
+        'on-pure-white': '#111111',
+        'light-gray': '#F5F5F5',
+        'on-light-gray': '#111111',
+        'muted-gray': '#666666',
+        'outline-subtle': '#E5E5E5',
+        'outline-dark': '#2E2E2E',
+      },
+      borderRadius: {
+        'sm': '4px',
+        'DEFAULT': '6px',
+        'md': '8px',
+        'lg': '12px',
+        'xl': '16px',
+        'full': '9999px',
+      },
+      spacing: {
+        'gutter-xs': '4px',
+        'gutter-sm': '8px',
+        'gutter-md': '16px',
+        'gutter-lg': '24px',
+        'gutter-xl': '32px',
+        'section': '64px',
+        'page-margin': '48px',
+      },
+      fontFamily: {
+        'display': ['"Inter"', 'sans-serif'],
+        'headline': ['"Inter"', 'sans-serif'],
+        'title': ['"Inter"', 'sans-serif'],
+        'body': ['"Inter"', 'sans-serif'],
+        'label': ['"Inter"', 'sans-serif'],
+      },
+      fontSize: {
+        'display-xl': ['60px', { lineHeight: '64px', letterSpacing: '-1.6px', fontWeight: '700' }],
+        'display-xl-mobile': ['32px', { lineHeight: '38px', letterSpacing: '-0.6px', fontWeight: '700' }],
+        'headline-lg': ['36px', { lineHeight: '42px', letterSpacing: '-0.8px', fontWeight: '700' }],
+        'headline-lg-mobile': ['28px', { lineHeight: '34px', letterSpacing: '-0.5px', fontWeight: '700' }],
+        'headline-md': ['24px', { lineHeight: '30px', letterSpacing: '-0.4px', fontWeight: '700' }],
+        'title-lg': ['20px', { lineHeight: '26px', letterSpacing: '-0.2px', fontWeight: '600' }],
+        'title-md': ['16px', { lineHeight: '22px', letterSpacing: '-0.1px', fontWeight: '600' }],
+        'body-lg': ['16px', { lineHeight: '24px', letterSpacing: '0px', fontWeight: '400' }],
+        'body-md': ['14px', { lineHeight: '20px', letterSpacing: '0px', fontWeight: '400' }],
+        'label-lg': ['14px', { lineHeight: '20px', letterSpacing: '0px', fontWeight: '600' }],
+        'label-md': ['13px', { lineHeight: '18px', letterSpacing: '0px', fontWeight: '500' }],
+        'label-sm': ['12px', { lineHeight: '16px', letterSpacing: '0.2px', fontWeight: '500' }],
+      },
+      transitionDuration: {
+        'state-change': '150ms',
+        'surface-enter': '240ms',
+      },
+      transitionDelay: {
+        'state-change': '0ms',
+        'surface-enter': '0ms',
+      },
+      transitionTimingFunction: {
+        'state-change': 'ease-out',
+        'surface-enter': 'cubic-bezier(0.2, 0, 0, 1)',
+      },
+    },
+  },
+};
+if (typeof module !== 'undefined') module.exports = globalThis.tailwind.config;
+</script>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=block" rel="stylesheet">
+  <style>
+    .material-symbols-outlined, .material-symbols-rounded, .material-symbols-sharp, .material-icons {
+      display: inline-block;
+      width: 1em;
+      height: 1em;
+      line-height: 1 !important;
+      box-sizing: content-box;
+      overflow: hidden;
+      white-space: nowrap;
+      direction: ltr;
+      vertical-align: middle;
+    }
+  </style>
+</head>
+<body class="bg-pure-white text-on-pure-white font-body antialiased">
+  <div class="min-h-[884px] flex flex-col bg-pure-white" data-stitch-vh="min-h-[884px]===min-h-screen">
+
+    <!-- 1. Navigation Bar (Shared Shell) -->
+    <header class="sticky top-0 z-40 bg-pure-white border-b border-outline-subtle">
+      <div class="max-w-[1360px] mx-auto px-gutter-md md:px-gutter-lg xl:px-page-margin h-[72px] flex items-center justify-between gap-gutter-xl">
+        <!-- Left: Bold PATRONET Wordmark -->
+        <a href="../patronet-homepage-refined/PatronetHomepageRefined.html" class="font-headline text-title-lg tracking-tight text-on-pure-white shrink-0" data-design-text-token="title-lg">
+          PATRONET
+        </a>
+
+        <!-- Center: Carefully Spaced Category Navigation -->
+        <nav aria-label="Primary navigation" class="hidden lg:flex items-center gap-10">
+          <a href="../patronet-catalogue/PatronetCatalogue.html" class="font-label text-label-lg text-on-pure-white hover:text-muted-gray transition-colors duration-state-change ease-state-change" data-design-text-token="label-lg">Shop All</a>
+          <a href="../patronet-catalogue/PatronetCatalogue.html" class="font-label text-label-lg text-on-pure-white hover:text-muted-gray transition-colors duration-state-change ease-state-change" data-design-text-token="label-lg">Electronics</a>
+          <a href="../patronet-catalogue/PatronetCatalogue.html" class="font-label text-label-lg text-on-pure-white hover:text-muted-gray transition-colors duration-state-change ease-state-change" data-design-text-token="label-lg">Computers</a>
+          <a href="../patronet-catalogue/PatronetCatalogue.html" class="font-label text-label-lg text-on-pure-white hover:text-muted-gray transition-colors duration-state-change ease-state-change" data-design-text-token="label-lg">Audio</a>
+          <a href="../patronet-catalogue/PatronetCatalogue.html" class="font-label text-label-lg text-accent-orange-text hover:text-primary-orange-hover transition-colors duration-state-change ease-state-change" data-design-text-token="label-lg">Deals</a>
+        </nav>
+
+        <!-- Right: Refined Search Input + Minimal Account, Wishlist, Cart -->
+        <div class="flex items-center gap-gutter-lg shrink-0">
+          <form class="hidden md:flex items-center gap-gutter-sm px-3.5 py-2 rounded-sm bg-light-gray border border-outline-subtle focus-within:border-deep-black w-64 lg:w-72 transition-colors duration-state-change" role="search" onsubmit="return false;">
+            <span class="material-symbols-outlined text-[18px] text-muted-gray shrink-0" aria-hidden="true">search</span>
+            <input type="search" placeholder="Search catalog" aria-label="Search PATRONET catalog" class="w-full bg-transparent border-0 p-0 font-body text-body-md text-on-pure-white placeholder:text-muted-gray focus:ring-0">
+          </form>
+
+          <div class="flex items-center gap-gutter-sm">
+            <button type="button" aria-label="Account" class="inline-flex items-center justify-center w-9 h-9 text-on-pure-white hover:text-muted-gray transition-colors duration-state-change ease-state-change">
+              <span class="material-symbols-outlined text-[20px]" aria-hidden="true">person</span>
+            </button>
+
+            <button type="button" aria-label="Wishlist" class="inline-flex items-center justify-center w-9 h-9 text-on-pure-white hover:text-muted-gray transition-colors duration-state-change ease-state-change">
+              <span class="material-symbols-outlined text-[20px]" aria-hidden="true">favorite</span>
+            </button>
+
+            <button id="header-cart-btn" type="button" aria-label="Shopping cart" class="inline-flex items-center gap-gutter-xs h-9 pl-gutter-xs text-on-pure-white border-b-2 border-primary-orange shrink-0">
+              <span class="material-symbols-outlined text-[20px] shrink-0" aria-hidden="true">shopping_cart</span>
+              <span class="font-label text-label-md tabular-nums whitespace-nowrap" data-design-text-token="label-md">(<span id="header-cart-count">3</span>)</span>
+            </button>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <main class="flex-1">
+      <div class="max-w-[1360px] mx-auto px-gutter-md md:px-gutter-lg xl:px-page-margin py-gutter-xl">
+
+        <!-- 2. Cart Header -->
+        <nav aria-label="Breadcrumb" class="flex items-center gap-gutter-sm font-label text-label-md text-muted-gray mb-gutter-md">
+          <a href="../patronet-homepage-refined/PatronetHomepageRefined.html" class="hover:text-on-pure-white transition-colors duration-state-change">Home</a>
+          <span aria-hidden="true">/</span>
+          <span class="text-on-pure-white" data-design-text-token="label-md">Shopping Cart</span>
+        </nav>
+
+        <div class="flex flex-col sm:flex-row sm:items-end justify-between gap-gutter-md pb-gutter-lg border-b border-outline-subtle mb-gutter-xl">
+          <div class="flex flex-wrap items-center gap-gutter-md">
+            <h1 class="font-headline text-headline-lg-mobile md:text-headline-lg text-on-pure-white" data-design-text-token="headline-lg">
+              Your cart.
+            </h1>
+            <span id="cart-item-count-label" class="font-label text-label-md text-muted-gray tabular-nums" data-design-text-token="label-md">
+              3 items
+            </span>
+          </div>
+          <a href="../patronet-catalogue/PatronetCatalogue.html" class="inline-flex items-center gap-gutter-xs font-label text-label-lg text-on-pure-white hover:text-accent-orange-text transition-colors duration-state-change shrink-0">
+            <span data-design-text-token="label-lg">Continue shopping</span>
+            <span class="material-symbols-outlined text-[18px]" aria-hidden="true">arrow_forward</span>
+          </a>
+        </div>
+
+        <!-- Interaction State: Backend Error Banner (Hidden by default) -->
+        <div id="cart-error-state" class="hidden mb-gutter-xl p-gutter-lg rounded-sm border border-outline-subtle bg-light-gray flex flex-col sm:flex-row sm:items-center justify-between gap-gutter-md" role="alert">
+          <div class="flex items-start gap-gutter-sm">
+            <span class="material-symbols-outlined text-[20px] text-accent-orange-text shrink-0 mt-0.5" aria-hidden="true">error</span>
+            <div class="flex flex-col gap-gutter-xs">
+              <p class="font-label text-label-lg text-on-light-gray" data-design-text-token="label-lg">Unable to sync cart updates</p>
+              <p class="font-body text-body-md text-muted-gray" data-design-text-token="body-md">Please check your connection and try again. Your local selections are preserved.</p>
+            </div>
+          </div>
+          <button type="button" onclick="setCartViewState(&#39;default&#39;)" class="px-gutter-md py-2 rounded-sm bg-deep-black text-on-deep-black font-label text-label-md hover:bg-surface-dark-elevated transition-colors duration-state-change shrink-0">
+            <span data-design-text-token="label-md">Retry</span>
+          </button>
+        </div>
+
+        <!-- Interaction State: Loading Cart Contents (Hidden by default) -->
+        <div id="cart-loading-state" class="hidden py-section flex flex-col items-center justify-center gap-gutter-md border-y border-outline-subtle">
+          <span class="material-symbols-outlined text-[28px] text-muted-gray animate-spin" aria-hidden="true">progress_activity</span>
+          <p class="font-body text-body-md text-muted-gray" data-design-text-token="body-md">Updating your cart...</p>
+        </div>
+
+        <!-- 3. Main Two-Column Cart Layout (~65% Items / ~35% Summary) -->
+        <div id="cart-main-layout" class="grid grid-cols-1 lg:grid-cols-12 gap-gutter-xl items-start">
+
+          <!-- LEFT COLUMN: Cart Items (~65% -> 8 cols) -->
+          <div class="lg:col-span-8">
+            <div id="cart-items-list" class="divide-y divide-outline-subtle border-b border-outline-subtle">
+
+              <!-- Item 1: PATRONET GameBook 15 -->
+              <article class="cart-item py-gutter-lg flex flex-col sm:flex-row gap-gutter-lg" data-price="94990" data-qty="1">
+                <a href="../patronet-product-details/PatronetProductDetails.html" class="w-28 h-28 sm:w-32 sm:h-32 bg-light-gray rounded-sm p-gutter-sm shrink-0 flex items-center justify-center overflow-hidden">
+                  <img src="https://lh3.googleusercontent.com/aida/ALJJyrDiK48nkB5nc39ENn71KKa0NGyy5-rVdYk8Vu1ZnfeuBpxKtvutGqH3o6C-gpCjNTWsSJ_Hp4HMW3lbbNpjGSLJka8K7gPBXtJY5_Pb6RkFnYfwJ94o5DKQWlMCT2HfloilyiLgSqJ8ovDb5RWSZ1CVHQvRvrMg3T1Fw3hkhA7kFf3VMjm8L8BZbnlmJBNRTfpSi-RvqsiDLKv4j1qMs6auOjKy-Sv6TlgdLj5B0NRxmbIC_dh13EjE9mZmZhw" alt="PATRONET GameBook 15" class="w-full h-full object-contain">
+                </a>
+
+                <div class="flex-1 flex flex-col justify-between gap-gutter-md">
+                  <div class="flex flex-col sm:flex-row sm:items-start justify-between gap-gutter-sm">
+                    <div class="flex flex-col gap-gutter-xs">
+                      <span class="font-label text-label-md text-muted-gray" data-design-text-token="label-md">PATRONET</span>
+                      <a href="../patronet-product-details/PatronetProductDetails.html" class="font-title text-title-lg text-on-pure-white hover:text-accent-orange-text transition-colors duration-state-change" data-design-text-token="title-lg">
+                        PATRONET GameBook 15
+                      </a>
+                      <span class="font-body text-body-md text-muted-gray tabular-nums" data-design-text-token="body-md">Unit price: ₹94,990</span>
+                    </div>
+                    <p class="item-subtotal font-headline text-headline-md text-on-pure-white tabular-nums shrink-0" data-design-text-token="headline-md">
+                      ₹94,990
+                    </p>
+                  </div>
+
+                  <div class="flex items-center justify-between gap-gutter-md">
+                    <!-- Quantity Selector -->
+                    <div class="inline-flex items-center border border-outline-subtle rounded-sm bg-light-gray h-10 px-gutter-xs">
+                      <button type="button" onclick="changeItemQty(this, -1)" aria-label="Decrease quantity of PATRONET GameBook 15" class="w-8 h-8 inline-flex items-center justify-center text-on-pure-white hover:text-accent-orange-text transition-colors duration-state-change">
+                        <span class="material-symbols-outlined text-[16px]" aria-hidden="true">remove</span>
+                      </button>
+                      <span class="item-qty w-9 text-center font-label text-label-md tabular-nums text-on-pure-white" data-design-text-token="label-md">1</span>
+                      <button type="button" onclick="changeItemQty(this, 1)" aria-label="Increase quantity of PATRONET GameBook 15" class="w-8 h-8 inline-flex items-center justify-center text-on-pure-white hover:text-accent-orange-text transition-colors duration-state-change">
+                        <span class="material-symbols-outlined text-[16px]" aria-hidden="true">add</span>
+                      </button>
+                    </div>
+
+                    <button type="button" onclick="removeCartItem(this)" class="font-label text-label-md text-muted-gray hover:text-accent-orange-text transition-colors duration-state-change">
+                      <span data-design-text-token="label-md">Remove</span>
+                    </button>
+                  </div>
+                </div>
+              </article>
+
+              <!-- Item 2: Studio ANC Headphones -->
+              <article class="cart-item py-gutter-lg flex flex-col sm:flex-row gap-gutter-lg" data-price="13999" data-qty="1">
+                <div class="w-28 h-28 sm:w-32 sm:h-32 bg-light-gray rounded-sm p-gutter-sm shrink-0 flex items-center justify-center overflow-hidden">
+                  <img src="https://lh3.googleusercontent.com/aida/ALJJyrCo-y0tdg4iIEcbleH9BQWLTlroKbPA2aYI-vZsOtiu3uyGt8LX4-kr8qREBWtpgzkX3oQYV6jZl_aFrEZ6vTZEMLPFTmgt2ooBXxl37okJQIjnaUvX7njPQXXBfChEV6UPtNLSVdoHmPWvitubZydTtDfI1zU6oA8s36iugg4B73MZiSSVILQjooFZ6x_oQp2fyuDIf4WGNrGXqy8FCeqg6oxpccwG8zkvJTx9J7ZSgkRC4wFsyD-MxmOiEQ" alt="Studio ANC Headphones" class="w-full h-full object-contain">
+                </div>
+
+                <div class="flex-1 flex flex-col justify-between gap-gutter-md">
+                  <div class="flex flex-col sm:flex-row sm:items-start justify-between gap-gutter-sm">
+                    <div class="flex flex-col gap-gutter-xs">
+                      <span class="font-label text-label-md text-muted-gray" data-design-text-token="label-md">PATRONET Audio</span>
+                      <h2 class="font-title text-title-lg text-on-pure-white" data-design-text-token="title-lg">
+                        Studio ANC Headphones
+                      </h2>
+                      <span class="font-body text-body-md text-muted-gray tabular-nums" data-design-text-token="body-md">Unit price: ₹13,999</span>
+                    </div>
+                    <p class="item-subtotal font-headline text-headline-md text-on-pure-white tabular-nums shrink-0" data-design-text-token="headline-md">
+                      ₹13,999
+                    </p>
+                  </div>
+
+                  <div class="flex items-center justify-between gap-gutter-md">
+                    <!-- Quantity Selector -->
+                    <div class="inline-flex items-center border border-outline-subtle rounded-sm bg-light-gray h-10 px-gutter-xs">
+                      <button type="button" onclick="changeItemQty(this, -1)" aria-label="Decrease quantity of Studio ANC Headphones" class="w-8 h-8 inline-flex items-center justify-center text-on-pure-white hover:text-accent-orange-text transition-colors duration-state-change">
+                        <span class="material-symbols-outlined text-[16px]" aria-hidden="true">remove</span>
+                      </button>
+                      <span class="item-qty w-9 text-center font-label text-label-md tabular-nums text-on-pure-white" data-design-text-token="label-md">1</span>
+                      <button type="button" onclick="changeItemQty(this, 1)" aria-label="Increase quantity of Studio ANC Headphones" class="w-8 h-8 inline-flex items-center justify-center text-on-pure-white hover:text-accent-orange-text transition-colors duration-state-change">
+                        <span class="material-symbols-outlined text-[16px]" aria-hidden="true">add</span>
+                      </button>
+                    </div>
+
+                    <button type="button" onclick="removeCartItem(this)" class="font-label text-label-md text-muted-gray hover:text-accent-orange-text transition-colors duration-state-change">
+                      <span data-design-text-token="label-md">Remove</span>
+                    </button>
+                  </div>
+                </div>
+              </article>
+
+              <!-- Item 3: Precision Wireless Mouse -->
+              <article class="cart-item py-gutter-lg flex flex-col sm:flex-row gap-gutter-lg" data-price="6299" data-qty="1">
+                <div class="w-28 h-28 sm:w-32 sm:h-32 bg-light-gray rounded-sm p-gutter-sm shrink-0 flex items-center justify-center overflow-hidden">
+                  <img src="https://lh3.googleusercontent.com/aida/ALJJyrCRNa3urQXbEuWTmydzRdASrNT2L882VV2P7qEeTVAmocq_2HPeGy2K8C4PQVfyYY_MkNrF2IjefgWAjstKtXpIG8q5EHQQGz3Yiy054Dbos03GVKt7p33OL5YK6dAneXGlA6zxI_B9hE5kqny00BObloJPZxk4K8_t7qSUUcCd39hp9bPcpjO9kAqa3MW5xwawuS75IOCVDBsNd1r7c3BkG1Ee4NzyEuGX0vBJRkBSZEhH6MPxsuvXCKJc20sx0fWZ" alt="Precision Wireless Mouse" class="w-full h-full object-contain">
+                </div>
+
+                <div class="flex-1 flex flex-col justify-between gap-gutter-md">
+                  <div class="flex flex-col sm:flex-row sm:items-start justify-between gap-gutter-sm">
+                    <div class="flex flex-col gap-gutter-xs">
+                      <span class="font-label text-label-md text-muted-gray" data-design-text-token="label-md">Logitech</span>
+                      <h2 class="font-title text-title-lg text-on-pure-white" data-design-text-token="title-lg">
+                        Precision Wireless Mouse
+                      </h2>
+                      <span class="font-body text-body-md text-muted-gray tabular-nums" data-design-text-token="body-md">Unit price: ₹6,299</span>
+
+                      <!-- Out-of-stock Warning (Visible when stock-warning state is active) -->
+                      <p class="oos-warning hidden inline-flex items-center gap-gutter-xs font-label text-label-md text-accent-orange-text pt-gutter-xs" data-design-text-token="label-md">
+                        <span class="material-symbols-outlined text-[16px]" aria-hidden="true">warning</span>
+                        <span>Currently out of stock — remove to proceed to checkout</span>
+                      </p>
+                    </div>
+                    <p class="item-subtotal font-headline text-headline-md text-on-pure-white tabular-nums shrink-0" data-design-text-token="headline-md">
+                      ₹6,299
+                    </p>
+                  </div>
+
+                  <div class="flex items-center justify-between gap-gutter-md">
+                    <!-- Quantity Selector -->
+                    <div class="inline-flex items-center border border-outline-subtle rounded-sm bg-light-gray h-10 px-gutter-xs">
+                      <button type="button" onclick="changeItemQty(this, -1)" aria-label="Decrease quantity of Precision Wireless Mouse" class="w-8 h-8 inline-flex items-center justify-center text-on-pure-white hover:text-accent-orange-text transition-colors duration-state-change">
+                        <span class="material-symbols-outlined text-[16px]" aria-hidden="true">remove</span>
+                      </button>
+                      <span class="item-qty w-9 text-center font-label text-label-md tabular-nums text-on-pure-white" data-design-text-token="label-md">1</span>
+                      <button type="button" onclick="changeItemQty(this, 1)" aria-label="Increase quantity of Precision Wireless Mouse" class="w-8 h-8 inline-flex items-center justify-center text-on-pure-white hover:text-accent-orange-text transition-colors duration-state-change">
+                        <span class="material-symbols-outlined text-[16px]" aria-hidden="true">add</span>
+                      </button>
+                    </div>
+
+                    <button type="button" onclick="removeCartItem(this)" class="font-label text-label-md text-muted-gray hover:text-accent-orange-text transition-colors duration-state-change">
+                      <span data-design-text-token="label-md">Remove</span>
+                    </button>
+                  </div>
+                </div>
+              </article>
+
+            </div>
+          </div>
+
+          <!-- RIGHT COLUMN: Order Summary (~35% -> 4 cols) -->
+          <aside aria-label="Order summary" class="lg:col-span-4 bg-light-gray rounded-sm p-gutter-xl flex flex-col gap-gutter-lg">
+            <h2 class="font-headline text-headline-md text-on-light-gray" data-design-text-token="headline-md">
+              Order summary
+            </h2>
+
+            <div class="flex flex-col gap-gutter-md pb-gutter-lg border-b border-outline-subtle">
+              <div class="flex items-baseline justify-between gap-gutter-md">
+                <span class="font-body text-body-md text-muted-gray" data-design-text-token="body-md">Subtotal</span>
+                <span id="summary-subtotal" class="font-title text-title-md text-on-light-gray tabular-nums" data-design-text-token="title-md">₹1,15,288</span>
+              </div>
+              <div class="flex items-baseline justify-between gap-gutter-md">
+                <span class="font-body text-body-md text-muted-gray" data-design-text-token="body-md">Shipping</span>
+                <span class="font-body text-body-md text-muted-gray" data-design-text-token="body-md">Calculated at checkout</span>
+              </div>
+            </div>
+
+            <div class="flex items-baseline justify-between gap-gutter-md">
+              <span class="font-title text-title-lg text-on-light-gray" data-design-text-token="title-lg">Total</span>
+              <span id="summary-total" class="font-headline text-headline-md text-on-light-gray tabular-nums" data-design-text-token="headline-md">₹1,15,288</span>
+            </div>
+
+            <div class="flex flex-col gap-gutter-sm">
+              <button id="checkout-btn" type="button" class="w-full py-3.5 px-gutter-lg rounded-sm bg-primary-orange text-on-primary-orange font-label text-label-lg hover:bg-primary-orange-hover active:scale-[0.99] transition-colors duration-state-change">
+                <span data-design-text-token="label-lg">Proceed to Checkout</span>
+              </button>
+              <p class="font-body text-body-md text-muted-gray text-pretty" data-design-text-token="body-md">
+                Final availability and total will be confirmed at checkout.
+              </p>
+            </div>
+          </aside>
+        </div>
+
+        <!-- 4. Empty Cart State (Hidden when items exist) -->
+        <section id="empty-cart-state" class="hidden py-section text-center flex flex-col items-center gap-gutter-md border-y border-outline-subtle">
+          <span class="material-symbols-outlined text-[36px] text-muted-gray" aria-hidden="true">shopping_cart</span>
+          <div class="flex flex-col gap-gutter-xs">
+            <h2 class="font-headline text-headline-lg-mobile md:text-headline-lg text-on-pure-white" data-design-text-token="headline-lg">
+              Your cart is empty.
+            </h2>
+            <p class="font-body text-body-lg text-muted-gray" data-design-text-token="body-lg">
+              Discover something worth adding.
+            </p>
+          </div>
+          <a href="../patronet-catalogue/PatronetCatalogue.html" class="mt-gutter-sm inline-flex items-center justify-center px-gutter-xl py-3.5 rounded-sm bg-primary-orange text-on-primary-orange font-label text-label-lg hover:bg-primary-orange-hover transition-colors duration-state-change">
+            <span data-design-text-token="label-lg">Explore products</span>
+          </a>
+        </section>
+
+        <!-- Subtle Interactive State Preview Strip -->
+        <div class="mt-section pt-gutter-lg border-t border-outline-subtle flex flex-wrap items-center justify-between gap-gutter-md">
+          <span class="font-label text-label-sm text-muted-gray" data-design-text-token="label-sm">Cart state preview:</span>
+          <div class="flex flex-wrap items-center gap-gutter-xs">
+            <button type="button" onclick="setCartViewState(&#39;default&#39;)" class="state-btn px-3 py-1.5 rounded-sm bg-deep-black text-on-deep-black font-label text-label-sm">Default (3 items)</button>
+            <button type="button" onclick="setCartViewState(&#39;oos&#39;)" class="state-btn px-3 py-1.5 rounded-sm bg-light-gray text-on-light-gray font-label text-label-sm hover:bg-outline-subtle">Out-of-stock warning</button>
+            <button type="button" onclick="setCartViewState(&#39;loading&#39;)" class="state-btn px-3 py-1.5 rounded-sm bg-light-gray text-on-light-gray font-label text-label-sm hover:bg-outline-subtle">Loading</button>
+            <button type="button" onclick="setCartViewState(&#39;error&#39;)" class="state-btn px-3 py-1.5 rounded-sm bg-light-gray text-on-light-gray font-label text-label-sm hover:bg-outline-subtle">Backend error</button>
+            <button type="button" onclick="setCartViewState(&#39;empty&#39;)" class="state-btn px-3 py-1.5 rounded-sm bg-light-gray text-on-light-gray font-label text-label-sm hover:bg-outline-subtle">Empty cart</button>
+          </div>
+        </div>
+
+      </div>
+    </main>
+
+    <!-- Footer (Shared Shell) -->
+    <footer id="footer" class="bg-deep-black text-on-deep-black">
+      <div class="max-w-[1360px] mx-auto px-gutter-md md:px-gutter-lg xl:px-page-margin py-section">
+        <div class="grid grid-cols-1 md:grid-cols-12 gap-gutter-xl pb-12 border-b border-outline-dark">
+          <!-- Brand Column -->
+          <div class="md:col-span-4 flex flex-col gap-gutter-md">
+            <span class="font-headline text-headline-md tracking-tight text-on-deep-black" data-design-text-token="headline-md">PATRONET</span>
+            <p class="font-body text-body-md text-on-surface-dark-elevated max-w-xs text-pretty" data-design-text-token="body-md">
+              Precision electronics and AI-assisted hardware discovery for creators, gamers, and teams across India.
+            </p>
+          </div>
+
+          <!-- Shop -->
+          <div class="md:col-span-2 flex flex-col gap-gutter-md">
+            <h3 class="font-label text-label-lg text-on-deep-black" data-design-text-token="label-lg">Shop</h3>
+            <ul class="flex flex-col gap-gutter-sm font-body text-body-md text-on-surface-dark-elevated">
+              <li><a href="../patronet-catalogue/PatronetCatalogue.html" class="hover:text-primary-orange transition-colors duration-state-change">Laptops</a></li>
+              <li><a href="../patronet-catalogue/PatronetCatalogue.html" class="hover:text-primary-orange transition-colors duration-state-change">Audio</a></li>
+              <li><a href="../patronet-catalogue/PatronetCatalogue.html" class="hover:text-primary-orange transition-colors duration-state-change">Monitors</a></li>
+              <li><a href="../patronet-catalogue/PatronetCatalogue.html" class="hover:text-primary-orange transition-colors duration-state-change">Wearables</a></li>
+              <li><a href="../patronet-catalogue/PatronetCatalogue.html" class="hover:text-primary-orange transition-colors duration-state-change">Gaming</a></li>
+            </ul>
+          </div>
+
+          <!-- Support -->
+          <div class="md:col-span-2 flex flex-col gap-gutter-md">
+            <h3 class="font-label text-label-lg text-on-deep-black" data-design-text-token="label-lg">Support</h3>
+            <ul class="flex flex-col gap-gutter-sm font-body text-body-md text-on-surface-dark-elevated">
+              <li><a href="#" class="hover:text-primary-orange transition-colors duration-state-change">Help Center</a></li>
+              <li><a href="#" class="hover:text-primary-orange transition-colors duration-state-change">Track Order</a></li>
+              <li><a href="#" class="hover:text-primary-orange transition-colors duration-state-change">Warranty &amp; Service</a></li>
+              <li><a href="#" class="hover:text-primary-orange transition-colors duration-state-change">Bulk Procurement</a></li>
+            </ul>
+          </div>
+
+          <!-- Account -->
+          <div class="md:col-span-2 flex flex-col gap-gutter-md">
+            <h3 class="font-label text-label-lg text-on-deep-black" data-design-text-token="label-lg">Account</h3>
+            <ul class="flex flex-col gap-gutter-sm font-body text-body-md text-on-surface-dark-elevated">
+              <li><a href="#" class="hover:text-primary-orange transition-colors duration-state-change">My Account</a></li>
+              <li><a href="#" class="hover:text-primary-orange transition-colors duration-state-change">Wishlist</a></li>
+              <li><a href="#" class="hover:text-primary-orange transition-colors duration-state-change">Compare Studio</a></li>
+              <li><a href="#" class="hover:text-primary-orange transition-colors duration-state-change">Shopping Cart</a></li>
+            </ul>
+          </div>
+
+          <!-- Policies -->
+          <div class="md:col-span-2 flex flex-col gap-gutter-md">
+            <h3 class="font-label text-label-lg text-on-deep-black" data-design-text-token="label-lg">Policies</h3>
+            <ul class="flex flex-col gap-gutter-sm font-body text-body-md text-on-surface-dark-elevated">
+              <li><a href="#" class="hover:text-primary-orange transition-colors duration-state-change">Privacy Policy</a></li>
+              <li><a href="#" class="hover:text-primary-orange transition-colors duration-state-change">Terms of Service</a></li>
+              <li><a href="#" class="hover:text-primary-orange transition-colors duration-state-change">Shipping Policy</a></li>
+              <li><a href="#" class="hover:text-primary-orange transition-colors duration-state-change">Returns &amp; Refunds</a></li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="pt-gutter-lg flex flex-col sm:flex-row items-start sm:items-center justify-between gap-gutter-sm font-label text-label-md text-on-surface-dark-elevated">
+          <span data-design-text-token="label-md">© 2026 PATRONET. All rights reserved.</span>
+          <span data-design-text-token="label-md">Prices inclusive of GST · Pan-India Delivery</span>
+        </div>
+      </div>
+    </footer>
+  </div>
+
+  <script>
+    function formatINR(num) {
+      return '₹' + num.toLocaleString('en-IN');
+    }
+
+    function recalculateCart() {
+      const items = Array.from(document.querySelectorAll('.cart-item')).filter((el) => !el.classList.contains('removed-item'));
+      let totalQty = 0;
+      let subtotal = 0;
+
+      items.forEach((item) => {
+        const unit = Number(item.getAttribute('data-price') || 0);
+        const qty = Number(item.getAttribute('data-qty') || 1);
+        totalQty += qty;
+        const lineTotal = unit * qty;
+        subtotal += lineTotal;
+        const subEl = item.querySelector('.item-subtotal');
+        if (subEl) subEl.textContent = formatINR(lineTotal);
+      });
+
+      const headerCount = document.getElementById('header-cart-count');
+      const countLabel = document.getElementById('cart-item-count-label');
+      const subSummary = document.getElementById('summary-subtotal');
+      const totalSummary = document.getElementById('summary-total');
+      const mainLayout = document.getElementById('cart-main-layout');
+      const emptyState = document.getElementById('empty-cart-state');
+
+      if (headerCount) headerCount.textContent = String(totalQty);
+      if (countLabel) countLabel.textContent = totalQty + (totalQty === 1 ? ' item' : ' items');
+      if (subSummary) subSummary.textContent = formatINR(subtotal);
+      if (totalSummary) totalSummary.textContent = formatINR(subtotal);
+
+      const isEmpty = items.length === 0;
+      if (mainLayout) mainLayout.classList.toggle('hidden', isEmpty);
+      if (emptyState) emptyState.classList.toggle('hidden', !isEmpty);
+    }
+
+    function changeItemQty(btn, delta) {
+      const item = btn.closest('.cart-item');
+      if (!item) return;
+      const current = Number(item.getAttribute('data-qty') || 1);
+      const next = Math.max(1, current + delta);
+      item.setAttribute('data-qty', String(next));
+      const qtyEl = item.querySelector('.item-qty');
+      if (qtyEl) qtyEl.textContent = String(next);
+      recalculateCart();
+    }
+
+    function removeCartItem(btn) {
+      const item = btn.closest('.cart-item');
+      if (!item) return;
+      item.classList.add('hidden', 'removed-item');
+      recalculateCart();
+    }
+
+    function setCartViewState(state) {
+      const mainLayout = document.getElementById('cart-main-layout');
+      const emptyState = document.getElementById('empty-cart-state');
+      const loadingState = document.getElementById('cart-loading-state');
+      const errorState = document.getElementById('cart-error-state');
+
+      // Reset removed items when returning to default or oos
+      if (state === 'default' || state === 'oos') {
+        document.querySelectorAll('.cart-item').forEach((el) => {
+          el.classList.remove('hidden', 'removed-item');
+        });
+      }
+
+      document.querySelectorAll('.oos-warning').forEach((w) => {
+        w.classList.toggle('hidden', state !== 'oos');
+      });
+
+      if (loadingState) loadingState.classList.toggle('hidden', state !== 'loading');
+      if (errorState) errorState.classList.toggle('hidden', state !== 'error');
+      if (emptyState) emptyState.classList.toggle('hidden', state !== 'empty');
+      if (mainLayout) mainLayout.classList.toggle('hidden', state === 'loading' || state === 'empty');
+
+      if (state === 'default' || state === 'oos' || state === 'error') {
+        recalculateCart();
+      }
+    }
+  </script>
+
+
+</body></html>

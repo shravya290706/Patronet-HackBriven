@@ -1,0 +1,514 @@
+<!DOCTYPE html><html lang="en"><head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>PATRONET — Order History</title>
+  <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+  <script id="tailwind-config">/** @type {import('tailwindcss').Config} */
+globalThis.tailwind = globalThis.tailwind || {};
+globalThis.tailwind.config = {
+  darkMode: 'class',
+  theme: {
+    extend: {
+      colors: {
+        'primary-orange': '#FF6B00',
+        'on-primary-orange': '#111111',
+        'primary-orange-hover': '#E05E00',
+        'primary-orange-tint': '#FFEDE6',
+        'accent-orange-text': '#BF4E00',
+        'deep-black': '#111111',
+        'on-deep-black': '#FFFFFF',
+        'surface-dark-elevated': '#1A1A1A',
+        'on-surface-dark-elevated': '#F5F5F5',
+        'pure-white': '#FFFFFF',
+        'on-pure-white': '#111111',
+        'light-gray': '#F5F5F5',
+        'on-light-gray': '#111111',
+        'muted-gray': '#666666',
+        'outline-subtle': '#E5E5E5',
+        'outline-dark': '#2E2E2E',
+      },
+      borderRadius: {
+        'sm': '4px',
+        'DEFAULT': '6px',
+        'md': '8px',
+        'lg': '12px',
+        'xl': '16px',
+        'full': '9999px',
+      },
+      spacing: {
+        'gutter-xs': '4px',
+        'gutter-sm': '8px',
+        'gutter-md': '16px',
+        'gutter-lg': '24px',
+        'gutter-xl': '32px',
+        'section': '64px',
+        'page-margin': '48px',
+      },
+      fontFamily: {
+        'display': ['"Inter"', 'sans-serif'],
+        'headline': ['"Inter"', 'sans-serif'],
+        'title': ['"Inter"', 'sans-serif'],
+        'body': ['"Inter"', 'sans-serif'],
+        'label': ['"Inter"', 'sans-serif'],
+      },
+      fontSize: {
+        'display-xl': ['60px', { lineHeight: '64px', letterSpacing: '-1.6px', fontWeight: '700' }],
+        'display-xl-mobile': ['32px', { lineHeight: '38px', letterSpacing: '-0.6px', fontWeight: '700' }],
+        'headline-lg': ['36px', { lineHeight: '42px', letterSpacing: '-0.8px', fontWeight: '700' }],
+        'headline-lg-mobile': ['28px', { lineHeight: '34px', letterSpacing: '-0.5px', fontWeight: '700' }],
+        'headline-md': ['24px', { lineHeight: '30px', letterSpacing: '-0.4px', fontWeight: '700' }],
+        'title-lg': ['20px', { lineHeight: '26px', letterSpacing: '-0.2px', fontWeight: '600' }],
+        'title-md': ['16px', { lineHeight: '22px', letterSpacing: '-0.1px', fontWeight: '600' }],
+        'body-lg': ['16px', { lineHeight: '24px', letterSpacing: '0px', fontWeight: '400' }],
+        'body-md': ['14px', { lineHeight: '20px', letterSpacing: '0px', fontWeight: '400' }],
+        'label-lg': ['14px', { lineHeight: '20px', letterSpacing: '0px', fontWeight: '600' }],
+        'label-md': ['13px', { lineHeight: '18px', letterSpacing: '0px', fontWeight: '500' }],
+        'label-sm': ['12px', { lineHeight: '16px', letterSpacing: '0.2px', fontWeight: '500' }],
+      },
+      transitionDuration: {
+        'state-change': '150ms',
+        'surface-enter': '240ms',
+      },
+      transitionDelay: {
+        'state-change': '0ms',
+        'surface-enter': '0ms',
+      },
+      transitionTimingFunction: {
+        'state-change': 'ease-out',
+        'surface-enter': 'cubic-bezier(0.2, 0, 0, 1)',
+      },
+    },
+  },
+};
+if (typeof module !== 'undefined') module.exports = globalThis.tailwind.config;
+</script>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=block" rel="stylesheet">
+  <style>
+    .material-symbols-outlined, .material-symbols-rounded, .material-symbols-sharp, .material-icons {
+      display: inline-block;
+      width: 1em;
+      height: 1em;
+      line-height: 1 !important;
+      box-sizing: content-box;
+      overflow: hidden;
+      white-space: nowrap;
+      direction: ltr;
+      vertical-align: middle;
+    }
+  </style>
+</head>
+<body class="bg-pure-white text-on-pure-white font-body antialiased">
+  <div class="min-h-[1024px] flex flex-col bg-pure-white" data-stitch-vh="min-h-[1024px]===min-h-screen">
+
+    <!-- 1. Navigation Bar (Shared Shell) -->
+    <header class="sticky top-0 z-40 bg-pure-white border-b border-outline-subtle">
+      <div class="max-w-[1360px] mx-auto px-gutter-md md:px-gutter-lg xl:px-page-margin h-[72px] flex items-center justify-between gap-gutter-xl">
+        <a href="../patronet-homepage-refined/PatronetHomepageRefined.html" class="font-headline text-title-lg tracking-tight text-on-pure-white shrink-0" data-design-text-token="title-lg">
+          PATRONET
+        </a>
+
+        <nav aria-label="Primary navigation" class="hidden lg:flex items-center gap-10">
+          <a href="../patronet-catalogue/PatronetCatalogue.html" class="font-label text-label-lg text-on-pure-white hover:text-muted-gray transition-colors duration-state-change ease-state-change" data-design-text-token="label-lg">Shop All</a>
+          <a href="../patronet-catalogue/PatronetCatalogue.html" class="font-label text-label-lg text-on-pure-white hover:text-muted-gray transition-colors duration-state-change ease-state-change" data-design-text-token="label-lg">Electronics</a>
+          <a href="../patronet-catalogue/PatronetCatalogue.html" class="font-label text-label-lg text-on-pure-white hover:text-muted-gray transition-colors duration-state-change ease-state-change" data-design-text-token="label-lg">Computers</a>
+          <a href="../patronet-catalogue/PatronetCatalogue.html" class="font-label text-label-lg text-on-pure-white hover:text-muted-gray transition-colors duration-state-change ease-state-change" data-design-text-token="label-lg">Audio</a>
+          <a href="../patronet-catalogue/PatronetCatalogue.html" class="font-label text-label-lg text-accent-orange-text hover:text-primary-orange-hover transition-colors duration-state-change ease-state-change" data-design-text-token="label-lg">Deals</a>
+        </nav>
+
+        <div class="flex items-center gap-gutter-lg shrink-0">
+          <form class="hidden md:flex items-center gap-gutter-sm px-3.5 py-2 rounded-sm bg-light-gray border border-outline-subtle focus-within:border-deep-black w-64 lg:w-72 transition-colors duration-state-change" role="search" onsubmit="return false;">
+            <span class="material-symbols-outlined text-[18px] text-muted-gray shrink-0" aria-hidden="true">search</span>
+            <input type="search" placeholder="Search catalog" aria-label="Search PATRONET catalog" class="w-full bg-transparent border-0 p-0 font-body text-body-md text-on-pure-white placeholder:text-muted-gray focus:ring-0">
+          </form>
+
+          <div class="flex items-center gap-gutter-sm">
+            <a href="../patronet-account/PatronetAccount.html" aria-label="Account" class="inline-flex items-center justify-center w-9 h-9 text-on-pure-white border-b-2 border-primary-orange">
+              <span class="material-symbols-outlined text-[20px]" aria-hidden="true">person</span>
+            </a>
+
+            <button type="button" aria-label="Wishlist" class="inline-flex items-center justify-center w-9 h-9 text-on-pure-white hover:text-muted-gray transition-colors duration-state-change ease-state-change">
+              <span class="material-symbols-outlined text-[20px]" aria-hidden="true">favorite</span>
+            </button>
+
+            <a href="../patronet-cart/PatronetCart.html" aria-label="Shopping cart" class="inline-flex items-center gap-gutter-xs h-9 pl-gutter-xs text-on-pure-white hover:text-muted-gray transition-colors duration-state-change shrink-0">
+              <span class="material-symbols-outlined text-[20px] shrink-0" aria-hidden="true">shopping_cart</span>
+              <span class="font-label text-label-md tabular-nums whitespace-nowrap" data-design-text-token="label-md">(3)</span>
+            </a>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <main class="flex-1">
+      <div class="max-w-[1360px] mx-auto px-gutter-md md:px-gutter-lg xl:px-page-margin py-gutter-xl">
+
+        <!-- Page Header -->
+        <nav aria-label="Breadcrumb" class="flex items-center gap-gutter-sm font-label text-label-md text-muted-gray mb-gutter-md">
+          <a href="../patronet-homepage-refined/PatronetHomepageRefined.html" class="hover:text-on-pure-white transition-colors duration-state-change" data-design-text-token="label-md">Home</a>
+          <span aria-hidden="true">/</span>
+          <a href="../patronet-account/PatronetAccount.html" class="hover:text-on-pure-white transition-colors duration-state-change" data-design-text-token="label-md">My Account</a>
+          <span aria-hidden="true">/</span>
+          <span class="text-on-pure-white" data-design-text-token="label-md">Your Orders</span>
+        </nav>
+
+        <div class="pb-gutter-lg border-b border-outline-subtle mb-gutter-xl flex flex-col sm:flex-row sm:items-end justify-between gap-gutter-md">
+          <div class="flex flex-col gap-gutter-xs">
+            <h1 class="font-headline text-headline-lg-mobile md:text-headline-lg text-on-pure-white" data-design-text-token="headline-lg">
+              Your orders.
+            </h1>
+            <p class="font-body text-body-lg text-muted-gray" data-design-text-token="body-lg">
+              Review past purchases, payment statuses, and order details.
+            </p>
+          </div>
+          <button type="button" onclick="toggleMobileAccountMenu()" class="lg:hidden inline-flex items-center justify-between gap-gutter-sm px-gutter-md py-2.5 rounded-sm border border-outline-subtle bg-light-gray font-label text-label-md text-on-light-gray">
+            <span data-design-text-token="label-md">Account navigation</span>
+            <span class="material-symbols-outlined text-[18px]" aria-hidden="true">expand_more</span>
+          </button>
+        </div>
+
+        <!-- Account Layout: Left Navigation + Order History -->
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-gutter-xl items-start">
+
+          <!-- Left-Side Account Navigation -->
+          <aside id="orders-sidebar" class="hidden lg:block lg:col-span-3">
+            <nav aria-label="Account sections" class="flex flex-col border border-outline-subtle rounded-sm divide-y divide-outline-subtle bg-pure-white">
+              <a href="../patronet-account/PatronetAccount.html" class="px-gutter-lg py-3.5 font-label text-label-lg text-muted-gray hover:text-on-pure-white hover:bg-light-gray transition-colors duration-state-change" data-design-text-token="label-lg">
+                Profile
+              </a>
+              <a href="../patronet-orders/PatronetOrders.html" class="px-gutter-lg py-3.5 font-label text-label-lg text-on-pure-white bg-light-gray border-l-2 border-primary-orange" data-design-text-token="label-lg">
+                My Orders
+              </a>
+              <a href="../patronet-account/PatronetAccount.html#saved-addresses" class="px-gutter-lg py-3.5 font-label text-label-lg text-muted-gray hover:text-on-pure-white hover:bg-light-gray transition-colors duration-state-change" data-design-text-token="label-lg">
+                Saved Addresses
+              </a>
+              <a href="../patronet-catalogue/PatronetCatalogue.html" class="px-gutter-lg py-3.5 font-label text-label-lg text-muted-gray hover:text-on-pure-white hover:bg-light-gray transition-colors duration-state-change" data-design-text-token="label-lg">
+                Wishlist
+              </a>
+              <a href="../patronet-login/PatronetLogin.html" class="px-gutter-lg py-3.5 font-label text-label-lg text-accent-orange-text hover:bg-light-gray transition-colors duration-state-change" data-design-text-token="label-lg">
+                Sign Out
+              </a>
+            </nav>
+          </aside>
+
+          <!-- Main Orders Column -->
+          <div class="lg:col-span-9 flex flex-col gap-gutter-lg">
+
+            <!-- Filter Tabs (Allows testing Empty State naturally) -->
+            <div class="flex flex-wrap items-center gap-gutter-xs border-b border-outline-subtle pb-gutter-md" role="tablist" aria-label="Filter orders">
+              <button type="button" onclick="filterOrders(&#39;all&#39;, this)" class="order-tab px-gutter-md py-2 rounded-sm bg-deep-black text-on-deep-black font-label text-label-md" role="tab" aria-selected="true">
+                <span data-design-text-token="label-md">All orders (2)</span>
+              </button>
+              <button type="button" onclick="filterOrders(&#39;active&#39;, this)" class="order-tab px-gutter-md py-2 rounded-sm bg-light-gray text-on-light-gray font-label text-label-md hover:bg-outline-subtle" role="tab" aria-selected="false">
+                <span data-design-text-token="label-md">Active (1)</span>
+              </button>
+              <button type="button" onclick="filterOrders(&#39;cancelled&#39;, this)" class="order-tab px-gutter-md py-2 rounded-sm bg-light-gray text-on-light-gray font-label text-label-md hover:bg-outline-subtle" role="tab" aria-selected="false">
+                <span data-design-text-token="label-md">Cancelled (0)</span>
+              </button>
+            </div>
+
+            <!-- Orders List -->
+            <div id="orders-list" class="flex flex-col gap-gutter-md">
+
+              <!-- Order 1 -->
+              <article class="order-card rounded-sm border border-outline-subtle bg-pure-white overflow-hidden" data-status="active">
+                <div class="p-gutter-lg flex flex-col gap-gutter-lg">
+                  <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-gutter-md pb-gutter-md border-b border-outline-subtle">
+                    <div class="flex flex-wrap items-center gap-gutter-lg">
+                      <div class="flex flex-col gap-gutter-xs">
+                        <span class="font-label text-label-sm text-muted-gray" data-design-text-token="label-sm">Order number</span>
+                        <span class="font-title text-title-md text-on-pure-white tabular-nums" data-design-text-token="title-md">PN-2026-84921</span>
+                      </div>
+                      <div class="flex flex-col gap-gutter-xs">
+                        <span class="font-label text-label-sm text-muted-gray" data-design-text-token="label-sm">Date placed</span>
+                        <span class="font-body text-body-md text-on-pure-white tabular-nums" data-design-text-token="body-md">21 Nov 2026</span>
+                      </div>
+                      <div class="flex flex-col gap-gutter-xs">
+                        <span class="font-label text-label-sm text-muted-gray" data-design-text-token="label-sm">Total amount</span>
+                        <span class="font-title text-title-md text-on-pure-white tabular-nums" data-design-text-token="title-md">₹1,15,288</span>
+                      </div>
+                    </div>
+
+                    <div class="flex flex-wrap items-center gap-gutter-sm">
+                      <!-- Order Status (Solid light-gray + orange dot) -->
+                      <span class="inline-flex items-center gap-gutter-xs px-2.5 py-1 rounded-sm bg-light-gray font-label text-label-sm text-on-light-gray" data-design-text-token="label-sm">
+                        <span class="w-2 h-2 rounded-full bg-primary-orange shrink-0" aria-hidden="true"></span>
+                        <span>Order received</span>
+                      </span>
+                      <!-- Payment Status (Outlined border, visually distinct) -->
+                      <span class="inline-flex items-center px-2.5 py-1 rounded-sm border border-outline-subtle bg-pure-white font-label text-label-sm text-muted-gray" data-design-text-token="label-sm">
+                        Payment: Pending validation
+                      </span>
+                    </div>
+                  </div>
+
+                  <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-gutter-md">
+                    <div class="flex items-center gap-gutter-sm">
+                      <div class="w-14 h-14 bg-light-gray rounded-sm p-gutter-xs border border-outline-subtle flex items-center justify-center overflow-hidden">
+                        <img src="https://lh3.googleusercontent.com/aida/ALJJyrDiK48nkB5nc39ENn71KKa0NGyy5-rVdYk8Vu1ZnfeuBpxKtvutGqH3o6C-gpCjNTWsSJ_Hp4HMW3lbbNpjGSLJka8K7gPBXtJY5_Pb6RkFnYfwJ94o5DKQWlMCT2HfloilyiLgSqJ8ovDb5RWSZ1CVHQvRvrMg3T1Fw3hkhA7kFf3VMjm8L8BZbnlmJBNRTfpSi-RvqsiDLKv4j1qMs6auOjKy-Sv6TlgdLj5B0NRxmbIC_dh13EjE9mZmZhw" alt="PATRONET GameBook 15" class="w-full h-full object-contain">
+                      </div>
+                      <div class="w-14 h-14 bg-light-gray rounded-sm p-gutter-xs border border-outline-subtle flex items-center justify-center overflow-hidden">
+                        <img src="https://lh3.googleusercontent.com/aida/ALJJyrCo-y0tdg4iIEcbleH9BQWLTlroKbPA2aYI-vZsOtiu3uyGt8LX4-kr8qREBWtpgzkX3oQYV6jZl_aFrEZ6vTZEMLPFTmgt2ooBXxl37okJQIjnaUvX7njPQXXBfChEV6UPtNLSVdoHmPWvitubZydTtDfI1zU6oA8s36iugg4B73MZiSSVILQjooFZ6x_oQp2fyuDIf4WGNrGXqy8FCeqg6oxpccwG8zkvJTx9J7ZSgkRC4wFsyD-MxmOiEQ" alt="Studio ANC Headphones" class="w-full h-full object-contain">
+                      </div>
+                      <div class="w-14 h-14 bg-light-gray rounded-sm p-gutter-xs border border-outline-subtle flex items-center justify-center overflow-hidden">
+                        <img src="https://lh3.googleusercontent.com/aida/ALJJyrCRNa3urQXbEuWTmydzRdASrNT2L882VV2P7qEeTVAmocq_2HPeGy2K8C4PQVfyYY_MkNrF2IjefgWAjstKtXpIG8q5EHQQGz3Yiy054Dbos03GVKt7p33OL5YK6dAneXGlA6zxI_B9hE5kqny00BObloJPZxk4K8_t7qSUUcCd39hp9bPcpjO9kAqa3MW5xwawuS75IOCVDBsNd1r7c3BkG1Ee4NzyEuGX0vBJRkBSZEhH6MPxsuvXCKJc20sx0fWZ" alt="Precision Wireless Mouse" class="w-full h-full object-contain">
+                      </div>
+                      <span class="font-body text-body-md text-muted-gray ml-gutter-xs" data-design-text-token="body-md">3 items</span>
+                    </div>
+
+                    <button type="button" onclick="toggleOrderDetails(&#39;details-84921&#39;, this)" class="px-gutter-lg py-2.5 rounded-sm border border-outline-subtle bg-pure-white font-label text-label-md text-on-pure-white hover:border-deep-black transition-colors duration-state-change shrink-0">
+                      <span data-design-text-token="label-md">View Details</span>
+                    </button>
+                  </div>
+
+                  <!-- Expandable Order Details View -->
+                  <div id="details-84921" class="hidden pt-gutter-lg border-t border-outline-subtle flex flex-col gap-gutter-lg">
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-gutter-lg">
+                      <div class="flex flex-col gap-gutter-xs">
+                        <span class="font-label text-label-sm text-muted-gray" data-design-text-token="label-sm">Delivery address</span>
+                        <p class="font-body text-body-md text-on-pure-white" data-design-text-token="body-md">
+                          Aarav Mehta · Flat 402, Skylark Residency, 14th Road, Bandra West, Mumbai, Maharashtra — 400050
+                        </p>
+                      </div>
+                      <div class="flex flex-col gap-gutter-xs">
+                        <span class="font-label text-label-sm text-muted-gray" data-design-text-token="label-sm">Status summary</span>
+                        <p class="font-body text-body-md text-on-pure-white" data-design-text-token="body-md">
+                          Order status: Order received · Payment status: Pending validation (UPI)
+                        </p>
+                      </div>
+                    </div>
+
+                    <ul class="divide-y divide-outline-subtle border-y border-outline-subtle">
+                      <li class="py-gutter-sm flex items-center justify-between gap-gutter-md">
+                        <span class="font-body text-body-md text-on-pure-white" data-design-text-token="body-md">PATRONET GameBook 15 · Qty 1 × ₹94,990</span>
+                        <span class="font-label text-label-md text-on-pure-white tabular-nums" data-design-text-token="label-md">₹94,990</span>
+                      </li>
+                      <li class="py-gutter-sm flex items-center justify-between gap-gutter-md">
+                        <span class="font-body text-body-md text-on-pure-white" data-design-text-token="body-md">Studio ANC Headphones · Qty 1 × ₹13,999</span>
+                        <span class="font-label text-label-md text-on-pure-white tabular-nums" data-design-text-token="label-md">₹13,999</span>
+                      </li>
+                      <li class="py-gutter-sm flex items-center justify-between gap-gutter-md">
+                        <span class="font-body text-body-md text-on-pure-white" data-design-text-token="body-md">Precision Wireless Mouse · Qty 1 × ₹6,299</span>
+                        <span class="font-label text-label-md text-on-pure-white tabular-nums" data-design-text-token="label-md">₹6,299</span>
+                      </li>
+                    </ul>
+
+                    <div class="flex items-center justify-between">
+                      <span class="font-title text-title-md text-on-pure-white" data-design-text-token="title-md">Order total</span>
+                      <span class="font-headline text-headline-md text-on-pure-white tabular-nums" data-design-text-token="headline-md">₹1,15,288</span>
+                    </div>
+                  </div>
+                </div>
+              </article>
+
+              <!-- Order 2 -->
+              <article class="order-card rounded-sm border border-outline-subtle bg-pure-white overflow-hidden" data-status="delivered">
+                <div class="p-gutter-lg flex flex-col gap-gutter-lg">
+                  <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-gutter-md pb-gutter-md border-b border-outline-subtle">
+                    <div class="flex flex-wrap items-center gap-gutter-lg">
+                      <div class="flex flex-col gap-gutter-xs">
+                        <span class="font-label text-label-sm text-muted-gray" data-design-text-token="label-sm">Order number</span>
+                        <span class="font-title text-title-md text-on-pure-white tabular-nums" data-design-text-token="title-md">PN-2026-79304</span>
+                      </div>
+                      <div class="flex flex-col gap-gutter-xs">
+                        <span class="font-label text-label-sm text-muted-gray" data-design-text-token="label-sm">Date placed</span>
+                        <span class="font-body text-body-md text-on-pure-white tabular-nums" data-design-text-token="body-md">04 Nov 2026</span>
+                      </div>
+                      <div class="flex flex-col gap-gutter-xs">
+                        <span class="font-label text-label-sm text-muted-gray" data-design-text-token="label-sm">Total amount</span>
+                        <span class="font-title text-title-md text-on-pure-white tabular-nums" data-design-text-token="title-md">₹19,999</span>
+                      </div>
+                    </div>
+
+                    <div class="flex flex-wrap items-center gap-gutter-sm">
+                      <!-- Order Status (Solid deep-black) -->
+                      <span class="inline-flex items-center px-2.5 py-1 rounded-sm bg-deep-black font-label text-label-sm text-on-deep-black" data-design-text-token="label-sm">
+                        Delivered
+                      </span>
+                      <!-- Payment Status (Outlined border, visually distinct) -->
+                      <span class="inline-flex items-center px-2.5 py-1 rounded-sm border border-outline-subtle bg-pure-white font-label text-label-sm text-on-pure-white" data-design-text-token="label-sm">
+                        Payment: Paid via UPI
+                      </span>
+                    </div>
+                  </div>
+
+                  <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-gutter-md">
+                    <div class="flex items-center gap-gutter-sm">
+                      <div class="w-14 h-14 bg-light-gray rounded-sm p-gutter-xs border border-outline-subtle flex items-center justify-center overflow-hidden">
+                        <img src="https://lh3.googleusercontent.com/aida/ALJJyrDchzed7MK7CAvv2hv5OtuNLxLY26BeQv_GlHGRqqqvviuur0raQm9S8Nf83kVGw7kdpAieEoAHkr1pT1I9fJhk1JAD1VsSc9CzzcHg3O-R_N7ODj9no7Pbr7hoaN0BH7rpTFSXaygXt5E0bI7_puubMJJzZbIuNjYou7WzE8IO-nW_P3KD5-xBxovljhlO6W1k3qiglkUATPKlNi0elRgEf1dnF6_jhC5b4UVxxZE7voHYyzmw5Q3ZPRN6oKvh6xo" alt="Tactile Mechanical Keyboard" class="w-full h-full object-contain">
+                      </div>
+                      <span class="font-body text-body-md text-muted-gray ml-gutter-xs" data-design-text-token="body-md">Tactile Mechanical Keyboard · 1 item</span>
+                    </div>
+
+                    <button type="button" onclick="toggleOrderDetails(&#39;details-79304&#39;, this)" class="px-gutter-lg py-2.5 rounded-sm border border-outline-subtle bg-pure-white font-label text-label-md text-on-pure-white hover:border-deep-black transition-colors duration-state-change shrink-0">
+                      <span data-design-text-token="label-md">View Details</span>
+                    </button>
+                  </div>
+
+                  <!-- Expandable Order Details View -->
+                  <div id="details-79304" class="hidden pt-gutter-lg border-t border-outline-subtle flex flex-col gap-gutter-lg">
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-gutter-lg">
+                      <div class="flex flex-col gap-gutter-xs">
+                        <span class="font-label text-label-sm text-muted-gray" data-design-text-token="label-sm">Delivery address</span>
+                        <p class="font-body text-body-md text-on-pure-white" data-design-text-token="body-md">
+                          Aarav Mehta · Level 6, Maker Maxity, Bandra Kurla Complex, Mumbai, Maharashtra — 400051
+                        </p>
+                      </div>
+                      <div class="flex flex-col gap-gutter-xs">
+                        <span class="font-label text-label-sm text-muted-gray" data-design-text-token="label-sm">Status summary</span>
+                        <p class="font-body text-body-md text-on-pure-white" data-design-text-token="body-md">
+                          Order status: Delivered · Payment status: Paid via UPI
+                        </p>
+                      </div>
+                    </div>
+
+                    <ul class="divide-y divide-outline-subtle border-y border-outline-subtle">
+                      <li class="py-gutter-sm flex items-center justify-between gap-gutter-md">
+                        <span class="font-body text-body-md text-on-pure-white" data-design-text-token="body-md">Tactile Mechanical Keyboard · Qty 1 × ₹19,999</span>
+                        <span class="font-label text-label-md text-on-pure-white tabular-nums" data-design-text-token="label-md">₹19,999</span>
+                      </li>
+                    </ul>
+
+                    <div class="flex items-center justify-between">
+                      <span class="font-title text-title-md text-on-pure-white" data-design-text-token="title-md">Order total</span>
+                      <span class="font-headline text-headline-md text-on-pure-white tabular-nums" data-design-text-token="headline-md">₹19,999</span>
+                    </div>
+                  </div>
+                </div>
+              </article>
+
+            </div>
+
+            <!-- Empty Orders State -->
+            <section id="empty-orders-state" class="hidden py-section text-center flex flex-col items-center gap-gutter-md border border-outline-subtle rounded-sm bg-light-gray">
+              <span class="material-symbols-outlined text-[36px] text-muted-gray" aria-hidden="true">package_2</span>
+              <div class="flex flex-col gap-gutter-xs">
+                <h2 class="font-headline text-headline-md text-on-light-gray" data-design-text-token="headline-md">
+                  No orders yet.
+                </h2>
+                <p class="font-body text-body-md text-muted-gray" data-design-text-token="body-md">
+                  Orders you place with PATRONET will appear here.
+                </p>
+              </div>
+              <a href="../patronet-catalogue/PatronetCatalogue.html" class="mt-gutter-xs inline-flex items-center justify-center px-gutter-xl py-3 rounded-sm bg-primary-orange text-on-primary-orange font-label text-label-lg hover:bg-primary-orange-hover transition-colors duration-state-change">
+                <span data-design-text-token="label-lg">Start shopping</span>
+              </a>
+            </section>
+
+          </div>
+        </div>
+      </div>
+    </main>
+
+    <!-- Footer (Shared Shell) -->
+    <footer id="footer" class="bg-deep-black text-on-deep-black">
+      <div class="max-w-[1360px] mx-auto px-gutter-md md:px-gutter-lg xl:px-page-margin py-section">
+        <div class="grid grid-cols-1 md:grid-cols-12 gap-gutter-xl pb-12 border-b border-outline-dark">
+          <div class="md:col-span-4 flex flex-col gap-gutter-md">
+            <span class="font-headline text-headline-md tracking-tight text-on-deep-black" data-design-text-token="headline-md">PATRONET</span>
+            <p class="font-body text-body-md text-on-surface-dark-elevated max-w-xs text-pretty" data-design-text-token="body-md">
+              Precision electronics and AI-assisted hardware discovery for creators, gamers, and teams across India.
+            </p>
+          </div>
+
+          <div class="md:col-span-2 flex flex-col gap-gutter-md">
+            <h3 class="font-label text-label-lg text-on-deep-black" data-design-text-token="label-lg">Shop</h3>
+            <ul class="flex flex-col gap-gutter-sm font-body text-body-md text-on-surface-dark-elevated">
+              <li><a href="../patronet-catalogue/PatronetCatalogue.html" class="hover:text-primary-orange transition-colors duration-state-change">Laptops</a></li>
+              <li><a href="../patronet-catalogue/PatronetCatalogue.html" class="hover:text-primary-orange transition-colors duration-state-change">Audio</a></li>
+              <li><a href="../patronet-catalogue/PatronetCatalogue.html" class="hover:text-primary-orange transition-colors duration-state-change">Monitors</a></li>
+              <li><a href="../patronet-catalogue/PatronetCatalogue.html" class="hover:text-primary-orange transition-colors duration-state-change">Wearables</a></li>
+              <li><a href="../patronet-catalogue/PatronetCatalogue.html" class="hover:text-primary-orange transition-colors duration-state-change">Gaming</a></li>
+            </ul>
+          </div>
+
+          <div class="md:col-span-2 flex flex-col gap-gutter-md">
+            <h3 class="font-label text-label-lg text-on-deep-black" data-design-text-token="label-lg">Support</h3>
+            <ul class="flex flex-col gap-gutter-sm font-body text-body-md text-on-surface-dark-elevated">
+              <li><a href="#" class="hover:text-primary-orange transition-colors duration-state-change">Help Center</a></li>
+              <li><a href="../patronet-orders/PatronetOrders.html" class="hover:text-primary-orange transition-colors duration-state-change">Track Order</a></li>
+              <li><a href="#" class="hover:text-primary-orange transition-colors duration-state-change">Warranty &amp; Service</a></li>
+              <li><a href="#" class="hover:text-primary-orange transition-colors duration-state-change">Bulk Procurement</a></li>
+            </ul>
+          </div>
+
+          <div class="md:col-span-2 flex flex-col gap-gutter-md">
+            <h3 class="font-label text-label-lg text-on-deep-black" data-design-text-token="label-lg">Account</h3>
+            <ul class="flex flex-col gap-gutter-sm font-body text-body-md text-on-surface-dark-elevated">
+              <li><a href="../patronet-account/PatronetAccount.html" class="hover:text-primary-orange transition-colors duration-state-change">My Account</a></li>
+              <li><a href="#" class="hover:text-primary-orange transition-colors duration-state-change">Wishlist</a></li>
+              <li><a href="#" class="hover:text-primary-orange transition-colors duration-state-change">Compare Studio</a></li>
+              <li><a href="../patronet-cart/PatronetCart.html" class="hover:text-primary-orange transition-colors duration-state-change">Shopping Cart</a></li>
+            </ul>
+          </div>
+
+          <div class="md:col-span-2 flex flex-col gap-gutter-md">
+            <h3 class="font-label text-label-lg text-on-deep-black" data-design-text-token="label-lg">Policies</h3>
+            <ul class="flex flex-col gap-gutter-sm font-body text-body-md text-on-surface-dark-elevated">
+              <li><a href="#" class="hover:text-primary-orange transition-colors duration-state-change">Privacy Policy</a></li>
+              <li><a href="#" class="hover:text-primary-orange transition-colors duration-state-change">Terms of Service</a></li>
+              <li><a href="#" class="hover:text-primary-orange transition-colors duration-state-change">Shipping Policy</a></li>
+              <li><a href="#" class="hover:text-primary-orange transition-colors duration-state-change">Returns &amp; Refunds</a></li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="pt-gutter-lg flex flex-col sm:flex-row items-start sm:items-center justify-between gap-gutter-sm font-label text-label-md text-on-surface-dark-elevated">
+          <span data-design-text-token="label-md">© 2026 PATRONET. All rights reserved.</span>
+          <span data-design-text-token="label-md">Prices inclusive of GST · Pan-India Delivery</span>
+        </div>
+      </div>
+    </footer>
+  </div>
+
+  <script>
+    function toggleMobileAccountMenu() {
+      document.getElementById('orders-sidebar').classList.toggle('hidden');
+    }
+
+    function toggleOrderDetails(id, btn) {
+      const el = document.getElementById(id);
+      const label = btn.querySelector('span');
+      if (el.classList.contains('hidden')) {
+        el.classList.remove('hidden');
+        label.textContent = 'Hide Details';
+      } else {
+        el.classList.add('hidden');
+        label.textContent = 'View Details';
+      }
+    }
+
+    function filterOrders(filter, activeBtn) {
+      document.querySelectorAll('.order-tab').forEach((btn) => {
+        btn.classList.remove('bg-deep-black', 'text-on-deep-black');
+        btn.classList.add('bg-light-gray', 'text-on-light-gray');
+        btn.setAttribute('aria-selected', 'false');
+      });
+      activeBtn.classList.remove('bg-light-gray', 'text-on-light-gray');
+      activeBtn.classList.add('bg-deep-black', 'text-on-deep-black');
+      activeBtn.setAttribute('aria-selected', 'true');
+
+      const cards = Array.from(document.querySelectorAll('.order-card'));
+      let visibleCount = 0;
+
+      cards.forEach((card) => {
+        const status = card.getAttribute('data-status');
+        if (filter === 'all' || status === filter) {
+          card.classList.remove('hidden');
+          visibleCount += 1;
+        } else {
+          card.classList.add('hidden');
+        }
+      });
+
+      const emptyEl = document.getElementById('empty-orders-state');
+      if (visibleCount === 0) {
+        emptyEl.classList.remove('hidden');
+      } else {
+        emptyEl.classList.add('hidden');
+      }
+    }
+  </script>
+
+
+</body></html>

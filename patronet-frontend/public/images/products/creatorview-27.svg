@@ -1,0 +1,31 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 600" width="100%" height="100%">
+  <defs>
+    <radialGradient id="mon-aura" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="#FF6B00" stop-opacity="0.08"/>
+      <stop offset="100%" stop-color="#FF6B00" stop-opacity="0"/>
+    </radialGradient>
+    <linearGradient id="mon-screen-grad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#22222a"/>
+      <stop offset="100%" stop-color="#101015"/>
+    </linearGradient>
+  </defs>
+
+  <rect width="600" height="600" fill="#f8f8f8"/>
+  <circle cx="300" cy="300" r="220" fill="url(#mon-aura)"/>
+
+  <!-- Stand -->
+  <rect x="288" y="320" width="24" height="110" fill="#30303c" rx="4"/>
+  <polygon points="200,430 400,430 420,442 180,442" fill="#202028"/>
+
+  <!-- Monitor Screen -->
+  <rect x="90" y="110" width="420" height="245" rx="8" fill="#121216" stroke="#3e3e4c" stroke-width="2"/>
+  <rect x="98" y="118" width="404" height="225" rx="4" fill="url(#mon-screen-grad)"/>
+
+  <!-- Graphics pattern on display -->
+  <circle cx="300" cy="230" r="50" fill="none" stroke="#FF6B00" stroke-width="1.5" opacity="0.7"/>
+  <circle cx="300" cy="230" r="28" fill="none" stroke="#00e5ff" stroke-width="1.5" stroke-dasharray="4 3"/>
+  <line x1="220" y1="230" x2="380" y2="230" stroke="#FF6B00" stroke-width="1" opacity="0.4"/>
+
+  <!-- Shadow -->
+  <ellipse cx="300" cy="455" rx="180" ry="12" fill="#000000" opacity="0.12"/>
+</svg>
