@@ -1,0 +1,816 @@
+<!DOCTYPE html><html lang="en"><head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>PATRONET — Product Catalogue &amp; Filters</title>
+  <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+  <script id="tailwind-config">/** @type {import('tailwindcss').Config} */
+globalThis.tailwind = globalThis.tailwind || {};
+globalThis.tailwind.config = {
+  darkMode: 'class',
+  theme: {
+    extend: {
+      colors: {
+        'primary-orange': '#FF6B00',
+        'on-primary-orange': '#111111',
+        'primary-orange-hover': '#E05E00',
+        'primary-orange-tint': '#FFEDE6',
+        'accent-orange-text': '#BF4E00',
+        'deep-black': '#111111',
+        'on-deep-black': '#FFFFFF',
+        'surface-dark-elevated': '#1A1A1A',
+        'on-surface-dark-elevated': '#F5F5F5',
+        'pure-white': '#FFFFFF',
+        'on-pure-white': '#111111',
+        'light-gray': '#F5F5F5',
+        'on-light-gray': '#111111',
+        'muted-gray': '#666666',
+        'outline-subtle': '#E5E5E5',
+        'outline-dark': '#2E2E2E',
+      },
+      borderRadius: {
+        'sm': '4px',
+        'DEFAULT': '6px',
+        'md': '8px',
+        'lg': '12px',
+        'xl': '16px',
+        'full': '9999px',
+      },
+      spacing: {
+        'gutter-xs': '4px',
+        'gutter-sm': '8px',
+        'gutter-md': '16px',
+        'gutter-lg': '24px',
+        'gutter-xl': '32px',
+        'section': '64px',
+        'page-margin': '48px',
+      },
+      fontFamily: {
+        'display': ['"Inter"', 'sans-serif'],
+        'headline': ['"Inter"', 'sans-serif'],
+        'title': ['"Inter"', 'sans-serif'],
+        'body': ['"Inter"', 'sans-serif'],
+        'label': ['"Inter"', 'sans-serif'],
+      },
+      fontSize: {
+        'display-xl': ['60px', { lineHeight: '64px', letterSpacing: '-1.6px', fontWeight: '700' }],
+        'display-xl-mobile': ['32px', { lineHeight: '38px', letterSpacing: '-0.6px', fontWeight: '700' }],
+        'headline-lg': ['36px', { lineHeight: '42px', letterSpacing: '-0.8px', fontWeight: '700' }],
+        'headline-lg-mobile': ['28px', { lineHeight: '34px', letterSpacing: '-0.5px', fontWeight: '700' }],
+        'headline-md': ['24px', { lineHeight: '30px', letterSpacing: '-0.4px', fontWeight: '700' }],
+        'title-lg': ['20px', { lineHeight: '26px', letterSpacing: '-0.2px', fontWeight: '600' }],
+        'title-md': ['16px', { lineHeight: '22px', letterSpacing: '-0.1px', fontWeight: '600' }],
+        'body-lg': ['16px', { lineHeight: '24px', letterSpacing: '0px', fontWeight: '400' }],
+        'body-md': ['14px', { lineHeight: '20px', letterSpacing: '0px', fontWeight: '400' }],
+        'label-lg': ['14px', { lineHeight: '20px', letterSpacing: '0px', fontWeight: '600' }],
+        'label-md': ['13px', { lineHeight: '18px', letterSpacing: '0px', fontWeight: '500' }],
+        'label-sm': ['12px', { lineHeight: '16px', letterSpacing: '0.2px', fontWeight: '500' }],
+      },
+      transitionDuration: {
+        'state-change': '150ms',
+        'surface-enter': '240ms',
+      },
+      transitionDelay: {
+        'state-change': '0ms',
+        'surface-enter': '0ms',
+      },
+      transitionTimingFunction: {
+        'state-change': 'ease-out',
+        'surface-enter': 'cubic-bezier(0.2, 0, 0, 1)',
+      },
+    },
+  },
+};
+if (typeof module !== 'undefined') module.exports = globalThis.tailwind.config;
+</script>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=block" rel="stylesheet">
+  <style>
+    .material-symbols-outlined, .material-symbols-rounded, .material-symbols-sharp, .material-icons {
+      display: inline-block;
+      width: 1em;
+      height: 1em;
+      line-height: 1 !important;
+      box-sizing: content-box;
+      overflow: hidden;
+      white-space: nowrap;
+      direction: ltr;
+      vertical-align: middle;
+    }
+  </style>
+</head>
+<body class="bg-pure-white text-on-pure-white font-body antialiased">
+  <div class="min-h-[884px] flex flex-col bg-pure-white" data-stitch-vh="min-h-[884px]===min-h-screen">
+
+    <!-- 1. Navigation Bar (Shared Shell) -->
+    <header class="sticky top-0 z-40 bg-pure-white border-b border-outline-subtle">
+      <div class="max-w-[1360px] mx-auto px-gutter-md md:px-gutter-lg xl:px-page-margin h-[72px] flex items-center justify-between gap-gutter-xl">
+        <!-- Left: Bold PATRONET Wordmark -->
+        <a href="../patronet-homepage-refined/PatronetHomepageRefined.html" class="font-headline text-title-lg tracking-tight text-on-pure-white shrink-0" data-design-text-token="title-lg">
+          PATRONET
+        </a>
+
+        <!-- Center: Carefully Spaced Category Navigation -->
+        <nav aria-label="Primary navigation" class="hidden lg:flex items-center gap-10">
+          <a href="#" aria-current="page" class="font-label text-label-lg text-on-pure-white border-b-2 border-primary-orange pb-0.5" data-design-text-token="label-lg">Shop All</a>
+          <a href="#" class="font-label text-label-lg text-on-pure-white hover:text-muted-gray transition-colors duration-state-change ease-state-change" data-design-text-token="label-lg">Electronics</a>
+          <a href="#" class="font-label text-label-lg text-on-pure-white hover:text-muted-gray transition-colors duration-state-change ease-state-change" data-design-text-token="label-lg">Computers</a>
+          <a href="#" class="font-label text-label-lg text-on-pure-white hover:text-muted-gray transition-colors duration-state-change ease-state-change" data-design-text-token="label-lg">Audio</a>
+          <a href="#" class="font-label text-label-lg text-accent-orange-text hover:text-primary-orange-hover transition-colors duration-state-change ease-state-change" data-design-text-token="label-lg">Deals</a>
+        </nav>
+
+        <!-- Right: Refined Search Input + Minimal Account, Wishlist, Cart -->
+        <div class="flex items-center gap-gutter-lg shrink-0">
+          <form class="hidden md:flex items-center gap-gutter-sm px-3.5 py-2 rounded-sm bg-light-gray border border-outline-subtle focus-within:border-deep-black w-64 lg:w-72 transition-colors duration-state-change" role="search" onsubmit="return false;">
+            <span class="material-symbols-outlined text-[18px] text-muted-gray shrink-0" aria-hidden="true">search</span>
+            <input id="header-search-input" type="search" placeholder="Search catalog" aria-label="Search PATRONET catalog" oninput="applyFilters()" class="w-full bg-transparent border-0 p-0 font-body text-body-md text-on-pure-white placeholder:text-muted-gray focus:ring-0">
+          </form>
+
+          <div class="flex items-center gap-gutter-sm">
+            <button type="button" aria-label="Account" class="inline-flex items-center justify-center w-9 h-9 text-on-pure-white hover:text-muted-gray transition-colors duration-state-change ease-state-change">
+              <span class="material-symbols-outlined text-[20px]" aria-hidden="true">person</span>
+            </button>
+
+            <button type="button" aria-label="Wishlist" class="inline-flex items-center justify-center w-9 h-9 text-on-pure-white hover:text-muted-gray transition-colors duration-state-change ease-state-change">
+              <span class="material-symbols-outlined text-[20px]" aria-hidden="true">favorite</span>
+            </button>
+
+            <button id="header-cart-btn" type="button" aria-label="Shopping cart" class="inline-flex items-center gap-gutter-xs h-9 pl-gutter-xs text-on-pure-white hover:text-muted-gray transition-colors duration-state-change ease-state-change shrink-0">
+              <span class="material-symbols-outlined text-[20px] shrink-0" aria-hidden="true">shopping_cart</span>
+              <span class="font-label text-label-md tabular-nums whitespace-nowrap" data-design-text-token="label-md">(<span id="cart-count">0</span>)</span>
+            </button>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <main class="flex-1">
+      <div class="max-w-[1360px] mx-auto px-gutter-md md:px-gutter-lg xl:px-page-margin py-gutter-xl">
+
+        <!-- 2. Breadcrumbs & Catalogue Header -->
+        <nav aria-label="Breadcrumb" class="flex items-center gap-gutter-sm font-label text-label-md text-muted-gray mb-gutter-md">
+          <a href="../patronet-homepage-refined/PatronetHomepageRefined.html" class="hover:text-on-pure-white transition-colors duration-state-change">Home</a>
+          <span aria-hidden="true">/</span>
+          <a href="#" class="hover:text-on-pure-white transition-colors duration-state-change">Shop All</a>
+          <span aria-hidden="true">/</span>
+          <span class="text-on-pure-white" data-design-text-token="label-md">Electronics</span>
+        </nav>
+
+        <div class="flex flex-col md:flex-row md:items-end justify-between gap-gutter-lg pb-gutter-lg border-b border-outline-subtle mb-gutter-xl">
+          <div class="flex flex-col gap-gutter-xs">
+            <div class="flex flex-wrap items-center gap-gutter-md">
+              <h1 class="font-headline text-headline-lg-mobile md:text-headline-lg text-on-pure-white" data-design-text-token="headline-lg">
+                Explore products.
+              </h1>
+              <span id="product-count-label" class="font-label text-label-md text-muted-gray tabular-nums" data-design-text-token="label-md">
+                9 products
+              </span>
+            </div>
+            <p class="font-body text-body-md text-muted-gray" data-design-text-token="body-md">
+              Find the right technology for every need.
+            </p>
+          </div>
+
+          <div class="flex items-center justify-between md:justify-end gap-gutter-md shrink-0">
+            <!-- Mobile / Tablet Filter Drawer Trigger -->
+            <button type="button" onclick="toggleMobileFilters()" class="lg:hidden inline-flex items-center gap-gutter-xs px-gutter-md py-2 rounded-sm border border-outline-subtle bg-pure-white font-label text-label-md text-on-pure-white hover:border-deep-black transition-colors duration-state-change">
+              <span class="material-symbols-outlined text-[18px]" aria-hidden="true">tune</span>
+              <span data-design-text-token="label-md">Filters</span>
+            </button>
+
+            <!-- Compact Sorting Dropdown -->
+            <div class="flex items-center gap-gutter-sm">
+              <label for="sort-select" class="font-label text-label-md text-muted-gray whitespace-nowrap" data-design-text-token="label-md">Sort by</label>
+              <select id="sort-select" onchange="applyFilters()" class="px-3 py-2 pr-8 rounded-sm bg-light-gray border border-outline-subtle font-label text-label-md text-on-pure-white focus:border-deep-black focus:ring-0">
+                <option value="featured">Featured</option>
+                <option value="price-asc">Price: Low to High</option>
+                <option value="price-desc">Price: High to Low</option>
+                <option value="newest">Newest</option>
+              </select>
+            </div>
+          </div>
+        </div>
+
+        <!-- Main Catalogue Grid: ~22% Filter Sidebar + 3-Column Product Grid -->
+        <div class="grid grid-cols-1 lg:grid-cols-[272px_minmax(0,1fr)] gap-gutter-xl items-start">
+
+          <!-- 3. Filter Sidebar -->
+          <aside id="filter-sidebar" aria-label="Product filters" class="hidden lg:block">
+            <div class="flex items-center justify-between pb-gutter-md border-b border-outline-subtle">
+              <h2 class="font-title text-title-md text-on-pure-white" data-design-text-token="title-md">Filters</h2>
+              <button type="button" onclick="clearAllFilters()" class="font-label text-label-md text-muted-gray hover:text-accent-orange-text transition-colors duration-state-change">
+                <span data-design-text-token="label-md">Clear filters</span>
+              </button>
+            </div>
+
+            <div class="divide-y divide-outline-subtle">
+              <!-- Category Filter -->
+              <section class="py-gutter-lg flex flex-col gap-gutter-sm">
+                <h3 class="font-label text-label-lg text-on-pure-white" data-design-text-token="label-lg">Category</h3>
+                <div class="flex flex-col gap-gutter-sm pt-gutter-xs">
+                  <label class="flex items-center justify-between gap-gutter-sm cursor-pointer">
+                    <span class="inline-flex items-center gap-gutter-sm">
+                      <input type="checkbox" value="Laptops" onchange="applyFilters()" class="category-filter rounded-sm border-outline-subtle text-deep-black focus:ring-deep-black">
+                      <span class="font-body text-body-md text-on-pure-white" data-design-text-token="body-md">Laptops</span>
+                    </span>
+                    <span class="font-label text-label-sm text-muted-gray tabular-nums">2</span>
+                  </label>
+                  <label class="flex items-center justify-between gap-gutter-sm cursor-pointer">
+                    <span class="inline-flex items-center gap-gutter-sm">
+                      <input type="checkbox" value="Audio" onchange="applyFilters()" class="category-filter rounded-sm border-outline-subtle text-deep-black focus:ring-deep-black">
+                      <span class="font-body text-body-md text-on-pure-white" data-design-text-token="body-md">Audio</span>
+                    </span>
+                    <span class="font-label text-label-sm text-muted-gray tabular-nums">1</span>
+                  </label>
+                  <label class="flex items-center justify-between gap-gutter-sm cursor-pointer">
+                    <span class="inline-flex items-center gap-gutter-sm">
+                      <input type="checkbox" value="Monitors" onchange="applyFilters()" class="category-filter rounded-sm border-outline-subtle text-deep-black focus:ring-deep-black">
+                      <span class="font-body text-body-md text-on-pure-white" data-design-text-token="body-md">Monitors</span>
+                    </span>
+                    <span class="font-label text-label-sm text-muted-gray tabular-nums">1</span>
+                  </label>
+                  <label class="flex items-center justify-between gap-gutter-sm cursor-pointer">
+                    <span class="inline-flex items-center gap-gutter-sm">
+                      <input type="checkbox" value="Wearables" onchange="applyFilters()" class="category-filter rounded-sm border-outline-subtle text-deep-black focus:ring-deep-black">
+                      <span class="font-body text-body-md text-on-pure-white" data-design-text-token="body-md">Wearables</span>
+                    </span>
+                    <span class="font-label text-label-sm text-muted-gray tabular-nums">1</span>
+                  </label>
+                  <label class="flex items-center justify-between gap-gutter-sm cursor-pointer">
+                    <span class="inline-flex items-center gap-gutter-sm">
+                      <input type="checkbox" value="Accessories" onchange="applyFilters()" class="category-filter rounded-sm border-outline-subtle text-deep-black focus:ring-deep-black">
+                      <span class="font-body text-body-md text-on-pure-white" data-design-text-token="body-md">Accessories</span>
+                    </span>
+                    <span class="font-label text-label-sm text-muted-gray tabular-nums">3</span>
+                  </label>
+                  <label class="flex items-center justify-between gap-gutter-sm cursor-pointer">
+                    <span class="inline-flex items-center gap-gutter-sm">
+                      <input type="checkbox" value="Gaming" onchange="applyFilters()" class="category-filter rounded-sm border-outline-subtle text-deep-black focus:ring-deep-black">
+                      <span class="font-body text-body-md text-on-pure-white" data-design-text-token="body-md">Gaming</span>
+                    </span>
+                    <span class="font-label text-label-sm text-muted-gray tabular-nums">1</span>
+                  </label>
+                </div>
+              </section>
+
+              <!-- Brand Filter (Searchable) -->
+              <section class="py-gutter-lg flex flex-col gap-gutter-sm">
+                <h3 class="font-label text-label-lg text-on-pure-white" data-design-text-token="label-lg">Brand</h3>
+                <div class="flex items-center gap-gutter-xs px-2.5 py-1.5 rounded-sm bg-light-gray border border-outline-subtle focus-within:border-deep-black">
+                  <span class="material-symbols-outlined text-[16px] text-muted-gray shrink-0" aria-hidden="true">search</span>
+                  <input id="brand-search-input" type="text" placeholder="Filter brands" aria-label="Search brands" oninput="filterBrandList()" class="w-full bg-transparent border-0 p-0 font-body text-body-md text-on-pure-white placeholder:text-muted-gray focus:ring-0">
+                </div>
+                <div id="brand-list" class="flex flex-col gap-gutter-sm pt-gutter-xs">
+                  <label class="brand-item flex items-center gap-gutter-sm cursor-pointer" data-brand="patronet">
+                    <input type="checkbox" value="PATRONET" onchange="applyFilters()" class="brand-filter rounded-sm border-outline-subtle text-deep-black focus:ring-deep-black">
+                    <span class="font-body text-body-md text-on-pure-white" data-design-text-token="body-md">PATRONET</span>
+                  </label>
+                  <label class="brand-item flex items-center gap-gutter-sm cursor-pointer" data-brand="patronet audio">
+                    <input type="checkbox" value="PATRONET Audio" onchange="applyFilters()" class="brand-filter rounded-sm border-outline-subtle text-deep-black focus:ring-deep-black">
+                    <span class="font-body text-body-md text-on-pure-white" data-design-text-token="body-md">PATRONET Audio</span>
+                  </label>
+                  <label class="brand-item flex items-center gap-gutter-sm cursor-pointer" data-brand="patronet wearables">
+                    <input type="checkbox" value="PATRONET Wearables" onchange="applyFilters()" class="brand-filter rounded-sm border-outline-subtle text-deep-black focus:ring-deep-black">
+                    <span class="font-body text-body-md text-on-pure-white" data-design-text-token="body-md">PATRONET Wearables</span>
+                  </label>
+                  <label class="brand-item flex items-center gap-gutter-sm cursor-pointer" data-brand="patronet home">
+                    <input type="checkbox" value="PATRONET Home" onchange="applyFilters()" class="brand-filter rounded-sm border-outline-subtle text-deep-black focus:ring-deep-black">
+                    <span class="font-body text-body-md text-on-pure-white" data-design-text-token="body-md">PATRONET Home</span>
+                  </label>
+                  <label class="brand-item flex items-center gap-gutter-sm cursor-pointer" data-brand="keychron">
+                    <input type="checkbox" value="Keychron" onchange="applyFilters()" class="brand-filter rounded-sm border-outline-subtle text-deep-black focus:ring-deep-black">
+                    <span class="font-body text-body-md text-on-pure-white" data-design-text-token="body-md">Keychron</span>
+                  </label>
+                  <label class="brand-item flex items-center gap-gutter-sm cursor-pointer" data-brand="logitech">
+                    <input type="checkbox" value="Logitech" onchange="applyFilters()" class="brand-filter rounded-sm border-outline-subtle text-deep-black focus:ring-deep-black">
+                    <span class="font-body text-body-md text-on-pure-white" data-design-text-token="body-md">Logitech</span>
+                  </label>
+                </div>
+              </section>
+
+              <!-- Price Range (INR) -->
+              <section class="py-gutter-lg flex flex-col gap-gutter-sm">
+                <h3 class="font-label text-label-lg text-on-pure-white" data-design-text-token="label-lg">Price range (₹)</h3>
+                <div class="grid grid-cols-2 gap-gutter-sm pt-gutter-xs">
+                  <div class="flex flex-col gap-gutter-xs">
+                    <label for="price-min" class="font-label text-label-sm text-muted-gray" data-design-text-token="label-sm">Min</label>
+                    <input id="price-min" type="number" value="0" min="0" max="120000" step="1000" onchange="applyFilters()" class="w-full px-2.5 py-1.5 rounded-sm bg-light-gray border border-outline-subtle font-body text-body-md tabular-nums text-on-pure-white focus:border-deep-black focus:ring-0">
+                  </div>
+                  <div class="flex flex-col gap-gutter-xs">
+                    <label for="price-max" class="font-label text-label-sm text-muted-gray" data-design-text-token="label-sm">Max</label>
+                    <input id="price-max" type="number" value="120000" min="0" max="120000" step="1000" onchange="applyFilters()" class="w-full px-2.5 py-1.5 rounded-sm bg-light-gray border border-outline-subtle font-body text-body-md tabular-nums text-on-pure-white focus:border-deep-black focus:ring-0">
+                  </div>
+                </div>
+                <input id="price-range-slider" type="range" min="0" max="120000" step="1000" value="120000" aria-label="Maximum price slider" oninput="syncPriceSlider(this.value)" class="w-full accent-primary-orange mt-gutter-xs cursor-pointer">
+              </section>
+
+              <!-- Availability Toggle -->
+              <section class="py-gutter-lg flex items-center justify-between gap-gutter-sm">
+                <span class="font-label text-label-lg text-on-pure-white" data-design-text-token="label-lg">In stock only</span>
+                <label class="relative inline-flex items-center cursor-pointer">
+                  <input id="in-stock-toggle" type="checkbox" onchange="applyFilters()" class="sr-only peer">
+                  <span class="w-10 h-5 bg-outline-subtle rounded-full peer peer-checked:bg-primary-orange transition-colors duration-state-change after:content-[&#39;&#39;] after:absolute after:top-0.5 after:left-0.5 after:bg-pure-white after:rounded-full after:h-4 after:w-4 after:transition-transform after:duration-state-change peer-checked:after:translate-x-5"></span>
+                </label>
+              </section>
+            </div>
+          </aside>
+
+          <!-- 4. Product Grid & Pagination -->
+          <div class="flex flex-col gap-gutter-xl">
+            <div id="product-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-gutter-lg items-stretch">
+
+              <!-- 1. Gaming Laptop -->
+              <article class="product-card h-full flex flex-col justify-between gap-gutter-md" data-category="Laptops" data-brand="PATRONET" data-price="94990" data-instock="true" data-name="GameBook 15 (RTX 4050)" data-order="1">
+                <div class="flex flex-col gap-gutter-md">
+                  <div class="relative aspect-square w-full bg-light-gray rounded-sm overflow-hidden flex items-center justify-center p-gutter-lg">
+                    <img src="https://lh3.googleusercontent.com/aida/ALJJyrDiK48nkB5nc39ENn71KKa0NGyy5-rVdYk8Vu1ZnfeuBpxKtvutGqH3o6C-gpCjNTWsSJ_Hp4HMW3lbbNpjGSLJka8K7gPBXtJY5_Pb6RkFnYfwJ94o5DKQWlMCT2HfloilyiLgSqJ8ovDb5RWSZ1CVHQvRvrMg3T1Fw3hkhA7kFf3VMjm8L8BZbnlmJBNRTfpSi-RvqsiDLKv4j1qMs6auOjKy-Sv6TlgdLj5B0NRxmbIC_dh13EjE9mZmZhw" alt="PATRONET GameBook 15 Gaming Laptop" class="w-full h-full object-contain">
+                    <button type="button" onclick="toggleWishlist(this)" aria-label="Add GameBook 15 to wishlist" aria-pressed="false" class="absolute top-3 right-3 inline-flex items-center justify-center w-8 h-8 rounded-full bg-pure-white text-muted-gray hover:text-on-pure-white transition-colors duration-state-change">
+                      <span class="material-symbols-outlined text-[18px]" aria-hidden="true">favorite</span>
+                    </button>
+                  </div>
+                  <div class="flex flex-col gap-gutter-xs">
+                    <span class="font-label text-label-md text-muted-gray" data-design-text-token="label-md">PATRONET</span>
+                    <h2 class="font-title text-title-lg text-on-pure-white" data-design-text-token="title-lg">GameBook 15 (RTX 4050)</h2>
+                    <p class="font-headline text-headline-md tabular-nums text-on-pure-white pt-gutter-xs" data-design-text-token="headline-md">₹94,990</p>
+                  </div>
+                </div>
+                <footer class="flex items-center justify-between gap-gutter-sm pt-gutter-md border-t border-outline-subtle">
+                  <label class="inline-flex items-center gap-gutter-xs cursor-pointer">
+                    <input type="checkbox" checked onchange="updateCompareBar()" class="compare-checkbox rounded-sm border-outline-subtle text-deep-black focus:ring-deep-black">
+                    <span class="font-label text-label-md text-muted-gray" data-design-text-token="label-md">Compare</span>
+                  </label>
+                  <button type="button" onclick="addToCart(&#39;GameBook 15&#39;)" class="px-gutter-lg py-2.5 rounded-sm bg-primary-orange text-on-primary-orange font-label text-label-lg hover:bg-primary-orange-hover active:scale-[0.99] transition-colors duration-state-change shrink-0">
+                    <span data-design-text-token="label-lg">Add to Cart</span>
+                  </button>
+                </footer>
+              </article>
+
+              <!-- 2. Business Laptop -->
+              <article class="product-card h-full flex flex-col justify-between gap-gutter-md" data-category="Laptops" data-brand="PATRONET" data-price="78990" data-instock="true" data-name="AirBook Pro 14 (Ultra 7)" data-order="2">
+                <div class="flex flex-col gap-gutter-md">
+                  <div class="relative aspect-square w-full bg-light-gray rounded-sm overflow-hidden flex items-center justify-center p-gutter-lg">
+                    <img src="https://lh3.googleusercontent.com/aida/ALJJyrBVAruqQeaXZwCPzlXz99uwqEuss1yxTHNE8fuqgMhrwXhrME-sR3Hwgs825kYFsBZDDIrUWkeQ1bz7kZ2NAh3Hj0AUjPfTQBIvHPGZ9L38TLoAoozP34kbIr2cPUbUdIqQ1GJnyQvoKpKukzioE_L7WrgCmlDUaBIdWYLj6-hGkcLVOgVOE90SNbX_tAgX98ZyNv6M7-HaUao89zuiY7GuH7rR_0R6CfbruEUhkUeevH1YnFtJQPdCaZSAXejnc2Ih" alt="PATRONET AirBook Pro 14 Business Laptop" class="w-full h-full object-contain">
+                    <button type="button" onclick="toggleWishlist(this)" aria-label="Add AirBook Pro 14 to wishlist" aria-pressed="false" class="absolute top-3 right-3 inline-flex items-center justify-center w-8 h-8 rounded-full bg-pure-white text-muted-gray hover:text-on-pure-white transition-colors duration-state-change">
+                      <span class="material-symbols-outlined text-[18px]" aria-hidden="true">favorite</span>
+                    </button>
+                  </div>
+                  <div class="flex flex-col gap-gutter-xs">
+                    <span class="font-label text-label-md text-muted-gray" data-design-text-token="label-md">PATRONET</span>
+                    <h2 class="font-title text-title-lg text-on-pure-white" data-design-text-token="title-lg">AirBook Pro 14 (Ultra 7)</h2>
+                    <p class="font-headline text-headline-md tabular-nums text-on-pure-white pt-gutter-xs" data-design-text-token="headline-md">₹78,990</p>
+                  </div>
+                </div>
+                <footer class="flex items-center justify-between gap-gutter-sm pt-gutter-md border-t border-outline-subtle">
+                  <label class="inline-flex items-center gap-gutter-xs cursor-pointer">
+                    <input type="checkbox" checked onchange="updateCompareBar()" class="compare-checkbox rounded-sm border-outline-subtle text-deep-black focus:ring-deep-black">
+                    <span class="font-label text-label-md text-muted-gray" data-design-text-token="label-md">Compare</span>
+                  </label>
+                  <button type="button" onclick="addToCart(&#39;AirBook Pro 14&#39;)" class="px-gutter-lg py-2.5 rounded-sm bg-primary-orange text-on-primary-orange font-label text-label-lg hover:bg-primary-orange-hover active:scale-[0.99] transition-colors duration-state-change shrink-0">
+                    <span data-design-text-token="label-lg">Add to Cart</span>
+                  </button>
+                </footer>
+              </article>
+
+              <!-- 3. Wireless Headphones -->
+              <article class="product-card h-full flex flex-col justify-between gap-gutter-md" data-category="Audio" data-brand="PATRONET Audio" data-price="13999" data-instock="true" data-name="Studio ANC Headphones" data-order="3">
+                <div class="flex flex-col gap-gutter-md">
+                  <div class="relative aspect-square w-full bg-light-gray rounded-sm overflow-hidden flex items-center justify-center p-gutter-lg">
+                    <img src="https://lh3.googleusercontent.com/aida/ALJJyrCo-y0tdg4iIEcbleH9BQWLTlroKbPA2aYI-vZsOtiu3uyGt8LX4-kr8qREBWtpgzkX3oQYV6jZl_aFrEZ6vTZEMLPFTmgt2ooBXxl37okJQIjnaUvX7njPQXXBfChEV6UPtNLSVdoHmPWvitubZydTtDfI1zU6oA8s36iugg4B73MZiSSVILQjooFZ6x_oQp2fyuDIf4WGNrGXqy8FCeqg6oxpccwG8zkvJTx9J7ZSgkRC4wFsyD-MxmOiEQ" alt="Studio ANC Wireless Headphones" class="w-full h-full object-contain">
+                    <button type="button" onclick="toggleWishlist(this)" aria-label="Add Studio ANC Headphones to wishlist" aria-pressed="false" class="absolute top-3 right-3 inline-flex items-center justify-center w-8 h-8 rounded-full bg-pure-white text-muted-gray hover:text-on-pure-white transition-colors duration-state-change">
+                      <span class="material-symbols-outlined text-[18px]" aria-hidden="true">favorite</span>
+                    </button>
+                  </div>
+                  <div class="flex flex-col gap-gutter-xs">
+                    <span class="font-label text-label-md text-muted-gray" data-design-text-token="label-md">PATRONET Audio</span>
+                    <h2 class="font-title text-title-lg text-on-pure-white" data-design-text-token="title-lg">Studio ANC Headphones</h2>
+                    <p class="font-headline text-headline-md tabular-nums text-on-pure-white pt-gutter-xs" data-design-text-token="headline-md">₹13,999</p>
+                  </div>
+                </div>
+                <footer class="flex items-center justify-between gap-gutter-sm pt-gutter-md border-t border-outline-subtle">
+                  <label class="inline-flex items-center gap-gutter-xs cursor-pointer">
+                    <input type="checkbox" onchange="updateCompareBar()" class="compare-checkbox rounded-sm border-outline-subtle text-deep-black focus:ring-deep-black">
+                    <span class="font-label text-label-md text-muted-gray" data-design-text-token="label-md">Compare</span>
+                  </label>
+                  <button type="button" onclick="addToCart(&#39;Studio ANC Headphones&#39;)" class="px-gutter-lg py-2.5 rounded-sm bg-primary-orange text-on-primary-orange font-label text-label-lg hover:bg-primary-orange-hover active:scale-[0.99] transition-colors duration-state-change shrink-0">
+                    <span data-design-text-token="label-lg">Add to Cart</span>
+                  </button>
+                </footer>
+              </article>
+
+              <!-- 4. Computer Monitor -->
+              <article class="product-card h-full flex flex-col justify-between gap-gutter-md" data-category="Monitors" data-brand="PATRONET" data-price="24990" data-instock="true" data-name="CreatorView 27 QHD Monitor" data-order="4">
+                <div class="flex flex-col gap-gutter-md">
+                  <div class="relative aspect-square w-full bg-light-gray rounded-sm overflow-hidden flex items-center justify-center p-gutter-lg">
+                    <img src="https://lh3.googleusercontent.com/aida/ALJJyrCVB-NxTqjPj_M8BK-LPf0ZO0VW7Jz0sayelVOTH1TeI3R69k8aZRxfyV4UH5kD43HiQ2PrDHjMAdhuiFOWLv-AlzXKZ22XKye_2Wnuh2ZZhxKYPN4_UOaXN5nddc6Xh-FV80s7B-cmLuR0P00FW-w9i8yOuMgrAepjxplk81PWdIW8YEW6SJRgywg3W0OWZBpGKf3_mHDHTD71vPzcf0Ds2Y43L2gq0lPXTOL74kmOubPeKgxSQzR3pmIZ2hnh" alt="CreatorView 27 QHD IPS Monitor" class="w-full h-full object-contain">
+                    <button type="button" onclick="toggleWishlist(this)" aria-label="Add CreatorView 27 QHD Monitor to wishlist" aria-pressed="false" class="absolute top-3 right-3 inline-flex items-center justify-center w-8 h-8 rounded-full bg-pure-white text-muted-gray hover:text-on-pure-white transition-colors duration-state-change">
+                      <span class="material-symbols-outlined text-[18px]" aria-hidden="true">favorite</span>
+                    </button>
+                  </div>
+                  <div class="flex flex-col gap-gutter-xs">
+                    <span class="font-label text-label-md text-muted-gray" data-design-text-token="label-md">PATRONET</span>
+                    <h2 class="font-title text-title-lg text-on-pure-white" data-design-text-token="title-lg">CreatorView 27 QHD Monitor</h2>
+                    <p class="font-headline text-headline-md tabular-nums text-on-pure-white pt-gutter-xs" data-design-text-token="headline-md">₹24,990</p>
+                  </div>
+                </div>
+                <footer class="flex items-center justify-between gap-gutter-sm pt-gutter-md border-t border-outline-subtle">
+                  <label class="inline-flex items-center gap-gutter-xs cursor-pointer">
+                    <input type="checkbox" onchange="updateCompareBar()" class="compare-checkbox rounded-sm border-outline-subtle text-deep-black focus:ring-deep-black">
+                    <span class="font-label text-label-md text-muted-gray" data-design-text-token="label-md">Compare</span>
+                  </label>
+                  <button type="button" onclick="addToCart(&#39;CreatorView 27 QHD Monitor&#39;)" class="px-gutter-lg py-2.5 rounded-sm bg-primary-orange text-on-primary-orange font-label text-label-lg hover:bg-primary-orange-hover active:scale-[0.99] transition-colors duration-state-change shrink-0">
+                    <span data-design-text-token="label-lg">Add to Cart</span>
+                  </button>
+                </footer>
+              </article>
+
+              <!-- 5. Mechanical Keyboard -->
+              <article class="product-card h-full flex flex-col justify-between gap-gutter-md" data-category="Accessories" data-brand="Keychron" data-price="8499" data-instock="true" data-name="Tactile 75 Mechanical Keyboard" data-order="5">
+                <div class="flex flex-col gap-gutter-md">
+                  <div class="relative aspect-square w-full bg-light-gray rounded-sm overflow-hidden flex items-center justify-center p-gutter-lg">
+                    <img src="https://lh3.googleusercontent.com/aida/ALJJyrDchzed7MK7CAvv2hv5OtuNLxLY26BeQv_GlHGRqqqvviuur0raQm9S8Nf83kVGw7kdpAieEoAHkr1pT1I9fJhk1JAD1VsSc9CzzcHg3O-R_N7ODj9no7Pbr7hoaN0BH7rpTFSXaygXt5E0bI7_puubMJJzZbIuNjYou7WzE8IO-nW_P3KD5-xBxovljhlO6W1k3qiglkUATPKlNi0elRgEf1dnF6_jhC5b4UVxxZE7voHYyzmw5Q3ZPRN6oKvh6xo" alt="Keychron Tactile 75 Mechanical Keyboard" class="w-full h-full object-contain">
+                    <button type="button" onclick="toggleWishlist(this)" aria-label="Add Tactile 75 Mechanical Keyboard to wishlist" aria-pressed="false" class="absolute top-3 right-3 inline-flex items-center justify-center w-8 h-8 rounded-full bg-pure-white text-muted-gray hover:text-on-pure-white transition-colors duration-state-change">
+                      <span class="material-symbols-outlined text-[18px]" aria-hidden="true">favorite</span>
+                    </button>
+                  </div>
+                  <div class="flex flex-col gap-gutter-xs">
+                    <span class="font-label text-label-md text-muted-gray" data-design-text-token="label-md">Keychron</span>
+                    <h2 class="font-title text-title-lg text-on-pure-white" data-design-text-token="title-lg">Tactile 75 Keyboard</h2>
+                    <p class="font-headline text-headline-md tabular-nums text-on-pure-white pt-gutter-xs" data-design-text-token="headline-md">₹8,499</p>
+                  </div>
+                </div>
+                <footer class="flex items-center justify-between gap-gutter-sm pt-gutter-md border-t border-outline-subtle">
+                  <label class="inline-flex items-center gap-gutter-xs cursor-pointer">
+                    <input type="checkbox" onchange="updateCompareBar()" class="compare-checkbox rounded-sm border-outline-subtle text-deep-black focus:ring-deep-black">
+                    <span class="font-label text-label-md text-muted-gray" data-design-text-token="label-md">Compare</span>
+                  </label>
+                  <button type="button" onclick="addToCart(&#39;Tactile 75 Mechanical Keyboard&#39;)" class="px-gutter-lg py-2.5 rounded-sm bg-primary-orange text-on-primary-orange font-label text-label-lg hover:bg-primary-orange-hover active:scale-[0.99] transition-colors duration-state-change shrink-0">
+                    <span data-design-text-token="label-lg">Add to Cart</span>
+                  </button>
+                </footer>
+              </article>
+
+              <!-- 6. Smartwatch -->
+              <article class="product-card h-full flex flex-col justify-between gap-gutter-md" data-category="Wearables" data-brand="PATRONET Wearables" data-price="4999" data-instock="true" data-name="Fit Pro Watch" data-order="6">
+                <div class="flex flex-col gap-gutter-md">
+                  <div class="relative aspect-square w-full bg-light-gray rounded-sm overflow-hidden flex items-center justify-center p-gutter-lg">
+                    <img src="https://lh3.googleusercontent.com/aida/ALJJyrDoF-4nkxNhXQYwlz-garKOO8Z59cCs1ZrTh8O_zOpMyHKQndbLG8XgBYz2EQK4dJZcCq2c4LWpF6Dyy9weR9MPNQeDj3uwp-eIc8F4lH4XVaV_0Mafkrd7kGQjFdmk9Mqf2wjcIHumTX7V3i_TyyVU1R-nnAbEgybJit7MARymK_wGsicQg_nr3GUMsFdPq1KeXUD8TF18xRgypv6WN23FxrzDJEwl2W385p4-0zuy82X84WkVN2_n2cRfRNw4Xlw" alt="PATRONET Fit Pro Smartwatch" class="w-full h-full object-contain">
+                    <button type="button" onclick="toggleWishlist(this)" aria-label="Add Fit Pro Watch to wishlist" aria-pressed="false" class="absolute top-3 right-3 inline-flex items-center justify-center w-8 h-8 rounded-full bg-pure-white text-muted-gray hover:text-on-pure-white transition-colors duration-state-change">
+                      <span class="material-symbols-outlined text-[18px]" aria-hidden="true">favorite</span>
+                    </button>
+                  </div>
+                  <div class="flex flex-col gap-gutter-xs">
+                    <span class="font-label text-label-md text-muted-gray" data-design-text-token="label-md">PATRONET Wearables</span>
+                    <h2 class="font-title text-title-lg text-on-pure-white" data-design-text-token="title-lg">Fit Pro Watch</h2>
+                    <p class="font-headline text-headline-md tabular-nums text-on-pure-white pt-gutter-xs" data-design-text-token="headline-md">₹4,999</p>
+                  </div>
+                </div>
+                <footer class="flex items-center justify-between gap-gutter-sm pt-gutter-md border-t border-outline-subtle">
+                  <label class="inline-flex items-center gap-gutter-xs cursor-pointer">
+                    <input type="checkbox" onchange="updateCompareBar()" class="compare-checkbox rounded-sm border-outline-subtle text-deep-black focus:ring-deep-black">
+                    <span class="font-label text-label-md text-muted-gray" data-design-text-token="label-md">Compare</span>
+                  </label>
+                  <button type="button" onclick="addToCart(&#39;Fit Pro Watch&#39;)" class="px-gutter-lg py-2.5 rounded-sm bg-primary-orange text-on-primary-orange font-label text-label-lg hover:bg-primary-orange-hover active:scale-[0.99] transition-colors duration-state-change shrink-0">
+                    <span data-design-text-token="label-lg">Add to Cart</span>
+                  </button>
+                </footer>
+              </article>
+
+              <!-- 7. Wireless Mouse -->
+              <article class="product-card h-full flex flex-col justify-between gap-gutter-md" data-category="Accessories" data-brand="Logitech" data-price="6299" data-instock="true" data-name="Precision Wireless Mouse" data-order="7">
+                <div class="flex flex-col gap-gutter-md">
+                  <div class="relative aspect-square w-full bg-light-gray rounded-sm overflow-hidden flex items-center justify-center p-gutter-lg">
+                    <img src="https://lh3.googleusercontent.com/aida/ALJJyrCRNa3urQXbEuWTmydzRdASrNT2L882VV2P7qEeTVAmocq_2HPeGy2K8C4PQVfyYY_MkNrF2IjefgWAjstKtXpIG8q5EHQQGz3Yiy054Dbos03GVKt7p33OL5YK6dAneXGlA6zxI_B9hE5kqny00BObloJPZxk4K8_t7qSUUcCd39hp9bPcpjO9kAqa3MW5xwawuS75IOCVDBsNd1r7c3BkG1Ee4NzyEuGX0vBJRkBSZEhH6MPxsuvXCKJc20sx0fWZ" alt="Logitech Precision Wireless Mouse" class="w-full h-full object-contain">
+                    <button type="button" onclick="toggleWishlist(this)" aria-label="Add Precision Wireless Mouse to wishlist" aria-pressed="false" class="absolute top-3 right-3 inline-flex items-center justify-center w-8 h-8 rounded-full bg-pure-white text-muted-gray hover:text-on-pure-white transition-colors duration-state-change">
+                      <span class="material-symbols-outlined text-[18px]" aria-hidden="true">favorite</span>
+                    </button>
+                  </div>
+                  <div class="flex flex-col gap-gutter-xs">
+                    <span class="font-label text-label-md text-muted-gray" data-design-text-token="label-md">Logitech</span>
+                    <h2 class="font-title text-title-lg text-on-pure-white" data-design-text-token="title-lg">Precision Wireless Mouse</h2>
+                    <p class="font-headline text-headline-md tabular-nums text-on-pure-white pt-gutter-xs" data-design-text-token="headline-md">₹6,299</p>
+                  </div>
+                </div>
+                <footer class="flex items-center justify-between gap-gutter-sm pt-gutter-md border-t border-outline-subtle">
+                  <label class="inline-flex items-center gap-gutter-xs cursor-pointer">
+                    <input type="checkbox" onchange="updateCompareBar()" class="compare-checkbox rounded-sm border-outline-subtle text-deep-black focus:ring-deep-black">
+                    <span class="font-label text-label-md text-muted-gray" data-design-text-token="label-md">Compare</span>
+                  </label>
+                  <button type="button" onclick="addToCart(&#39;Precision Wireless Mouse&#39;)" class="px-gutter-lg py-2.5 rounded-sm bg-primary-orange text-on-primary-orange font-label text-label-lg hover:bg-primary-orange-hover active:scale-[0.99] transition-colors duration-state-change shrink-0">
+                    <span data-design-text-token="label-lg">Add to Cart</span>
+                  </button>
+                </footer>
+              </article>
+
+              <!-- 8. Desk Lamp -->
+              <article class="product-card h-full flex flex-col justify-between gap-gutter-md" data-category="Accessories" data-brand="PATRONET Home" data-price="2799" data-instock="true" data-name="Smart LED Desk Lamp" data-order="8">
+                <div class="flex flex-col gap-gutter-md">
+                  <div class="relative aspect-square w-full bg-light-gray rounded-sm overflow-hidden flex items-center justify-center p-gutter-lg">
+                    <img src="https://lh3.googleusercontent.com/aida/ALJJyrCaC1x-8eBqawxEAwTJHzn5zH6qmxithtS3DaWIRGBTmqgAfA_5kYmchkFFYpqmArvL7aROt291bKqyqK3OgezOkLHqlBHSeqyY3z5gmM9b1mvFq07FVwpB5KUZV95-TxMVRUYmYL4nXD9uiH8oo0H8hlELECOodX5Es8mrMhx_1zHgmYJYaY1Eg_3eE6F3kDlw6p-XD4xkPcXPGg7mDYaKpbY_BRqPfNTPEu49FyZ1ctjxLEc1tEScmUQT0Q" alt="PATRONET Smart LED Desk Lamp" class="w-full h-full object-contain">
+                    <button type="button" onclick="toggleWishlist(this)" aria-label="Add Smart LED Desk Lamp to wishlist" aria-pressed="false" class="absolute top-3 right-3 inline-flex items-center justify-center w-8 h-8 rounded-full bg-pure-white text-muted-gray hover:text-on-pure-white transition-colors duration-state-change">
+                      <span class="material-symbols-outlined text-[18px]" aria-hidden="true">favorite</span>
+                    </button>
+                  </div>
+                  <div class="flex flex-col gap-gutter-xs">
+                    <span class="font-label text-label-md text-muted-gray" data-design-text-token="label-md">PATRONET Home</span>
+                    <h2 class="font-title text-title-lg text-on-pure-white" data-design-text-token="title-lg">Smart LED Desk Lamp</h2>
+                    <p class="font-headline text-headline-md tabular-nums text-on-pure-white pt-gutter-xs" data-design-text-token="headline-md">₹2,799</p>
+                  </div>
+                </div>
+                <footer class="flex items-center justify-between gap-gutter-sm pt-gutter-md border-t border-outline-subtle">
+                  <label class="inline-flex items-center gap-gutter-xs cursor-pointer">
+                    <input type="checkbox" onchange="updateCompareBar()" class="compare-checkbox rounded-sm border-outline-subtle text-deep-black focus:ring-deep-black">
+                    <span class="font-label text-label-md text-muted-gray" data-design-text-token="label-md">Compare</span>
+                  </label>
+                  <button type="button" onclick="addToCart(&#39;Smart LED Desk Lamp&#39;)" class="px-gutter-lg py-2.5 rounded-sm bg-primary-orange text-on-primary-orange font-label text-label-lg hover:bg-primary-orange-hover active:scale-[0.99] transition-colors duration-state-change shrink-0">
+                    <span data-design-text-token="label-lg">Add to Cart</span>
+                  </button>
+                </footer>
+              </article>
+
+              <!-- 9. Gaming Controller -->
+              <article class="product-card h-full flex flex-col justify-between gap-gutter-md" data-category="Gaming" data-brand="PATRONET" data-price="4499" data-instock="false" data-name="Apex Wireless Controller" data-order="9">
+                <div class="flex flex-col gap-gutter-md">
+                  <div class="relative aspect-square w-full bg-light-gray rounded-sm overflow-hidden flex items-center justify-center p-gutter-lg">
+                    <img src="https://lh3.googleusercontent.com/aida/ALJJyrAB7CaG3dY8K1tnVaEQqu1jhGOH07-t8_Vpol7hadS4MXUho2RA-6c4FUV9GmY7_7Wvr86l3PhIePSaQ8fHUQUbD4oKS7IzlpOjudvW0Eq2rgbDWbLup_eKKHUfOkKQxc5fw6ua2QrFTU2iSzirhPC_POgM-nbsy_M5I69JpnWMHO3GMoBpEjtMx1BbtEX2WI4cgsGHclAoVMLvhkytYdV_kGRuS2rBfhrf8aAC6Jb9J8sM-PR4wayFRRriC9sJfBz033XA" alt="PATRONET Apex Wireless Gaming Controller" class="w-full h-full object-contain">
+                    <button type="button" onclick="toggleWishlist(this)" aria-label="Add Apex Wireless Controller to wishlist" aria-pressed="false" class="absolute top-3 right-3 inline-flex items-center justify-center w-8 h-8 rounded-full bg-pure-white text-muted-gray hover:text-on-pure-white transition-colors duration-state-change">
+                      <span class="material-symbols-outlined text-[18px]" aria-hidden="true">favorite</span>
+                    </button>
+                  </div>
+                  <div class="flex flex-col gap-gutter-xs">
+                    <span class="font-label text-label-md text-muted-gray" data-design-text-token="label-md">PATRONET</span>
+                    <h2 class="font-title text-title-lg text-on-pure-white" data-design-text-token="title-lg">Apex Wireless Controller</h2>
+                    <p class="font-headline text-headline-md tabular-nums text-on-pure-white pt-gutter-xs" data-design-text-token="headline-md">₹4,499</p>
+                  </div>
+                </div>
+                <footer class="flex items-center justify-between gap-gutter-sm pt-gutter-md border-t border-outline-subtle">
+                  <label class="inline-flex items-center gap-gutter-xs cursor-pointer">
+                    <input type="checkbox" onchange="updateCompareBar()" class="compare-checkbox rounded-sm border-outline-subtle text-deep-black focus:ring-deep-black">
+                    <span class="font-label text-label-md text-muted-gray" data-design-text-token="label-md">Compare</span>
+                  </label>
+                  <button type="button" onclick="addToCart(&#39;Apex Wireless Controller&#39;)" class="px-gutter-lg py-2.5 rounded-sm bg-primary-orange text-on-primary-orange font-label text-label-lg hover:bg-primary-orange-hover active:scale-[0.99] transition-colors duration-state-change shrink-0">
+                    <span data-design-text-token="label-lg">Add to Cart</span>
+                  </button>
+                </footer>
+              </article>
+
+            </div>
+
+            <!-- Empty-Result State -->
+            <div id="empty-state" class="hidden py-section text-center flex flex-col items-center gap-gutter-md border border-outline-subtle rounded-sm bg-light-gray">
+              <span class="material-symbols-outlined text-[32px] text-muted-gray" aria-hidden="true">search_off</span>
+              <div class="flex flex-col gap-gutter-xs">
+                <h2 class="font-headline text-headline-md text-on-light-gray" data-design-text-token="headline-md">
+                  No products match your filters.
+                </h2>
+                <p class="font-body text-body-md text-muted-gray" data-design-text-token="body-md">
+                  Try widening your price range or clearing selected categories and brands.
+                </p>
+              </div>
+              <button type="button" onclick="clearAllFilters()" class="px-gutter-lg py-2.5 rounded-sm bg-primary-orange text-on-primary-orange font-label text-label-lg hover:bg-primary-orange-hover transition-colors duration-state-change">
+                <span data-design-text-token="label-lg">Clear filters</span>
+              </button>
+            </div>
+
+            <!-- 7. Minimal Pagination -->
+            <nav id="pagination" aria-label="Catalogue pagination" class="flex items-center justify-between pt-gutter-lg border-t border-outline-subtle">
+              <button type="button" disabled class="inline-flex items-center gap-gutter-xs font-label text-label-md text-muted-gray cursor-not-allowed">
+                <span class="material-symbols-outlined text-[18px]" aria-hidden="true">arrow_back</span>
+                <span data-design-text-token="label-md">Previous</span>
+              </button>
+
+              <div class="flex items-center gap-gutter-xs">
+                <button type="button" aria-current="page" class="w-9 h-9 rounded-sm bg-deep-black text-on-deep-black font-label text-label-md tabular-nums">1</button>
+                <button type="button" class="w-9 h-9 rounded-sm text-on-pure-white hover:bg-light-gray font-label text-label-md tabular-nums transition-colors duration-state-change">2</button>
+                <button type="button" class="w-9 h-9 rounded-sm text-on-pure-white hover:bg-light-gray font-label text-label-md tabular-nums transition-colors duration-state-change">3</button>
+              </div>
+
+              <button type="button" class="inline-flex items-center gap-gutter-xs font-label text-label-md text-on-pure-white hover:text-accent-orange-text transition-colors duration-state-change">
+                <span data-design-text-token="label-md">Next</span>
+                <span class="material-symbols-outlined text-[18px]" aria-hidden="true">arrow_forward</span>
+              </button>
+            </nav>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- 6. Comparison Bar -->
+      <div id="compare-bar" class="max-w-[1360px] mx-auto px-gutter-md md:px-gutter-lg xl:px-page-margin pb-gutter-xl">
+        <div class="bg-deep-black text-on-deep-black rounded-sm px-gutter-lg py-gutter-md flex flex-col sm:flex-row items-start sm:items-center justify-between gap-gutter-md border border-outline-dark">
+          <div class="flex items-center gap-gutter-md">
+            <span class="material-symbols-outlined text-[20px] text-primary-orange shrink-0" aria-hidden="true">compare</span>
+            <span id="compare-count-text" class="font-label text-label-lg text-on-deep-black tabular-nums" data-design-text-token="label-lg">
+              2 products selected
+            </span>
+          </div>
+          <div class="flex items-center gap-gutter-md shrink-0">
+            <button type="button" onclick="clearCompare()" class="font-label text-label-md text-on-surface-dark-elevated hover:text-primary-orange transition-colors duration-state-change">
+              <span data-design-text-token="label-md">Clear selection</span>
+            </button>
+            <button type="button" class="inline-flex items-center gap-gutter-xs px-gutter-lg py-2.5 rounded-sm bg-primary-orange text-on-primary-orange font-label text-label-lg hover:bg-primary-orange-hover transition-colors duration-state-change">
+              <span data-design-text-token="label-lg">Compare now</span>
+              <span class="material-symbols-outlined text-[18px]" aria-hidden="true">arrow_forward</span>
+            </button>
+          </div>
+        </div>
+      </div>
+    </main>
+
+    <!-- 8. Footer (Shared Shell) -->
+    <footer id="footer" class="bg-deep-black text-on-deep-black">
+      <div class="max-w-[1360px] mx-auto px-gutter-md md:px-gutter-lg xl:px-page-margin py-section">
+        <div class="grid grid-cols-1 md:grid-cols-12 gap-gutter-xl pb-12 border-b border-outline-dark">
+          <!-- Brand Column -->
+          <div class="md:col-span-4 flex flex-col gap-gutter-md">
+            <span class="font-headline text-headline-md tracking-tight text-on-deep-black" data-design-text-token="headline-md">PATRONET</span>
+            <p class="font-body text-body-md text-on-surface-dark-elevated max-w-xs text-pretty" data-design-text-token="body-md">
+              Precision electronics and AI-assisted hardware discovery for creators, gamers, and teams across India.
+            </p>
+          </div>
+
+          <!-- Shop -->
+          <div class="md:col-span-2 flex flex-col gap-gutter-md">
+            <h3 class="font-label text-label-lg text-on-deep-black" data-design-text-token="label-lg">Shop</h3>
+            <ul class="flex flex-col gap-gutter-sm font-body text-body-md text-on-surface-dark-elevated">
+              <li><a href="#" class="hover:text-primary-orange transition-colors duration-state-change">Laptops</a></li>
+              <li><a href="#" class="hover:text-primary-orange transition-colors duration-state-change">Audio</a></li>
+              <li><a href="#" class="hover:text-primary-orange transition-colors duration-state-change">Monitors</a></li>
+              <li><a href="#" class="hover:text-primary-orange transition-colors duration-state-change">Wearables</a></li>
+              <li><a href="#" class="hover:text-primary-orange transition-colors duration-state-change">Gaming</a></li>
+            </ul>
+          </div>
+
+          <!-- Support -->
+          <div class="md:col-span-2 flex flex-col gap-gutter-md">
+            <h3 class="font-label text-label-lg text-on-deep-black" data-design-text-token="label-lg">Support</h3>
+            <ul class="flex flex-col gap-gutter-sm font-body text-body-md text-on-surface-dark-elevated">
+              <li><a href="#" class="hover:text-primary-orange transition-colors duration-state-change">Help Center</a></li>
+              <li><a href="#" class="hover:text-primary-orange transition-colors duration-state-change">Track Order</a></li>
+              <li><a href="#" class="hover:text-primary-orange transition-colors duration-state-change">Warranty &amp; Service</a></li>
+              <li><a href="#" class="hover:text-primary-orange transition-colors duration-state-change">Bulk Procurement</a></li>
+            </ul>
+          </div>
+
+          <!-- Account -->
+          <div class="md:col-span-2 flex flex-col gap-gutter-md">
+            <h3 class="font-label text-label-lg text-on-deep-black" data-design-text-token="label-lg">Account</h3>
+            <ul class="flex flex-col gap-gutter-sm font-body text-body-md text-on-surface-dark-elevated">
+              <li><a href="#" class="hover:text-primary-orange transition-colors duration-state-change">My Account</a></li>
+              <li><a href="#" class="hover:text-primary-orange transition-colors duration-state-change">Wishlist</a></li>
+              <li><a href="#" class="hover:text-primary-orange transition-colors duration-state-change">Compare Studio</a></li>
+              <li><a href="#" class="hover:text-primary-orange transition-colors duration-state-change">Shopping Cart</a></li>
+            </ul>
+          </div>
+
+          <!-- Policies -->
+          <div class="md:col-span-2 flex flex-col gap-gutter-md">
+            <h3 class="font-label text-label-lg text-on-deep-black" data-design-text-token="label-lg">Policies</h3>
+            <ul class="flex flex-col gap-gutter-sm font-body text-body-md text-on-surface-dark-elevated">
+              <li><a href="#" class="hover:text-primary-orange transition-colors duration-state-change">Privacy Policy</a></li>
+              <li><a href="#" class="hover:text-primary-orange transition-colors duration-state-change">Terms of Service</a></li>
+              <li><a href="#" class="hover:text-primary-orange transition-colors duration-state-change">Shipping Policy</a></li>
+              <li><a href="#" class="hover:text-primary-orange transition-colors duration-state-change">Returns &amp; Refunds</a></li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="pt-gutter-lg flex flex-col sm:flex-row items-start sm:items-center justify-between gap-gutter-sm font-label text-label-md text-on-surface-dark-elevated">
+          <span data-design-text-token="label-md">© 2026 PATRONET. All rights reserved.</span>
+          <span data-design-text-token="label-md">Prices inclusive of GST · Pan-India Delivery</span>
+        </div>
+      </div>
+    </footer>
+  </div>
+
+  <script>
+    let cartTotal = 0;
+
+    function addToCart(name) {
+      cartTotal += 1;
+      const el = document.getElementById('cart-count');
+      if (el) el.textContent = String(cartTotal);
+    }
+
+    function toggleWishlist(btn) {
+      const pressed = btn.getAttribute('aria-pressed') === 'true';
+      const next = !pressed;
+      btn.setAttribute('aria-pressed', String(next));
+      const icon = btn.querySelector('.material-symbols-outlined');
+      if (icon) {
+        icon.style.fontVariationSettings = next ? "'FILL' 1" : "'FILL' 0";
+      }
+      btn.classList.toggle('text-accent-orange-text', next);
+      btn.classList.toggle('text-muted-gray', !next);
+    }
+
+    function toggleMobileFilters() {
+      const sidebar = document.getElementById('filter-sidebar');
+      if (sidebar) {
+        sidebar.classList.toggle('hidden');
+      }
+    }
+
+    function filterBrandList() {
+      const q = (document.getElementById('brand-search-input')?.value || '').trim().toLowerCase();
+      document.querySelectorAll('.brand-item').forEach((item) => {
+        const brand = item.getAttribute('data-brand') || '';
+        item.classList.toggle('hidden', !brand.includes(q));
+      });
+    }
+
+    function syncPriceSlider(val) {
+      const maxInput = document.getElementById('price-max');
+      if (maxInput) maxInput.value = val;
+      applyFilters();
+    }
+
+    function applyFilters() {
+      const query = (document.getElementById('header-search-input')?.value || '').trim().toLowerCase();
+      const selectedCategories = Array.from(document.querySelectorAll('.category-filter:checked')).map((c) => c.value);
+      const selectedBrands = Array.from(document.querySelectorAll('.brand-filter:checked')).map((b) => b.value);
+      const minPrice = Number(document.getElementById('price-min')?.value || 0);
+      const maxPrice = Number(document.getElementById('price-max')?.value || 120000);
+      const inStockOnly = Boolean(document.getElementById('in-stock-toggle')?.checked);
+      const sortMode = document.getElementById('sort-select')?.value || 'featured';
+
+      const grid = document.getElementById('product-grid');
+      const cards = Array.from(document.querySelectorAll('.product-card'));
+      let visibleCount = 0;
+
+      cards.forEach((card) => {
+        const cat = card.getAttribute('data-category') || '';
+        const brand = card.getAttribute('data-brand') || '';
+        const price = Number(card.getAttribute('data-price') || 0);
+        const instock = card.getAttribute('data-instock') === 'true';
+        const name = (card.getAttribute('data-name') || '').toLowerCase();
+
+        const matchesQuery = !query || name.includes(query) || brand.toLowerCase().includes(query) || cat.toLowerCase().includes(query);
+        const matchesCat = selectedCategories.length === 0 || selectedCategories.includes(cat);
+        const matchesBrand = selectedBrands.length === 0 || selectedBrands.includes(brand);
+        const matchesPrice = price >= minPrice && price <= maxPrice;
+        const matchesStock = !inStockOnly || instock;
+
+        const show = matchesQuery && matchesCat && matchesBrand && matchesPrice && matchesStock;
+        card.classList.toggle('hidden', !show);
+        if (show) visibleCount += 1;
+      });
+
+      cards.sort((a, b) => {
+        const pa = Number(a.getAttribute('data-price') || 0);
+        const pb = Number(b.getAttribute('data-price') || 0);
+        const oa = Number(a.getAttribute('data-order') || 0);
+        const ob = Number(b.getAttribute('data-order') || 0);
+        if (sortMode === 'price-asc') return pa - pb;
+        if (sortMode === 'price-desc') return pb - pa;
+        if (sortMode === 'newest') return ob - oa;
+        return oa - ob;
+      });
+      if (grid) {
+        cards.forEach((c) => grid.appendChild(c));
+      }
+
+      const countLabel = document.getElementById('product-count-label');
+      if (countLabel) {
+        countLabel.textContent = visibleCount + (visibleCount === 1 ? ' product' : ' products');
+      }
+
+      const emptyState = document.getElementById('empty-state');
+      const pagination = document.getElementById('pagination');
+      if (emptyState) emptyState.classList.toggle('hidden', visibleCount > 0);
+      if (pagination) pagination.classList.toggle('hidden', visibleCount === 0);
+      if (grid) grid.classList.toggle('hidden', visibleCount === 0);
+    }
+
+    function clearAllFilters() {
+      document.querySelectorAll('.category-filter, .brand-filter').forEach((el) => { el.checked = false; });
+      const minInput = document.getElementById('price-min');
+      const maxInput = document.getElementById('price-max');
+      const slider = document.getElementById('price-range-slider');
+      const stockToggle = document.getElementById('in-stock-toggle');
+      const headerSearch = document.getElementById('header-search-input');
+      const brandSearch = document.getElementById('brand-search-input');
+      if (minInput) minInput.value = '0';
+      if (maxInput) maxInput.value = '120000';
+      if (slider) slider.value = '120000';
+      if (stockToggle) stockToggle.checked = false;
+      if (headerSearch) headerSearch.value = '';
+      if (brandSearch) brandSearch.value = '';
+      filterBrandList();
+      applyFilters();
+    }
+
+    function updateCompareBar() {
+      const checked = document.querySelectorAll('.compare-checkbox:checked').length;
+      const bar = document.getElementById('compare-bar');
+      const text = document.getElementById('compare-count-text');
+      if (bar) bar.classList.toggle('hidden', checked === 0);
+      if (text) text.textContent = checked + (checked === 1 ? ' product selected' : ' products selected');
+    }
+
+    function clearCompare() {
+      document.querySelectorAll('.compare-checkbox').forEach((el) => { el.checked = false; });
+      updateCompareBar();
+    }
+  </script>
+
+
+</body></html>

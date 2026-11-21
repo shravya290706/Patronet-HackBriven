@@ -1,0 +1,252 @@
+<!DOCTYPE html><html lang="en"><head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>PATRONET — Sign In</title>
+  <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+  <script id="tailwind-config">/** @type {import('tailwindcss').Config} */
+globalThis.tailwind = globalThis.tailwind || {};
+globalThis.tailwind.config = {
+  darkMode: 'class',
+  theme: {
+    extend: {
+      colors: {
+        'primary-orange': '#FF6B00',
+        'on-primary-orange': '#111111',
+        'primary-orange-hover': '#E05E00',
+        'primary-orange-tint': '#FFEDE6',
+        'accent-orange-text': '#BF4E00',
+        'deep-black': '#111111',
+        'on-deep-black': '#FFFFFF',
+        'surface-dark-elevated': '#1A1A1A',
+        'on-surface-dark-elevated': '#F5F5F5',
+        'pure-white': '#FFFFFF',
+        'on-pure-white': '#111111',
+        'light-gray': '#F5F5F5',
+        'on-light-gray': '#111111',
+        'muted-gray': '#666666',
+        'outline-subtle': '#E5E5E5',
+        'outline-dark': '#2E2E2E',
+      },
+      borderRadius: {
+        'sm': '4px',
+        'DEFAULT': '6px',
+        'md': '8px',
+        'lg': '12px',
+        'xl': '16px',
+        'full': '9999px',
+      },
+      spacing: {
+        'gutter-xs': '4px',
+        'gutter-sm': '8px',
+        'gutter-md': '16px',
+        'gutter-lg': '24px',
+        'gutter-xl': '32px',
+        'section': '64px',
+        'page-margin': '48px',
+      },
+      fontFamily: {
+        'display': ['"Inter"', 'sans-serif'],
+        'headline': ['"Inter"', 'sans-serif'],
+        'title': ['"Inter"', 'sans-serif'],
+        'body': ['"Inter"', 'sans-serif'],
+        'label': ['"Inter"', 'sans-serif'],
+      },
+      fontSize: {
+        'display-xl': ['60px', { lineHeight: '64px', letterSpacing: '-1.6px', fontWeight: '700' }],
+        'display-xl-mobile': ['32px', { lineHeight: '38px', letterSpacing: '-0.6px', fontWeight: '700' }],
+        'headline-lg': ['36px', { lineHeight: '42px', letterSpacing: '-0.8px', fontWeight: '700' }],
+        'headline-lg-mobile': ['28px', { lineHeight: '34px', letterSpacing: '-0.5px', fontWeight: '700' }],
+        'headline-md': ['24px', { lineHeight: '30px', letterSpacing: '-0.4px', fontWeight: '700' }],
+        'title-lg': ['20px', { lineHeight: '26px', letterSpacing: '-0.2px', fontWeight: '600' }],
+        'title-md': ['16px', { lineHeight: '22px', letterSpacing: '-0.1px', fontWeight: '600' }],
+        'body-lg': ['16px', { lineHeight: '24px', letterSpacing: '0px', fontWeight: '400' }],
+        'body-md': ['14px', { lineHeight: '20px', letterSpacing: '0px', fontWeight: '400' }],
+        'label-lg': ['14px', { lineHeight: '20px', letterSpacing: '0px', fontWeight: '600' }],
+        'label-md': ['13px', { lineHeight: '18px', letterSpacing: '0px', fontWeight: '500' }],
+        'label-sm': ['12px', { lineHeight: '16px', letterSpacing: '0.2px', fontWeight: '500' }],
+      },
+      transitionDuration: {
+        'state-change': '150ms',
+        'surface-enter': '240ms',
+      },
+      transitionDelay: {
+        'state-change': '0ms',
+        'surface-enter': '0ms',
+      },
+      transitionTimingFunction: {
+        'state-change': 'ease-out',
+        'surface-enter': 'cubic-bezier(0.2, 0, 0, 1)',
+      },
+    },
+  },
+};
+if (typeof module !== 'undefined') module.exports = globalThis.tailwind.config;
+</script>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=block" rel="stylesheet">
+  <style>
+    .material-symbols-outlined, .material-symbols-rounded, .material-symbols-sharp, .material-icons {
+      display: inline-block;
+      width: 1em;
+      height: 1em;
+      line-height: 1 !important;
+      box-sizing: content-box;
+      overflow: hidden;
+      white-space: nowrap;
+      direction: ltr;
+      vertical-align: middle;
+    }
+  </style>
+</head>
+<body class="bg-pure-white text-on-pure-white font-body antialiased">
+  <div class="min-h-[1024px] grid grid-cols-1 lg:grid-cols-12" data-stitch-vh="min-h-[1024px]===min-h-screen">
+
+    <!-- Left Column: Minimal Black Editorial Panel (Compact brand bar on mobile, full panel on lg+) -->
+    <aside class="lg:col-span-6 bg-deep-black text-on-deep-black p-gutter-md lg:p-gutter-xl xl:p-page-margin flex flex-col justify-between gap-gutter-xl">
+      <div class="flex items-center justify-between">
+        <a href="../patronet-homepage-refined/PatronetHomepageRefined.html" class="font-headline text-title-lg tracking-tight text-on-deep-black" data-design-text-token="title-lg">
+          PATRONET
+        </a>
+        <a href="../patronet-homepage-refined/PatronetHomepageRefined.html" class="font-label text-label-md text-on-surface-dark-elevated hover:text-primary-orange transition-colors duration-state-change" data-design-text-token="label-md">
+          Back to store
+        </a>
+      </div>
+
+      <div class="hidden lg:flex my-auto flex-col gap-gutter-lg max-w-lg">
+        <div class="rounded-sm overflow-hidden border border-outline-dark bg-surface-dark-elevated aspect-[16/10]">
+          <img src="https://lh3.googleusercontent.com/aida/ALJJyrB1Neaw-vo6-82juA4qJyX5sXtojDpBQBWZ5IN_zVZYt3T9b9Yc3flfWncTFnYurWrkqiL2gOplUywN00Mc67jyJ1lUsivyKQ9WHmDVueOObcg8oDoEgUHxEOPAZDlgS44QghU0YoZajwZjp4s9l9IQcJBoOcBqNiaQz4LS42Y5xxbowqQX3Kl4NflipdAhjPbZZoAzk3_Q5uY5kFvMw7oYRJSd3w2nuFrLy6umQK2ctFAoa90IiG5eLr2eCbpaCA" alt="PATRONET workstation hardware setup" class="w-full h-full object-cover">
+        </div>
+        <div class="flex flex-col gap-gutter-sm">
+          <h2 class="font-headline text-headline-lg-mobile md:text-headline-lg text-on-deep-black text-balance" data-design-text-token="headline-lg">
+            Your next upgrade starts here.
+          </h2>
+          <p class="font-body text-body-lg text-on-surface-dark-elevated text-pretty" data-design-text-token="body-lg">
+            Sign in to manage your saved addresses, track active orders, and access your PATRONET hardware workspace.
+          </p>
+        </div>
+      </div>
+
+      <p class="hidden lg:block font-label text-label-md text-on-surface-dark-elevated" data-design-text-token="label-md">
+        © 2026 PATRONET. Precision electronics across India.
+      </p>
+    </aside>
+
+    <!-- Right Column: Login Form -->
+    <main class="lg:col-span-6 bg-pure-white text-on-pure-white p-gutter-lg md:p-gutter-xl xl:p-page-margin flex items-center justify-center">
+      <div class="w-full max-w-md flex flex-col gap-gutter-xl">
+
+        <div class="flex flex-col gap-gutter-xs">
+          <h1 class="font-headline text-headline-lg-mobile md:text-headline-lg text-on-pure-white" data-design-text-token="headline-lg">
+            Welcome back.
+          </h1>
+          <p class="font-body text-body-lg text-muted-gray text-pretty" data-design-text-token="body-lg">
+            Enter your email and password to sign in.
+          </p>
+        </div>
+
+        <!-- Invalid Credentials Alert (Hidden by default) -->
+        <div id="login-error-alert" class="hidden p-gutter-md rounded-sm border border-primary-orange bg-primary-orange-tint flex items-start gap-gutter-sm" role="alert">
+          <span class="material-symbols-outlined text-[20px] text-accent-orange-text shrink-0 mt-0.5" aria-hidden="true">error</span>
+          <p id="login-error-text" class="font-body text-body-md text-on-pure-white" data-design-text-token="body-md">
+            Invalid email or password. Please check your credentials and try again.
+          </p>
+        </div>
+
+        <form id="login-form" class="flex flex-col gap-gutter-lg" novalidate onsubmit="handleLoginSubmit(event)">
+          <!-- Email -->
+          <div class="flex flex-col gap-gutter-xs">
+            <label for="login-email" class="font-label text-label-md text-on-pure-white" data-design-text-token="label-md">Email address</label>
+            <input id="login-email" type="email" autocomplete="email" placeholder="aarav@mehta.in" class="w-full px-3.5 py-3 rounded-sm border border-outline-subtle bg-pure-white font-body text-body-md text-on-pure-white placeholder:text-muted-gray focus:border-deep-black focus:ring-0">
+            <span id="err-login-email" class="hidden font-label text-label-sm text-accent-orange-text" data-design-text-token="label-sm">Please enter a valid email address.</span>
+          </div>
+
+          <!-- Password with Visibility Toggle -->
+          <div class="flex flex-col gap-gutter-xs">
+            <label for="login-password" class="font-label text-label-md text-on-pure-white" data-design-text-token="label-md">Password</label>
+            <div class="relative flex items-center">
+              <input id="login-password" type="password" autocomplete="current-password" placeholder="Enter your password" class="w-full pl-3.5 pr-11 py-3 rounded-sm border border-outline-subtle bg-pure-white font-body text-body-md text-on-pure-white placeholder:text-muted-gray focus:border-deep-black focus:ring-0">
+              <button type="button" onclick="togglePasswordVisibility(&#39;login-password&#39;, &#39;login-pw-icon&#39;)" aria-label="Toggle password visibility" class="absolute right-3 inline-flex items-center justify-center w-8 h-8 text-muted-gray hover:text-on-pure-white transition-colors duration-state-change">
+                <span id="login-pw-icon" class="material-symbols-outlined text-[20px]" aria-hidden="true">visibility</span>
+              </button>
+            </div>
+            <span id="err-login-password" class="hidden font-label text-label-sm text-accent-orange-text" data-design-text-token="label-sm">Please enter your password.</span>
+          </div>
+
+          <!-- Primary Orange Sign In Button -->
+          <button id="login-submit-btn" type="submit" class="w-full py-3.5 px-gutter-lg rounded-sm bg-primary-orange text-on-primary-orange font-label text-label-lg hover:bg-primary-orange-hover transition-colors duration-state-change inline-flex items-center justify-center gap-gutter-sm">
+            <span id="login-spinner" class="hidden material-symbols-outlined text-[18px] animate-spin" aria-hidden="true">progress_activity</span>
+            <span id="login-btn-label" data-design-text-token="label-lg">Sign In</span>
+          </button>
+        </form>
+
+        <div class="pt-gutter-lg border-t border-outline-subtle flex items-center justify-between gap-gutter-md">
+          <span class="font-body text-body-md text-muted-gray" data-design-text-token="body-md">New to PATRONET?</span>
+          <a href="../patronet-register/PatronetRegister.html" class="font-label text-label-lg text-accent-orange-text hover:text-primary-orange-hover transition-colors duration-state-change" data-design-text-token="label-lg">
+            Create Account
+          </a>
+        </div>
+
+      </div>
+    </main>
+
+  </div>
+
+  <script>
+    function togglePasswordVisibility(inputId, iconId) {
+      const input = document.getElementById(inputId);
+      const icon = document.getElementById(iconId);
+      if (input.type === 'password') {
+        input.type = 'text';
+        icon.textContent = 'visibility_off';
+      } else {
+        input.type = 'password';
+        icon.textContent = 'visibility';
+      }
+    }
+
+    function handleLoginSubmit(event) {
+      event.preventDefault();
+      const email = document.getElementById('login-email').value.trim();
+      const password = document.getElementById('login-password').value;
+      const errEmail = document.getElementById('err-login-email');
+      const errPw = document.getElementById('err-login-password');
+      const alertBox = document.getElementById('login-error-alert');
+
+      errEmail.classList.add('hidden');
+      errPw.classList.add('hidden');
+      alertBox.classList.add('hidden');
+
+      let hasError = false;
+      if (!email || !email.includes('@')) {
+        errEmail.classList.remove('hidden');
+        hasError = true;
+      }
+      if (!password) {
+        errPw.classList.remove('hidden');
+        hasError = true;
+      }
+      if (hasError) return;
+
+      const btn = document.getElementById('login-submit-btn');
+      const spinner = document.getElementById('login-spinner');
+      const label = document.getElementById('login-btn-label');
+
+      btn.setAttribute('aria-busy', 'true');
+      spinner.classList.remove('hidden');
+      label.textContent = 'Signing in...';
+
+      setTimeout(() => {
+        if (password.length < 6) {
+          btn.removeAttribute('aria-busy');
+          spinner.classList.add('hidden');
+          label.textContent = 'Sign In';
+          alertBox.classList.remove('hidden');
+          return;
+        }
+        window.location.href = '../patronet-account/PatronetAccount.html';
+      }, 750);
+    }
+  </script>
+
+
+</body></html>

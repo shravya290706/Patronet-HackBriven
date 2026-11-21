@@ -1,0 +1,539 @@
+<!DOCTYPE html><html lang="en"><head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>PATRONET — Supplier Offer Comparison</title>
+  <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+  <script id="tailwind-config">/** @type {import('tailwindcss').Config} */
+globalThis.tailwind = globalThis.tailwind || {};
+globalThis.tailwind.config = {
+  darkMode: 'class',
+  theme: {
+    extend: {
+      colors: {
+        'primary-orange': '#FF6B00',
+        'on-primary-orange': '#111111',
+        'primary-orange-hover': '#E05E00',
+        'primary-orange-tint': '#FFEDE6',
+        'accent-orange-text': '#BF4E00',
+        'deep-black': '#111111',
+        'on-deep-black': '#FFFFFF',
+        'surface-dark-elevated': '#1A1A1A',
+        'on-surface-dark-elevated': '#F5F5F5',
+        'pure-white': '#FFFFFF',
+        'on-pure-white': '#111111',
+        'light-gray': '#F5F5F5',
+        'on-light-gray': '#111111',
+        'muted-gray': '#666666',
+        'outline-subtle': '#E5E5E5',
+        'outline-dark': '#2E2E2E',
+      },
+      borderRadius: {
+        'sm': '4px',
+        'DEFAULT': '6px',
+        'md': '8px',
+        'lg': '12px',
+        'xl': '16px',
+        'full': '9999px',
+      },
+      spacing: {
+        'gutter-xs': '4px',
+        'gutter-sm': '8px',
+        'gutter-md': '16px',
+        'gutter-lg': '24px',
+        'gutter-xl': '32px',
+        'section': '64px',
+        'page-margin': '48px',
+      },
+      fontFamily: {
+        'display': ['"Inter"', 'sans-serif'],
+        'headline': ['"Inter"', 'sans-serif'],
+        'title': ['"Inter"', 'sans-serif'],
+        'body': ['"Inter"', 'sans-serif'],
+        'label': ['"Inter"', 'sans-serif'],
+      },
+      fontSize: {
+        'display-xl': ['60px', { lineHeight: '64px', letterSpacing: '-1.6px', fontWeight: '700' }],
+        'display-xl-mobile': ['32px', { lineHeight: '38px', letterSpacing: '-0.6px', fontWeight: '700' }],
+        'headline-lg': ['36px', { lineHeight: '42px', letterSpacing: '-0.8px', fontWeight: '700' }],
+        'headline-lg-mobile': ['28px', { lineHeight: '34px', letterSpacing: '-0.5px', fontWeight: '700' }],
+        'headline-md': ['24px', { lineHeight: '30px', letterSpacing: '-0.4px', fontWeight: '700' }],
+        'title-lg': ['20px', { lineHeight: '26px', letterSpacing: '-0.2px', fontWeight: '600' }],
+        'title-md': ['16px', { lineHeight: '22px', letterSpacing: '-0.1px', fontWeight: '600' }],
+        'body-lg': ['16px', { lineHeight: '24px', letterSpacing: '0px', fontWeight: '400' }],
+        'body-md': ['14px', { lineHeight: '20px', letterSpacing: '0px', fontWeight: '400' }],
+        'label-lg': ['14px', { lineHeight: '20px', letterSpacing: '0px', fontWeight: '600' }],
+        'label-md': ['13px', { lineHeight: '18px', letterSpacing: '0px', fontWeight: '500' }],
+        'label-sm': ['12px', { lineHeight: '16px', letterSpacing: '0.2px', fontWeight: '500' }],
+      },
+      transitionDuration: {
+        'state-change': '150ms',
+        'surface-enter': '240ms',
+      },
+      transitionDelay: {
+        'state-change': '0ms',
+        'surface-enter': '0ms',
+      },
+      transitionTimingFunction: {
+        'state-change': 'ease-out',
+        'surface-enter': 'cubic-bezier(0.2, 0, 0, 1)',
+      },
+    },
+  },
+};
+if (typeof module !== 'undefined') module.exports = globalThis.tailwind.config;
+</script>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=block" rel="stylesheet">
+  <style>
+    .material-symbols-outlined, .material-symbols-rounded, .material-symbols-sharp, .material-icons {
+      display: inline-block;
+      width: 1em;
+      height: 1em;
+      line-height: 1 !important;
+      box-sizing: content-box;
+      overflow: hidden;
+      white-space: nowrap;
+      direction: ltr;
+      vertical-align: middle;
+    }
+  </style>
+</head>
+<body class="bg-pure-white text-on-pure-white font-body antialiased">
+  <div class="min-h-[1024px] flex flex-col bg-pure-white" data-stitch-vh="min-h-[1024px]===min-h-screen">
+
+    <!-- 1. Navigation Bar (Shared Shell) -->
+    <header class="sticky top-0 z-40 bg-pure-white border-b border-outline-subtle">
+      <div class="max-w-[1360px] mx-auto px-gutter-md md:px-gutter-lg xl:px-page-margin h-[72px] flex items-center justify-between gap-gutter-xl">
+        <a href="../patronet-homepage-refined/PatronetHomepageRefined.html" class="font-headline text-title-lg tracking-tight text-on-pure-white shrink-0" data-design-text-token="title-lg">
+          PATRONET
+        </a>
+
+        <nav aria-label="Primary navigation" class="hidden lg:flex items-center gap-10">
+          <a href="../patronet-catalogue/PatronetCatalogue.html" class="font-label text-label-lg text-on-pure-white hover:text-muted-gray transition-colors duration-state-change ease-state-change" data-design-text-token="label-lg">Shop All</a>
+          <a href="../patronet-catalogue/PatronetCatalogue.html" class="font-label text-label-lg text-on-pure-white hover:text-muted-gray transition-colors duration-state-change ease-state-change" data-design-text-token="label-lg">Electronics</a>
+          <a href="../patronet-catalogue/PatronetCatalogue.html" class="font-label text-label-lg text-on-pure-white hover:text-muted-gray transition-colors duration-state-change ease-state-change" data-design-text-token="label-lg">Computers</a>
+          <a href="../patronet-catalogue/PatronetCatalogue.html" class="font-label text-label-lg text-on-pure-white hover:text-muted-gray transition-colors duration-state-change ease-state-change" data-design-text-token="label-lg">Audio</a>
+          <a href="../patronet-catalogue/PatronetCatalogue.html" class="font-label text-label-lg text-accent-orange-text hover:text-primary-orange-hover transition-colors duration-state-change ease-state-change" data-design-text-token="label-lg">Deals</a>
+        </nav>
+
+        <div class="flex items-center gap-gutter-lg shrink-0">
+          <form class="hidden md:flex items-center gap-gutter-sm px-3.5 py-2 rounded-sm bg-light-gray border border-outline-subtle focus-within:border-deep-black w-64 lg:w-72 transition-colors duration-state-change" role="search" onsubmit="return false;">
+            <span class="material-symbols-outlined text-[18px] text-muted-gray shrink-0" aria-hidden="true">search</span>
+            <input type="search" placeholder="Search catalog" aria-label="Search PATRONET catalog" class="w-full bg-transparent border-0 p-0 font-body text-body-md text-on-pure-white placeholder:text-muted-gray focus:ring-0">
+          </form>
+
+          <div class="flex items-center gap-gutter-sm">
+            <a href="../patronet-account/PatronetAccount.html" aria-label="Account" class="inline-flex items-center justify-center w-9 h-9 text-on-pure-white hover:text-muted-gray transition-colors duration-state-change ease-state-change">
+              <span class="material-symbols-outlined text-[20px]" aria-hidden="true">person</span>
+            </a>
+            <button type="button" aria-label="Wishlist" class="inline-flex items-center justify-center w-9 h-9 text-on-pure-white hover:text-muted-gray transition-colors duration-state-change ease-state-change">
+              <span class="material-symbols-outlined text-[20px]" aria-hidden="true">favorite</span>
+            </button>
+            <a href="../patronet-cart/PatronetCart.html" aria-label="Shopping cart" class="inline-flex items-center gap-gutter-xs h-9 pl-gutter-xs text-on-pure-white hover:text-muted-gray transition-colors duration-state-change shrink-0">
+              <span class="material-symbols-outlined text-[20px] shrink-0" aria-hidden="true">shopping_cart</span>
+              <span class="font-label text-label-md tabular-nums whitespace-nowrap" data-design-text-token="label-md">(3)</span>
+            </a>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <main class="flex-1">
+      <div class="max-w-[1360px] mx-auto px-gutter-md md:px-gutter-lg xl:px-page-margin py-gutter-xl">
+
+        <!-- Header -->
+        <nav aria-label="Breadcrumb" class="flex items-center gap-gutter-sm font-label text-label-md text-muted-gray mb-gutter-md">
+          <a href="../patronet-homepage-refined/PatronetHomepageRefined.html" class="hover:text-on-pure-white transition-colors duration-state-change" data-design-text-token="label-md">Home</a>
+          <span aria-hidden="true">/</span>
+          <a href="../patronet-bulk-progress/PatronetBulkProgress.html" class="hover:text-on-pure-white transition-colors duration-state-change tabular-nums" data-design-text-token="label-md">PN-BULK-2026-4108</a>
+          <span aria-hidden="true">/</span>
+          <span class="text-on-pure-white" data-design-text-token="label-md">Offers</span>
+        </nav>
+
+        <div class="pb-gutter-lg border-b border-outline-subtle mb-gutter-xl flex flex-col lg:flex-row lg:items-end justify-between gap-gutter-md">
+          <div class="flex flex-col gap-gutter-sm">
+            <span class="font-label text-label-md tracking-wider uppercase text-accent-orange-text" data-design-text-token="label-md">
+              SUPPLIER QUOTATIONS
+            </span>
+            <h1 class="font-headline text-headline-lg-mobile md:text-headline-lg text-on-pure-white" data-design-text-token="headline-lg">
+              Compare your offers.
+            </h1>
+            <p class="font-body text-body-lg text-muted-gray max-w-2xl text-pretty" data-design-text-token="body-lg">
+              Review supplier quotations and choose the option that works best for you.
+            </p>
+          </div>
+
+          <a href="../patronet-bulk-progress/PatronetBulkProgress.html" class="inline-flex items-center gap-gutter-xs font-label text-label-lg text-on-pure-white hover:text-accent-orange-text transition-colors duration-state-change shrink-0">
+            <span class="material-symbols-outlined text-[18px]" aria-hidden="true">arrow_back</span>
+            <span data-design-text-token="label-lg">Back to negotiation status</span>
+          </a>
+        </div>
+
+        <!-- Customer-Controlled Selection Confirmation Banner (Hidden until an offer is selected) -->
+        <div id="offer-selected-banner" class="hidden mb-gutter-xl p-gutter-lg rounded-sm border-2 border-primary-orange bg-pure-white flex flex-col sm:flex-row sm:items-center justify-between gap-gutter-md" role="status">
+          <div class="flex flex-col gap-gutter-xs">
+            <span class="font-label text-label-sm text-accent-orange-text" data-design-text-token="label-sm">OFFER SELECTED FOR REVIEW</span>
+            <p id="selected-offer-summary" class="font-title text-title-md text-on-pure-white" data-design-text-token="title-md">
+              Apex Tech Distribution — ₹9,44,000
+            </p>
+            <p class="font-body text-body-md text-muted-gray" data-design-text-token="body-md">
+              No order has been placed yet. Proceed to checkout to review delivery details and confirm.
+            </p>
+          </div>
+          <a href="../patronet-checkout/PatronetCheckout.html" class="px-gutter-xl py-3 rounded-sm bg-primary-orange text-on-primary-orange font-label text-label-lg hover:bg-primary-orange-hover transition-colors duration-state-change shrink-0 text-center">
+            <span data-design-text-token="label-lg">Proceed to Checkout</span>
+          </a>
+        </div>
+
+        <div class="flex flex-col gap-section">
+
+          <!-- Mobile Offer Cards (< md) -->
+          <section aria-label="Supplier quotations mobile list" class="md:hidden flex flex-col gap-gutter-md">
+            <article class="p-gutter-lg rounded-sm border-2 border-primary-orange bg-pure-white flex flex-col gap-gutter-md">
+              <div class="flex items-start justify-between gap-gutter-sm">
+                <div class="flex flex-col gap-gutter-xs">
+                  <span class="font-title text-title-md text-on-pure-white" data-design-text-token="title-md">Apex Tech Distribution</span>
+                  <span class="font-label text-label-sm text-accent-orange-text" data-design-text-token="label-sm">Lowest confirmed full-qty price</span>
+                </div>
+                <span class="inline-flex items-center px-2.5 py-1 rounded-sm bg-deep-black font-label text-label-sm text-on-deep-black shrink-0" data-design-text-token="label-sm">Confirmed</span>
+              </div>
+              <div class="grid grid-cols-2 gap-gutter-sm py-gutter-sm border-y border-outline-subtle">
+                <div class="flex flex-col">
+                  <span class="font-label text-label-sm text-muted-gray" data-design-text-token="label-sm">Total</span>
+                  <span class="font-title text-title-md text-on-pure-white tabular-nums" data-design-text-token="title-md">₹9,44,000</span>
+                </div>
+                <div class="flex flex-col">
+                  <span class="font-label text-label-sm text-muted-gray" data-design-text-token="label-sm">Qty · Delivery</span>
+                  <span class="font-body text-body-md text-on-pure-white tabular-nums" data-design-text-token="body-md">20 units · 5–7 days</span>
+                </div>
+              </div>
+              <button type="button" onclick="selectOffer(&#39;Apex Tech Distribution&#39;, &#39;₹9,44,000&#39;, this)" class="w-full py-3 rounded-sm bg-primary-orange text-on-primary-orange font-label text-label-lg hover:bg-primary-orange-hover">
+                <span data-design-text-token="label-lg">Select this offer</span>
+              </button>
+            </article>
+
+            <article class="p-gutter-lg rounded-sm border border-outline-subtle bg-pure-white flex flex-col gap-gutter-md">
+              <div class="flex items-start justify-between gap-gutter-sm">
+                <span class="font-title text-title-md text-on-pure-white" data-design-text-token="title-md">Vanguard IT Solutions</span>
+                <span class="inline-flex items-center gap-gutter-xs px-2.5 py-1 rounded-sm bg-light-gray font-label text-label-sm text-on-light-gray shrink-0" data-design-text-token="label-sm">
+                  <span class="w-2 h-2 rounded-full bg-primary-orange shrink-0" aria-hidden="true"></span>
+                  <span>Counteroffer</span>
+                </span>
+              </div>
+              <div class="grid grid-cols-2 gap-gutter-sm py-gutter-sm border-y border-outline-subtle">
+                <div class="flex flex-col">
+                  <span class="font-label text-label-sm text-muted-gray" data-design-text-token="label-sm">Total</span>
+                  <span class="font-title text-title-md text-on-pure-white tabular-nums" data-design-text-token="title-md">₹9,62,000</span>
+                </div>
+                <div class="flex flex-col">
+                  <span class="font-label text-label-sm text-muted-gray" data-design-text-token="label-sm">Qty · Delivery</span>
+                  <span class="font-body text-body-md text-on-pure-white tabular-nums" data-design-text-token="body-md">20 units · 3–4 days</span>
+                </div>
+              </div>
+              <button type="button" onclick="selectOffer(&#39;Vanguard IT Solutions&#39;, &#39;₹9,62,000&#39;, this)" class="w-full py-3 rounded-sm bg-deep-black text-on-deep-black font-label text-label-lg hover:bg-surface-dark-elevated">
+                <span data-design-text-token="label-lg">Select this offer</span>
+              </button>
+            </article>
+
+            <article class="p-gutter-lg rounded-sm border border-outline-subtle bg-pure-white flex flex-col gap-gutter-md">
+              <div class="flex items-start justify-between gap-gutter-sm">
+                <span class="font-title text-title-md text-on-pure-white" data-design-text-token="title-md">Horizon Enterprise Systems</span>
+                <span class="inline-flex items-center px-2.5 py-1 rounded-sm border border-outline-subtle bg-pure-white font-label text-label-sm text-muted-gray shrink-0" data-design-text-token="label-sm">Partial offer</span>
+              </div>
+              <div class="grid grid-cols-2 gap-gutter-sm py-gutter-sm border-y border-outline-subtle">
+                <div class="flex flex-col">
+                  <span class="font-label text-label-sm text-muted-gray" data-design-text-token="label-sm">Total</span>
+                  <span class="font-title text-title-md text-on-pure-white tabular-nums" data-design-text-token="title-md">₹8,80,200</span>
+                </div>
+                <div class="flex flex-col">
+                  <span class="font-label text-label-sm text-muted-gray" data-design-text-token="label-sm">Qty · Delivery</span>
+                  <span class="font-body text-body-md text-muted-gray tabular-nums" data-design-text-token="body-md">18 units · Not provided</span>
+                </div>
+              </div>
+              <button type="button" onclick="selectOffer(&#39;Horizon Enterprise Systems&#39;, &#39;₹8,80,200&#39;, this)" class="w-full py-3 rounded-sm bg-deep-black text-on-deep-black font-label text-label-lg hover:bg-surface-dark-elevated">
+                <span data-design-text-token="label-lg">Select this offer</span>
+              </button>
+            </article>
+          </section>
+
+          <!-- Supplier Quotation Comparison Table (Tablet & Desktop) -->
+          <section aria-label="Supplier quotation comparison table" class="hidden md:block border border-outline-subtle rounded-sm overflow-x-auto bg-pure-white">
+            <table class="w-full min-w-[960px] border-collapse text-left">
+              <thead>
+                <tr class="border-b border-outline-subtle bg-light-gray">
+                  <th class="p-gutter-md font-label text-label-md text-on-light-gray whitespace-nowrap" data-design-text-token="label-md">Supplier</th>
+                  <th class="p-gutter-md font-label text-label-md text-on-light-gray whitespace-nowrap" data-design-text-token="label-md">Offered qty</th>
+                  <th class="p-gutter-md font-label text-label-md text-on-light-gray whitespace-nowrap" data-design-text-token="label-md">Unit price</th>
+                  <th class="p-gutter-md font-label text-label-md text-on-light-gray whitespace-nowrap" data-design-text-token="label-md">Total</th>
+                  <th class="p-gutter-md font-label text-label-md text-on-light-gray whitespace-nowrap" data-design-text-token="label-md">Delivery</th>
+                  <th class="p-gutter-md font-label text-label-md text-on-light-gray whitespace-nowrap" data-design-text-token="label-md">Status</th>
+                  <th class="p-gutter-md font-label text-label-md text-on-light-gray text-right whitespace-nowrap" data-design-text-token="label-md">Actions</th>
+                </tr>
+              </thead>
+              <tbody class="divide-y divide-outline-subtle">
+                <!-- Offer 1: Lowest Full Confirmed -->
+                <tr class="offer-row" data-supplier="Apex Tech Distribution">
+                  <td class="p-gutter-md">
+                    <div class="flex flex-col gap-gutter-xs">
+                      <span class="font-title text-title-md text-on-pure-white" data-design-text-token="title-md">Apex Tech Distribution</span>
+                      <span class="font-label text-label-sm text-accent-orange-text" data-design-text-token="label-sm">Lowest confirmed full-qty price</span>
+                    </div>
+                  </td>
+                  <td class="p-gutter-md font-body text-body-md text-on-pure-white tabular-nums whitespace-nowrap" data-design-text-token="body-md">20 units (Full)</td>
+                  <td class="p-gutter-md font-body text-body-md text-on-pure-white tabular-nums whitespace-nowrap" data-design-text-token="body-md">₹47,200</td>
+                  <td class="p-gutter-md font-title text-title-md text-on-pure-white tabular-nums whitespace-nowrap" data-design-text-token="title-md">₹9,44,000</td>
+                  <td class="p-gutter-md font-body text-body-md text-on-pure-white tabular-nums whitespace-nowrap" data-design-text-token="body-md">5–7 days</td>
+                  <td class="p-gutter-md whitespace-nowrap">
+                    <span class="inline-flex items-center px-2.5 py-1 rounded-sm bg-deep-black font-label text-label-sm text-on-deep-black" data-design-text-token="label-sm">Confirmed</span>
+                  </td>
+                  <td class="p-gutter-md text-right whitespace-nowrap">
+                    <div class="inline-flex items-center gap-gutter-sm">
+                      <button type="button" onclick="toggleOfferDetails(&#39;offer-apex&#39;, this)" class="px-3 py-2 rounded-sm border border-outline-subtle font-label text-label-sm text-on-pure-white hover:border-deep-black whitespace-nowrap">
+                        <span data-design-text-token="label-sm">View details</span>
+                      </button>
+                      <button type="button" onclick="selectOffer(&#39;Apex Tech Distribution&#39;, &#39;₹9,44,000&#39;, this)" class="select-offer-btn px-3.5 py-2 rounded-sm bg-primary-orange text-on-primary-orange font-label text-label-sm hover:bg-primary-orange-hover whitespace-nowrap">
+                        <span data-design-text-token="label-sm">Select this offer</span>
+                      </button>
+                    </div>
+                  </td>
+                </tr>
+                <tr id="offer-apex" class="hidden bg-light-gray">
+                  <td colspan="7" class="p-gutter-md">
+                    <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-gutter-md font-body text-body-md text-on-light-gray">
+                      <span data-design-text-token="body-md">Breakdown: ProBook 14 (10 × ₹68,400 = ₹6,84,000) + CreatorView 27 QHD Monitor (10 × ₹26,000 = ₹2,60,000)</span>
+                      <span class="font-label text-label-md text-muted-gray" data-design-text-token="label-md">GST invoice included</span>
+                    </div>
+                  </td>
+                </tr>
+
+                <!-- Offer 2 -->
+                <tr class="offer-row" data-supplier="Vanguard IT Solutions">
+                  <td class="p-gutter-md font-title text-title-md text-on-pure-white" data-design-text-token="title-md">Vanguard IT Solutions</td>
+                  <td class="p-gutter-md font-body text-body-md text-on-pure-white tabular-nums whitespace-nowrap" data-design-text-token="body-md">20 units (Full)</td>
+                  <td class="p-gutter-md font-body text-body-md text-on-pure-white tabular-nums whitespace-nowrap" data-design-text-token="body-md">₹48,100</td>
+                  <td class="p-gutter-md font-title text-title-md text-on-pure-white tabular-nums whitespace-nowrap" data-design-text-token="title-md">₹9,62,000</td>
+                  <td class="p-gutter-md font-body text-body-md text-on-pure-white tabular-nums whitespace-nowrap" data-design-text-token="body-md">3–4 days</td>
+                  <td class="p-gutter-md whitespace-nowrap">
+                    <span class="inline-flex items-center gap-gutter-xs px-2.5 py-1 rounded-sm bg-light-gray font-label text-label-sm text-on-light-gray" data-design-text-token="label-sm">
+                      <span class="w-2 h-2 rounded-full bg-primary-orange shrink-0" aria-hidden="true"></span>
+                      <span>Counteroffer</span>
+                    </span>
+                  </td>
+                  <td class="p-gutter-md text-right whitespace-nowrap">
+                    <div class="inline-flex items-center gap-gutter-sm">
+                      <button type="button" onclick="toggleOfferDetails(&#39;offer-vanguard&#39;, this)" class="px-3 py-2 rounded-sm border border-outline-subtle font-label text-label-sm text-on-pure-white hover:border-deep-black whitespace-nowrap">
+                        <span data-design-text-token="label-sm">View details</span>
+                      </button>
+                      <button type="button" onclick="selectOffer(&#39;Vanguard IT Solutions&#39;, &#39;₹9,62,000&#39;, this)" class="select-offer-btn px-3.5 py-2 rounded-sm bg-deep-black text-on-deep-black font-label text-label-sm hover:bg-surface-dark-elevated whitespace-nowrap">
+                        <span data-design-text-token="label-sm">Select this offer</span>
+                      </button>
+                    </div>
+                  </td>
+                </tr>
+                <tr id="offer-vanguard" class="hidden bg-light-gray">
+                  <td colspan="7" class="p-gutter-md">
+                    <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-gutter-md font-body text-body-md text-on-light-gray">
+                      <span data-design-text-token="body-md">Breakdown: ProBook 14 (10 × ₹69,700 = ₹6,97,000) + CreatorView 27 QHD Monitor (10 × ₹26,500 = ₹2,65,000)</span>
+                      <span class="font-label text-label-md text-muted-gray" data-design-text-token="label-md">Expedited dispatch</span>
+                    </div>
+                  </td>
+                </tr>
+
+                <!-- Offer 3 -->
+                <tr class="offer-row" data-supplier="Horizon Enterprise Systems">
+                  <td class="p-gutter-md font-title text-title-md text-on-pure-white" data-design-text-token="title-md">Horizon Enterprise Systems</td>
+                  <td class="p-gutter-md font-body text-body-md text-muted-gray tabular-nums whitespace-nowrap" data-design-text-token="body-md">18 units (Partial)</td>
+                  <td class="p-gutter-md font-body text-body-md text-on-pure-white tabular-nums whitespace-nowrap" data-design-text-token="body-md">₹48,900</td>
+                  <td class="p-gutter-md font-title text-title-md text-on-pure-white tabular-nums whitespace-nowrap" data-design-text-token="title-md">₹8,80,200</td>
+                  <td class="p-gutter-md font-body text-body-md text-muted-gray whitespace-nowrap" data-design-text-token="body-md">Not provided</td>
+                  <td class="p-gutter-md whitespace-nowrap">
+                    <span class="inline-flex items-center px-2.5 py-1 rounded-sm border border-outline-subtle bg-pure-white font-label text-label-sm text-muted-gray" data-design-text-token="label-sm">Partial offer</span>
+                  </td>
+                  <td class="p-gutter-md text-right whitespace-nowrap">
+                    <div class="inline-flex items-center gap-gutter-sm">
+                      <button type="button" onclick="toggleOfferDetails(&#39;offer-horizon&#39;, this)" class="px-3 py-2 rounded-sm border border-outline-subtle font-label text-label-sm text-on-pure-white hover:border-deep-black whitespace-nowrap">
+                        <span data-design-text-token="label-sm">View details</span>
+                      </button>
+                      <button type="button" onclick="selectOffer(&#39;Horizon Enterprise Systems&#39;, &#39;₹8,80,200&#39;, this)" class="select-offer-btn px-3.5 py-2 rounded-sm bg-deep-black text-on-deep-black font-label text-label-sm hover:bg-surface-dark-elevated whitespace-nowrap">
+                        <span data-design-text-token="label-sm">Select this offer</span>
+                      </button>
+                    </div>
+                  </td>
+                </tr>
+                <tr id="offer-horizon" class="hidden bg-light-gray">
+                  <td colspan="7" class="p-gutter-md">
+                    <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-gutter-md font-body text-body-md text-on-light-gray">
+                      <span data-design-text-token="body-md">Breakdown: ProBook 14 (8 × ₹70,000 = ₹5,60,000) + CreatorView 27 QHD Monitor (10 × ₹32,020 = ₹3,20,200)</span>
+                      <span class="font-label text-label-md text-muted-gray" data-design-text-token="label-md">2 laptops short of requested quantity</span>
+                    </div>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </section>
+
+          <!-- Dark AI Recommendation Panel -->
+          <section aria-labelledby="best-offer-heading" class="bg-deep-black text-on-deep-black rounded-sm p-gutter-xl flex flex-col gap-gutter-lg">
+            <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-gutter-sm pb-gutter-md border-b border-outline-dark">
+              <div class="flex flex-col gap-gutter-xs">
+                <span class="font-label text-label-sm tracking-wider uppercase text-primary-orange" data-design-text-token="label-sm">
+                  AI RECOMMENDATION
+                </span>
+                <h2 id="best-offer-heading" class="font-headline text-headline-lg-mobile md:text-headline-lg text-on-deep-black" data-design-text-token="headline-lg">
+                  Best offer for your requirements.
+                </h2>
+              </div>
+              <span class="font-label text-label-md text-on-surface-dark-elevated" data-design-text-token="label-md">
+                Customer approval required
+              </span>
+            </div>
+
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-gutter-xl items-start">
+              <div class="lg:col-span-5 flex flex-col gap-gutter-md">
+                <div class="flex flex-col gap-gutter-xs">
+                  <span class="font-label text-label-md text-primary-orange" data-design-text-token="label-md">Recommended supplier</span>
+                  <h3 class="font-headline text-headline-md text-on-deep-black" data-design-text-token="headline-md">
+                    Apex Tech Distribution
+                  </h3>
+                  <span class="font-title text-title-lg text-on-surface-dark-elevated tabular-nums" data-design-text-token="title-lg">
+                    ₹9,44,000 total · ₹95,800 below retail estimate
+                  </span>
+                </div>
+                <p class="font-body text-body-lg text-on-surface-dark-elevated text-pretty" data-design-text-token="body-lg">
+                  Apex Tech Distribution is the only supplier offering full 20-unit fulfillment at the lowest confirmed total quotation, while staying within your 10-business-day delivery note.
+                </p>
+                <div>
+                  <button type="button" onclick="selectOffer(&#39;Apex Tech Distribution&#39;, &#39;₹9,44,000&#39;, null)" class="px-gutter-xl py-3 rounded-sm bg-primary-orange text-on-primary-orange font-label text-label-lg hover:bg-primary-orange-hover transition-colors duration-state-change">
+                    <span data-design-text-token="label-lg">Select this offer</span>
+                  </button>
+                </div>
+              </div>
+
+              <div class="lg:col-span-7 grid grid-cols-1 sm:grid-cols-2 gap-gutter-lg">
+                <div class="p-gutter-lg rounded-sm bg-surface-dark-elevated border border-outline-dark flex flex-col gap-gutter-sm">
+                  <h4 class="font-title text-title-md text-on-deep-black" data-design-text-token="title-md">Relevant advantages</h4>
+                  <ul class="flex flex-col gap-gutter-xs font-body text-body-md text-on-surface-dark-elevated">
+                    <li class="flex items-start gap-gutter-xs">
+                      <span class="material-symbols-outlined text-[16px] text-primary-orange shrink-0 mt-0.5" aria-hidden="true">check</span>
+                      <span data-design-text-token="body-md">Covers all 10 laptops and 10 monitors in a single shipment</span>
+                    </li>
+                    <li class="flex items-start gap-gutter-xs">
+                      <span class="material-symbols-outlined text-[16px] text-primary-orange shrink-0 mt-0.5" aria-hidden="true">check</span>
+                      <span data-design-text-token="body-md">₹18,000 lower than Vanguard IT Solutions for the same quantity</span>
+                    </li>
+                    <li class="flex items-start gap-gutter-xs">
+                      <span class="material-symbols-outlined text-[16px] text-primary-orange shrink-0 mt-0.5" aria-hidden="true">check</span>
+                      <span data-design-text-token="body-md">Confirmed 5–7 business day delivery meets your timeline</span>
+                    </li>
+                  </ul>
+                </div>
+
+                <div class="p-gutter-lg rounded-sm bg-surface-dark-elevated border border-outline-dark flex flex-col gap-gutter-sm">
+                  <h4 class="font-title text-title-md text-on-deep-black" data-design-text-token="title-md">Important trade-offs</h4>
+                  <ul class="flex flex-col gap-gutter-xs font-body text-body-md text-on-surface-dark-elevated">
+                    <li class="flex items-start gap-gutter-xs">
+                      <span class="material-symbols-outlined text-[16px] text-on-surface-dark-elevated shrink-0 mt-0.5" aria-hidden="true">remove</span>
+                      <span data-design-text-token="body-md">2–3 days slower dispatch than Vanguard IT Solutions (3–4 days)</span>
+                    </li>
+                    <li class="flex items-start gap-gutter-xs">
+                      <span class="material-symbols-outlined text-[16px] text-on-surface-dark-elevated shrink-0 mt-0.5" aria-hidden="true">remove</span>
+                      <span data-design-text-token="body-md">Two other contacted suppliers have not yet submitted quotations</span>
+                    </li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+          </section>
+
+        </div>
+      </div>
+    </main>
+
+    <!-- Footer (Shared Shell) -->
+    <footer id="footer" class="bg-deep-black text-on-deep-black">
+      <div class="max-w-[1360px] mx-auto px-gutter-md md:px-gutter-lg xl:px-page-margin py-section">
+        <div class="grid grid-cols-1 md:grid-cols-12 gap-gutter-xl pb-12 border-b border-outline-dark">
+          <div class="md:col-span-4 flex flex-col gap-gutter-md">
+            <span class="font-headline text-headline-md tracking-tight text-on-deep-black" data-design-text-token="headline-md">PATRONET</span>
+            <p class="font-body text-body-md text-on-surface-dark-elevated max-w-xs text-pretty" data-design-text-token="body-md">
+              Precision electronics and AI-assisted hardware discovery for creators, gamers, and teams across India.
+            </p>
+          </div>
+          <div class="md:col-span-2 flex flex-col gap-gutter-md">
+            <h3 class="font-label text-label-lg text-on-deep-black" data-design-text-token="label-lg">Shop</h3>
+            <ul class="flex flex-col gap-gutter-sm font-body text-body-md text-on-surface-dark-elevated">
+              <li><a href="../patronet-catalogue/PatronetCatalogue.html" class="hover:text-primary-orange transition-colors duration-state-change">Laptops</a></li>
+              <li><a href="../patronet-catalogue/PatronetCatalogue.html" class="hover:text-primary-orange transition-colors duration-state-change">Audio</a></li>
+              <li><a href="../patronet-catalogue/PatronetCatalogue.html" class="hover:text-primary-orange transition-colors duration-state-change">Monitors</a></li>
+              <li><a href="../patronet-catalogue/PatronetCatalogue.html" class="hover:text-primary-orange transition-colors duration-state-change">Wearables</a></li>
+              <li><a href="../patronet-catalogue/PatronetCatalogue.html" class="hover:text-primary-orange transition-colors duration-state-change">Gaming</a></li>
+            </ul>
+          </div>
+          <div class="md:col-span-2 flex flex-col gap-gutter-md">
+            <h3 class="font-label text-label-lg text-on-deep-black" data-design-text-token="label-lg">Support</h3>
+            <ul class="flex flex-col gap-gutter-sm font-body text-body-md text-on-surface-dark-elevated">
+              <li><a href="#" class="hover:text-primary-orange transition-colors duration-state-change">Help Center</a></li>
+              <li><a href="../patronet-orders/PatronetOrders.html" class="hover:text-primary-orange transition-colors duration-state-change">Track Order</a></li>
+              <li><a href="#" class="hover:text-primary-orange transition-colors duration-state-change">Warranty &amp; Service</a></li>
+              <li><a href="../patronet-bulk-request/PatronetBulkRequest.html" class="hover:text-primary-orange transition-colors duration-state-change">Bulk Procurement</a></li>
+            </ul>
+          </div>
+          <div class="md:col-span-2 flex flex-col gap-gutter-md">
+            <h3 class="font-label text-label-lg text-on-deep-black" data-design-text-token="label-lg">Account</h3>
+            <ul class="flex flex-col gap-gutter-sm font-body text-body-md text-on-surface-dark-elevated">
+              <li><a href="../patronet-account/PatronetAccount.html" class="hover:text-primary-orange transition-colors duration-state-change">My Account</a></li>
+              <li><a href="#" class="hover:text-primary-orange transition-colors duration-state-change">Wishlist</a></li>
+              <li><a href="../patronet-compare/PatronetCompare.html" class="hover:text-primary-orange transition-colors duration-state-change">Compare Studio</a></li>
+              <li><a href="../patronet-cart/PatronetCart.html" class="hover:text-primary-orange transition-colors duration-state-change">Shopping Cart</a></li>
+            </ul>
+          </div>
+          <div class="md:col-span-2 flex flex-col gap-gutter-md">
+            <h3 class="font-label text-label-lg text-on-deep-black" data-design-text-token="label-lg">Policies</h3>
+            <ul class="flex flex-col gap-gutter-sm font-body text-body-md text-on-surface-dark-elevated">
+              <li><a href="#" class="hover:text-primary-orange transition-colors duration-state-change">Privacy Policy</a></li>
+              <li><a href="#" class="hover:text-primary-orange transition-colors duration-state-change">Terms of Service</a></li>
+              <li><a href="#" class="hover:text-primary-orange transition-colors duration-state-change">Shipping Policy</a></li>
+              <li><a href="#" class="hover:text-primary-orange transition-colors duration-state-change">Returns &amp; Refunds</a></li>
+            </ul>
+          </div>
+        </div>
+        <div class="pt-gutter-lg flex flex-col sm:flex-row items-start sm:items-center justify-between gap-gutter-sm font-label text-label-md text-on-surface-dark-elevated">
+          <span data-design-text-token="label-md">© 2026 PATRONET. All rights reserved.</span>
+          <span data-design-text-token="label-md">Prices inclusive of GST · Pan-India Delivery</span>
+        </div>
+      </div>
+    </footer>
+  </div>
+
+  <script>
+    function toggleOfferDetails(id, btn) {
+      const el = document.getElementById(id);
+      const label = btn.querySelector('span');
+      if (el.classList.contains('hidden')) {
+        el.classList.remove('hidden');
+        label.textContent = 'Hide details';
+      } else {
+        el.classList.add('hidden');
+        label.textContent = 'View details';
+      }
+    }
+
+    function selectOffer(supplier, total, btn) {
+      const banner = document.getElementById('offer-selected-banner');
+      document.getElementById('selected-offer-summary').textContent = `${supplier} — ${total}`;
+      banner.classList.remove('hidden');
+
+      document.querySelectorAll('.offer-row').forEach((row) => {
+        if (row.getAttribute('data-supplier') === supplier) {
+          row.classList.add('bg-light-gray');
+        } else {
+          row.classList.remove('bg-light-gray');
+        }
+      });
+
+      banner.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+    }
+  </script>
+
+
+</body></html>

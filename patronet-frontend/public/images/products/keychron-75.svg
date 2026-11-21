@@ -1,0 +1,61 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 600" width="100%" height="100%">
+  <defs>
+    <radialGradient id="kb-aura" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="#FF6B00" stop-opacity="0.08"/>
+      <stop offset="100%" stop-color="#FF6B00" stop-opacity="0"/>
+    </radialGradient>
+  </defs>
+
+  <rect width="600" height="600" fill="#f8f8f8"/>
+  <circle cx="300" cy="300" r="220" fill="url(#kb-aura)"/>
+
+  <!-- Keyboard Case -->
+  <g transform="translate(110, 180)">
+    <rect x="0" y="0" width="380" height="200" rx="12" fill="#202028" stroke="#3d3d4b" stroke-width="2"/>
+    <rect x="12" y="12" width="356" height="176" rx="8" fill="#141419"/>
+
+    <!-- Keycap grid -->
+    <!-- Rotary knob -->
+    <circle cx="345" cy="32" r="11" fill="#FF6B00" stroke="#cc5500" stroke-width="2"/>
+
+    <!-- Rows -->
+    <rect x="22" y="24" width="24" height="16" rx="3" fill="#30303c" stroke="#FF6B00" stroke-width="1.5"/>
+    <rect x="52" y="24" width="22" height="16" rx="3" fill="#252530"/>
+    <rect x="80" y="24" width="22" height="16" rx="3" fill="#252530"/>
+    <rect x="108" y="24" width="22" height="16" rx="3" fill="#252530"/>
+    <rect x="136" y="24" width="22" height="16" rx="3" fill="#252530"/>
+    <rect x="164" y="24" width="22" height="16" rx="3" fill="#252530"/>
+    <rect x="192" y="24" width="22" height="16" rx="3" fill="#252530"/>
+    <rect x="220" y="24" width="22" height="16" rx="3" fill="#252530"/>
+    <rect x="248" y="24" width="22" height="16" rx="3" fill="#252530"/>
+    <rect x="276" y="24" width="22" height="16" rx="3" fill="#252530"/>
+    <rect x="304" y="24" width="26" height="16" rx="3" fill="#30303c"/>
+
+    <rect x="22" y="46" width="30" height="18" rx="3" fill="#30303c"/>
+    <rect x="58" y="46" width="22" height="18" rx="3" fill="#252530"/>
+    <rect x="86" y="46" width="22" height="18" rx="3" fill="#252530"/>
+    <rect x="114" y="46" width="22" height="18" rx="3" fill="#252530"/>
+    <rect x="142" y="46" width="22" height="18" rx="3" fill="#252530"/>
+    <rect x="170" y="46" width="22" height="18" rx="3" fill="#252530"/>
+    <rect x="198" y="46" width="22" height="18" rx="3" fill="#252530"/>
+    <rect x="226" y="46" width="22" height="18" rx="3" fill="#252530"/>
+    <rect x="254" y="46" width="22" height="18" rx="3" fill="#252530"/>
+    <rect x="282" y="46" width="26" height="18" rx="3" fill="#252530"/>
+    <rect x="314" y="46" width="28" height="18" rx="3" fill="#30303c"/>
+
+    <!-- Spacebar row -->
+    <rect x="22" y="118" width="30" height="18" rx="3" fill="#30303c"/>
+    <rect x="58" y="118" width="26" height="18" rx="3" fill="#30303c"/>
+    <rect x="90" y="118" width="28" height="18" rx="3" fill="#30303c"/>
+    <rect x="124" y="118" width="130" height="18" rx="3" fill="#343442" stroke="#484858" stroke-width="1"/>
+    <rect x="260" y="118" width="26" height="18" rx="3" fill="#30303c"/>
+    <rect x="292" y="118" width="24" height="18" rx="3" fill="#FF6B00"/>
+    <rect x="322" y="118" width="24" height="18" rx="3" fill="#30303c"/>
+
+    <!-- Bottom accent line -->
+    <line x1="22" y1="155" x2="346" y2="155" stroke="#FF6B00" stroke-width="1.5" opacity="0.6"/>
+  </g>
+
+  <!-- Shadow -->
+  <ellipse cx="300" cy="415" rx="200" ry="14" fill="#000000" opacity="0.12"/>
+</svg>

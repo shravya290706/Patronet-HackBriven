@@ -1,0 +1,816 @@
+<!DOCTYPE html><html lang="en"><head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>PATRONET — Checkout</title>
+  <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+  <script id="tailwind-config">/** @type {import('tailwindcss').Config} */
+globalThis.tailwind = globalThis.tailwind || {};
+globalThis.tailwind.config = {
+  darkMode: 'class',
+  theme: {
+    extend: {
+      colors: {
+        'primary-orange': '#FF6B00',
+        'on-primary-orange': '#111111',
+        'primary-orange-hover': '#E05E00',
+        'primary-orange-tint': '#FFEDE6',
+        'accent-orange-text': '#BF4E00',
+        'deep-black': '#111111',
+        'on-deep-black': '#FFFFFF',
+        'surface-dark-elevated': '#1A1A1A',
+        'on-surface-dark-elevated': '#F5F5F5',
+        'pure-white': '#FFFFFF',
+        'on-pure-white': '#111111',
+        'light-gray': '#F5F5F5',
+        'on-light-gray': '#111111',
+        'muted-gray': '#666666',
+        'outline-subtle': '#E5E5E5',
+        'outline-dark': '#2E2E2E',
+      },
+      borderRadius: {
+        'sm': '4px',
+        'DEFAULT': '6px',
+        'md': '8px',
+        'lg': '12px',
+        'xl': '16px',
+        'full': '9999px',
+      },
+      spacing: {
+        'gutter-xs': '4px',
+        'gutter-sm': '8px',
+        'gutter-md': '16px',
+        'gutter-lg': '24px',
+        'gutter-xl': '32px',
+        'section': '64px',
+        'page-margin': '48px',
+      },
+      fontFamily: {
+        'display': ['"Inter"', 'sans-serif'],
+        'headline': ['"Inter"', 'sans-serif'],
+        'title': ['"Inter"', 'sans-serif'],
+        'body': ['"Inter"', 'sans-serif'],
+        'label': ['"Inter"', 'sans-serif'],
+      },
+      fontSize: {
+        'display-xl': ['60px', { lineHeight: '64px', letterSpacing: '-1.6px', fontWeight: '700' }],
+        'display-xl-mobile': ['32px', { lineHeight: '38px', letterSpacing: '-0.6px', fontWeight: '700' }],
+        'headline-lg': ['36px', { lineHeight: '42px', letterSpacing: '-0.8px', fontWeight: '700' }],
+        'headline-lg-mobile': ['28px', { lineHeight: '34px', letterSpacing: '-0.5px', fontWeight: '700' }],
+        'headline-md': ['24px', { lineHeight: '30px', letterSpacing: '-0.4px', fontWeight: '700' }],
+        'title-lg': ['20px', { lineHeight: '26px', letterSpacing: '-0.2px', fontWeight: '600' }],
+        'title-md': ['16px', { lineHeight: '22px', letterSpacing: '-0.1px', fontWeight: '600' }],
+        'body-lg': ['16px', { lineHeight: '24px', letterSpacing: '0px', fontWeight: '400' }],
+        'body-md': ['14px', { lineHeight: '20px', letterSpacing: '0px', fontWeight: '400' }],
+        'label-lg': ['14px', { lineHeight: '20px', letterSpacing: '0px', fontWeight: '600' }],
+        'label-md': ['13px', { lineHeight: '18px', letterSpacing: '0px', fontWeight: '500' }],
+        'label-sm': ['12px', { lineHeight: '16px', letterSpacing: '0.2px', fontWeight: '500' }],
+      },
+      transitionDuration: {
+        'state-change': '150ms',
+        'surface-enter': '240ms',
+      },
+      transitionDelay: {
+        'state-change': '0ms',
+        'surface-enter': '0ms',
+      },
+      transitionTimingFunction: {
+        'state-change': 'ease-out',
+        'surface-enter': 'cubic-bezier(0.2, 0, 0, 1)',
+      },
+    },
+  },
+};
+if (typeof module !== 'undefined') module.exports = globalThis.tailwind.config;
+</script>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=block" rel="stylesheet">
+  <style>
+    .material-symbols-outlined, .material-symbols-rounded, .material-symbols-sharp, .material-icons {
+      display: inline-block;
+      width: 1em;
+      height: 1em;
+      line-height: 1 !important;
+      box-sizing: content-box;
+      overflow: hidden;
+      white-space: nowrap;
+      direction: ltr;
+      vertical-align: middle;
+    }
+  </style>
+</head>
+<body class="bg-pure-white text-on-pure-white font-body antialiased">
+  <div class="min-h-[1024px] flex flex-col bg-pure-white" data-stitch-vh="min-h-[1024px]===min-h-screen">
+
+    <!-- 1. Navigation Bar (Shared Shell) -->
+    <header class="sticky top-0 z-40 bg-pure-white border-b border-outline-subtle">
+      <div class="max-w-[1360px] mx-auto px-gutter-md md:px-gutter-lg xl:px-page-margin h-[72px] flex items-center justify-between gap-gutter-xl">
+        <a href="../patronet-homepage-refined/PatronetHomepageRefined.html" class="font-headline text-title-lg tracking-tight text-on-pure-white shrink-0" data-design-text-token="title-lg">
+          PATRONET
+        </a>
+
+        <nav aria-label="Primary navigation" class="hidden lg:flex items-center gap-10">
+          <a href="../patronet-catalogue/PatronetCatalogue.html" class="font-label text-label-lg text-on-pure-white hover:text-muted-gray transition-colors duration-state-change ease-state-change" data-design-text-token="label-lg">Shop All</a>
+          <a href="../patronet-catalogue/PatronetCatalogue.html" class="font-label text-label-lg text-on-pure-white hover:text-muted-gray transition-colors duration-state-change ease-state-change" data-design-text-token="label-lg">Electronics</a>
+          <a href="../patronet-catalogue/PatronetCatalogue.html" class="font-label text-label-lg text-on-pure-white hover:text-muted-gray transition-colors duration-state-change ease-state-change" data-design-text-token="label-lg">Computers</a>
+          <a href="../patronet-catalogue/PatronetCatalogue.html" class="font-label text-label-lg text-on-pure-white hover:text-muted-gray transition-colors duration-state-change ease-state-change" data-design-text-token="label-lg">Audio</a>
+          <a href="../patronet-catalogue/PatronetCatalogue.html" class="font-label text-label-lg text-accent-orange-text hover:text-primary-orange-hover transition-colors duration-state-change ease-state-change" data-design-text-token="label-lg">Deals</a>
+        </nav>
+
+        <div class="flex items-center gap-gutter-lg shrink-0">
+          <form class="hidden md:flex items-center gap-gutter-sm px-3.5 py-2 rounded-sm bg-light-gray border border-outline-subtle focus-within:border-deep-black w-64 lg:w-72 transition-colors duration-state-change" role="search" onsubmit="return false;">
+            <span class="material-symbols-outlined text-[18px] text-muted-gray shrink-0" aria-hidden="true">search</span>
+            <input type="search" placeholder="Search catalog" aria-label="Search PATRONET catalog" class="w-full bg-transparent border-0 p-0 font-body text-body-md text-on-pure-white placeholder:text-muted-gray focus:ring-0">
+          </form>
+
+          <div class="flex items-center gap-gutter-sm">
+            <button type="button" aria-label="Account" class="inline-flex items-center justify-center w-9 h-9 text-on-pure-white hover:text-muted-gray transition-colors duration-state-change ease-state-change">
+              <span class="material-symbols-outlined text-[20px]" aria-hidden="true">person</span>
+            </button>
+
+            <button type="button" aria-label="Wishlist" class="inline-flex items-center justify-center w-9 h-9 text-on-pure-white hover:text-muted-gray transition-colors duration-state-change ease-state-change">
+              <span class="material-symbols-outlined text-[20px]" aria-hidden="true">favorite</span>
+            </button>
+
+            <a href="../patronet-cart/PatronetCart.html" aria-label="Shopping cart" class="inline-flex items-center gap-gutter-xs h-9 pl-gutter-xs text-on-pure-white hover:text-muted-gray transition-colors duration-state-change shrink-0">
+              <span class="material-symbols-outlined text-[20px] shrink-0" aria-hidden="true">shopping_cart</span>
+              <span class="font-label text-label-md tabular-nums whitespace-nowrap" data-design-text-token="label-md">(3)</span>
+            </a>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <main class="flex-1">
+      <div class="max-w-[1360px] mx-auto px-gutter-md md:px-gutter-lg xl:px-page-margin py-gutter-xl">
+
+        <!-- 2. Checkout Header -->
+        <nav aria-label="Breadcrumb" class="flex items-center gap-gutter-sm font-label text-label-md text-muted-gray mb-gutter-md">
+          <a href="../patronet-cart/PatronetCart.html" class="hover:text-on-pure-white transition-colors duration-state-change" data-design-text-token="label-md">Shopping Cart</a>
+          <span aria-hidden="true">/</span>
+          <span class="text-on-pure-white" data-design-text-token="label-md">Checkout</span>
+        </nav>
+
+        <div class="flex flex-col sm:flex-row sm:items-end justify-between gap-gutter-md pb-gutter-lg border-b border-outline-subtle mb-gutter-xl">
+          <div class="flex flex-col gap-gutter-xs">
+            <h1 class="font-headline text-headline-lg-mobile md:text-headline-lg text-on-pure-white" data-design-text-token="headline-lg">
+              Checkout.
+            </h1>
+            <p class="font-body text-body-lg text-muted-gray text-pretty" data-design-text-token="body-lg">
+              Review your details and complete your order.
+            </p>
+          </div>
+          <a href="../patronet-cart/PatronetCart.html" class="inline-flex items-center gap-gutter-xs font-label text-label-lg text-on-pure-white hover:text-accent-orange-text transition-colors duration-state-change shrink-0">
+            <span class="material-symbols-outlined text-[18px]" aria-hidden="true">arrow_back</span>
+            <span data-design-text-token="label-lg">Return to cart</span>
+          </a>
+        </div>
+
+        <!-- Order Submission Error Banner (Displayed on submission failure) -->
+        <div id="checkout-error-banner" class="hidden mb-gutter-xl p-gutter-lg rounded-sm border border-primary-orange bg-primary-orange-tint flex flex-col sm:flex-row sm:items-center justify-between gap-gutter-md" role="alert">
+          <div class="flex items-start gap-gutter-sm">
+            <span class="material-symbols-outlined text-[20px] text-accent-orange-text shrink-0 mt-0.5" aria-hidden="true">error</span>
+            <div class="flex flex-col gap-gutter-xs">
+              <p id="checkout-error-title" class="font-label text-label-lg text-on-pure-white" data-design-text-token="label-lg">Unable to place order</p>
+              <p id="checkout-error-message" class="font-body text-body-md text-on-pure-white" data-design-text-token="body-md">Please select or save a valid delivery address before continuing.</p>
+            </div>
+          </div>
+          <button type="button" onclick="dismissCheckoutError()" class="px-gutter-md py-2 rounded-sm bg-deep-black text-on-deep-black font-label text-label-md hover:bg-surface-dark-elevated transition-colors duration-state-change shrink-0">
+            <span data-design-text-token="label-md">Dismiss</span>
+          </button>
+        </div>
+
+        <!-- 3. Main Two-Column Checkout Layout (~65% Info / ~35% Summary) -->
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-gutter-xl items-start">
+
+          <!-- LEFT COLUMN: Delivery Address & Payment Method (~65% -> 8 cols) -->
+          <div class="lg:col-span-8 flex flex-col gap-section">
+
+            <!-- 4. Delivery Address Section -->
+            <section aria-labelledby="delivery-address-heading" class="flex flex-col gap-gutter-lg">
+              <div class="flex flex-wrap items-center justify-between gap-gutter-md">
+                <h2 id="delivery-address-heading" class="font-headline text-headline-md text-on-pure-white" data-design-text-token="headline-md">
+                  Delivery address
+                </h2>
+                <button id="toggle-new-address-btn" type="button" onclick="openAddressForm(null)" class="inline-flex items-center gap-gutter-xs px-gutter-md py-2 rounded-sm border border-outline-subtle bg-pure-white text-on-pure-white font-label text-label-md hover:border-deep-black transition-colors duration-state-change">
+                  <span class="material-symbols-outlined text-[16px]" aria-hidden="true">add</span>
+                  <span data-design-text-token="label-md">Add new address</span>
+                </button>
+              </div>
+
+              <!-- Saved Addresses List -->
+              <div id="saved-addresses-list" class="grid grid-cols-1 gap-gutter-md" role="radiogroup" aria-label="Saved delivery addresses">
+                <!-- Populated by JS -->
+              </div>
+
+              <!-- No Saved Addresses State (Shown when 0 saved addresses & form closed) -->
+              <div id="no-addresses-state" class="hidden p-gutter-xl rounded-sm border border-outline-subtle bg-light-gray flex flex-col sm:flex-row sm:items-center justify-between gap-gutter-md">
+                <div class="flex flex-col gap-gutter-xs">
+                  <p class="font-title text-title-md text-on-light-gray" data-design-text-token="title-md">No saved addresses</p>
+                  <p class="font-body text-body-md text-muted-gray" data-design-text-token="body-md">Add a delivery address to proceed with your order.</p>
+                </div>
+                <button type="button" onclick="openAddressForm(null)" class="px-gutter-lg py-2.5 rounded-sm bg-deep-black text-on-deep-black font-label text-label-md hover:bg-surface-dark-elevated transition-colors duration-state-change shrink-0">
+                  <span data-design-text-token="label-md">Add delivery address</span>
+                </button>
+              </div>
+
+              <!-- 5. Add / Edit Address Form -->
+              <form id="address-form" class="hidden p-gutter-lg rounded-sm border border-outline-subtle bg-pure-white flex flex-col gap-gutter-lg" novalidate onsubmit="saveAddressForm(event)">
+                <div class="flex items-center justify-between pb-gutter-md border-b border-outline-subtle">
+                  <h3 id="address-form-title" class="font-title text-title-lg text-on-pure-white" data-design-text-token="title-lg">Add new address</h3>
+                  <button type="button" onclick="closeAddressForm()" class="font-label text-label-md text-muted-gray hover:text-on-pure-white transition-colors duration-state-change">
+                    <span data-design-text-token="label-md">Cancel</span>
+                  </button>
+                </div>
+
+                <input type="hidden" id="editing-address-id" value>
+
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-gutter-md">
+                  <!-- Full name -->
+                  <div class="flex flex-col gap-gutter-xs">
+                    <label for="addr-fullname" class="font-label text-label-md text-on-pure-white" data-design-text-token="label-md">Full name</label>
+                    <input id="addr-fullname" type="text" placeholder="Aarav Mehta" class="w-full px-3.5 py-2.5 rounded-sm border border-outline-subtle bg-pure-white font-body text-body-md text-on-pure-white placeholder:text-muted-gray focus:border-deep-black focus:ring-0">
+                    <span id="err-fullname" class="hidden font-label text-label-sm text-accent-orange-text" data-design-text-token="label-sm">Please enter the recipient&#39;s full name.</span>
+                  </div>
+
+                  <!-- Phone number -->
+                  <div class="flex flex-col gap-gutter-xs">
+                    <label for="addr-phone" class="font-label text-label-md text-on-pure-white" data-design-text-token="label-md">Phone number</label>
+                    <input id="addr-phone" type="tel" placeholder="+91 98201 44512" class="w-full px-3.5 py-2.5 rounded-sm border border-outline-subtle bg-pure-white font-body text-body-md text-on-pure-white placeholder:text-muted-gray tabular-nums focus:border-deep-black focus:ring-0">
+                    <span id="err-phone" class="hidden font-label text-label-sm text-accent-orange-text" data-design-text-token="label-sm">Please enter a valid 10-digit Indian phone number.</span>
+                  </div>
+
+                  <!-- Address line 1 -->
+                  <div class="sm:col-span-2 flex flex-col gap-gutter-xs">
+                    <label for="addr-line1" class="font-label text-label-md text-on-pure-white" data-design-text-token="label-md">Address line</label>
+                    <input id="addr-line1" type="text" placeholder="Flat / House no., Building, Street" class="w-full px-3.5 py-2.5 rounded-sm border border-outline-subtle bg-pure-white font-body text-body-md text-on-pure-white placeholder:text-muted-gray focus:border-deep-black focus:ring-0">
+                    <span id="err-line1" class="hidden font-label text-label-sm text-accent-orange-text" data-design-text-token="label-sm">Please enter your street address or building details.</span>
+                  </div>
+
+                  <!-- Address line 2 (optional) -->
+                  <div class="sm:col-span-2 flex flex-col gap-gutter-xs">
+                    <label for="addr-line2" class="font-label text-label-md text-on-pure-white" data-design-text-token="label-md">
+                      Address line 2 <span class="text-muted-gray font-normal">(optional)</span>
+                    </label>
+                    <input id="addr-line2" type="text" placeholder="Landmark, Sector, or Area" class="w-full px-3.5 py-2.5 rounded-sm border border-outline-subtle bg-pure-white font-body text-body-md text-on-pure-white placeholder:text-muted-gray focus:border-deep-black focus:ring-0">
+                  </div>
+
+                  <!-- City -->
+                  <div class="flex flex-col gap-gutter-xs">
+                    <label for="addr-city" class="font-label text-label-md text-on-pure-white" data-design-text-token="label-md">City</label>
+                    <input id="addr-city" type="text" placeholder="Mumbai" class="w-full px-3.5 py-2.5 rounded-sm border border-outline-subtle bg-pure-white font-body text-body-md text-on-pure-white placeholder:text-muted-gray focus:border-deep-black focus:ring-0">
+                    <span id="err-city" class="hidden font-label text-label-sm text-accent-orange-text" data-design-text-token="label-sm">Please enter a city.</span>
+                  </div>
+
+                  <!-- State -->
+                  <div class="flex flex-col gap-gutter-xs">
+                    <label for="addr-state" class="font-label text-label-md text-on-pure-white" data-design-text-token="label-md">State</label>
+                    <input id="addr-state" type="text" placeholder="Maharashtra" class="w-full px-3.5 py-2.5 rounded-sm border border-outline-subtle bg-pure-white font-body text-body-md text-on-pure-white placeholder:text-muted-gray focus:border-deep-black focus:ring-0">
+                    <span id="err-state" class="hidden font-label text-label-sm text-accent-orange-text" data-design-text-token="label-sm">Please enter a state.</span>
+                  </div>
+
+                  <!-- Pincode -->
+                  <div class="flex flex-col gap-gutter-xs">
+                    <label for="addr-pincode" class="font-label text-label-md text-on-pure-white" data-design-text-token="label-md">Pincode</label>
+                    <input id="addr-pincode" type="text" maxlength="6" placeholder="400050" class="w-full px-3.5 py-2.5 rounded-sm border border-outline-subtle bg-pure-white font-body text-body-md text-on-pure-white placeholder:text-muted-gray tabular-nums focus:border-deep-black focus:ring-0">
+                    <span id="err-pincode" class="hidden font-label text-label-sm text-accent-orange-text" data-design-text-token="label-sm">Please enter a valid 6-digit pincode.</span>
+                  </div>
+
+                  <!-- Country (optional) -->
+                  <div class="flex flex-col gap-gutter-xs">
+                    <label for="addr-country" class="font-label text-label-md text-on-pure-white" data-design-text-token="label-md">
+                      Country <span class="text-muted-gray font-normal">(optional)</span>
+                    </label>
+                    <input id="addr-country" type="text" value="India" class="w-full px-3.5 py-2.5 rounded-sm border border-outline-subtle bg-pure-white font-body text-body-md text-on-pure-white placeholder:text-muted-gray focus:border-deep-black focus:ring-0">
+                  </div>
+
+                  <!-- Address label (optional) -->
+                  <div class="sm:col-span-2 flex flex-col gap-gutter-xs">
+                    <label for="addr-label" class="font-label text-label-md text-on-pure-white" data-design-text-token="label-md">
+                      Address label <span class="text-muted-gray font-normal">(optional)</span>
+                    </label>
+                    <input id="addr-label" type="text" placeholder="Home, Work, or Studio" class="w-full px-3.5 py-2.5 rounded-sm border border-outline-subtle bg-pure-white font-body text-body-md text-on-pure-white placeholder:text-muted-gray focus:border-deep-black focus:ring-0">
+                  </div>
+                </div>
+
+                <label class="inline-flex items-center gap-gutter-sm cursor-pointer">
+                  <input id="addr-default" type="checkbox" class="rounded-sm border-outline-subtle text-primary-orange focus:ring-primary-orange">
+                  <span class="font-body text-body-md text-on-pure-white" data-design-text-token="body-md">Set as default delivery address</span>
+                </label>
+
+                <div class="flex items-center justify-end gap-gutter-sm pt-gutter-sm border-t border-outline-subtle">
+                  <button type="button" onclick="closeAddressForm()" class="px-gutter-lg py-2.5 rounded-sm border border-outline-subtle bg-pure-white text-on-pure-white font-label text-label-md hover:border-deep-black transition-colors duration-state-change">
+                    <span data-design-text-token="label-md">Cancel</span>
+                  </button>
+                  <button type="submit" class="px-gutter-lg py-2.5 rounded-sm bg-deep-black text-on-deep-black font-label text-label-md hover:bg-surface-dark-elevated transition-colors duration-state-change">
+                    <span data-design-text-token="label-md">Save address</span>
+                  </button>
+                </div>
+              </form>
+            </section>
+
+            <!-- 6. Payment Method Section -->
+            <section aria-labelledby="payment-method-heading" class="pt-gutter-xl border-t border-outline-subtle flex flex-col gap-gutter-lg">
+              <div class="flex flex-col gap-gutter-xs">
+                <h2 id="payment-method-heading" class="font-headline text-headline-md text-on-pure-white" data-design-text-token="headline-md">
+                  Payment method
+                </h2>
+                <p class="font-body text-body-md text-muted-gray" data-design-text-token="body-md">
+                  Select how you would like to complete payment once your order is validated.
+                </p>
+              </div>
+
+              <div class="grid grid-cols-1 sm:grid-cols-2 gap-gutter-md" role="radiogroup" aria-label="Payment method">
+                <!-- UPI -->
+                <label id="payment-card-upi" class="payment-option flex items-center gap-gutter-md p-gutter-lg rounded-sm border-2 border-primary-orange bg-pure-white cursor-pointer transition-colors duration-state-change">
+                  <input type="radio" name="payment_method" value="UPI" checked onchange="selectPaymentMethod(&#39;UPI&#39;)" class="text-primary-orange border-outline-subtle focus:ring-primary-orange shrink-0">
+                  <div class="flex flex-col gap-gutter-xs">
+                    <span class="font-title text-title-md text-on-pure-white" data-design-text-token="title-md">UPI</span>
+                    <span class="font-body text-body-md text-muted-gray" data-design-text-token="body-md">Pay via UPI ID or app after order confirmation</span>
+                  </div>
+                </label>
+
+                <!-- Cash on Delivery -->
+                <label id="payment-card-cod" class="payment-option flex items-center gap-gutter-md p-gutter-lg rounded-sm border border-outline-subtle bg-pure-white hover:border-deep-black cursor-pointer transition-colors duration-state-change">
+                  <input type="radio" name="payment_method" value="Cash on Delivery" onchange="selectPaymentMethod(&#39;Cash on Delivery&#39;)" class="text-primary-orange border-outline-subtle focus:ring-primary-orange shrink-0">
+                  <div class="flex flex-col gap-gutter-xs">
+                    <span class="font-title text-title-md text-on-pure-white" data-design-text-token="title-md">Cash on Delivery</span>
+                    <span class="font-body text-body-md text-muted-gray" data-design-text-token="body-md">Pay at your doorstep when your order arrives</span>
+                  </div>
+                </label>
+              </div>
+            </section>
+          </div>
+
+          <!-- RIGHT COLUMN: Order Summary (~35% -> 4 cols) -->
+          <aside class="lg:col-span-4 lg:sticky lg:top-[104px]">
+            <div class="bg-light-gray rounded-sm p-gutter-lg border border-outline-subtle flex flex-col gap-gutter-lg">
+              <div class="flex items-center justify-between pb-gutter-md border-b border-outline-subtle">
+                <h2 class="font-headline text-headline-md text-on-light-gray" data-design-text-token="headline-md">
+                  Order summary
+                </h2>
+                <span class="font-label text-label-md text-muted-gray tabular-nums" data-design-text-token="label-md">3 items</span>
+              </div>
+
+              <!-- Line Items -->
+              <ul class="divide-y divide-outline-subtle">
+                <li class="py-gutter-md first:pt-0 flex items-start gap-gutter-md">
+                  <div class="w-16 h-16 bg-pure-white rounded-sm p-gutter-xs border border-outline-subtle shrink-0 flex items-center justify-center overflow-hidden">
+                    <img src="https://lh3.googleusercontent.com/aida/ALJJyrDiK48nkB5nc39ENn71KKa0NGyy5-rVdYk8Vu1ZnfeuBpxKtvutGqH3o6C-gpCjNTWsSJ_Hp4HMW3lbbNpjGSLJka8K7gPBXtJY5_Pb6RkFnYfwJ94o5DKQWlMCT2HfloilyiLgSqJ8ovDb5RWSZ1CVHQvRvrMg3T1Fw3hkhA7kFf3VMjm8L8BZbnlmJBNRTfpSi-RvqsiDLKv4j1qMs6auOjKy-Sv6TlgdLj5B0NRxmbIC_dh13EjE9mZmZhw" alt="PATRONET GameBook 15" class="w-full h-full object-contain">
+                  </div>
+                  <div class="flex-1 min-w-0 flex flex-col gap-gutter-xs">
+                    <p class="font-label text-label-lg text-on-light-gray truncate" data-design-text-token="label-lg">PATRONET GameBook 15</p>
+                    <p class="font-body text-body-md text-muted-gray tabular-nums" data-design-text-token="body-md">Qty 1 · ₹94,990 each</p>
+                  </div>
+                  <span class="font-label text-label-lg text-on-light-gray tabular-nums shrink-0" data-design-text-token="label-lg">₹94,990</span>
+                </li>
+
+                <li class="py-gutter-md flex items-start gap-gutter-md">
+                  <div class="w-16 h-16 bg-pure-white rounded-sm p-gutter-xs border border-outline-subtle shrink-0 flex items-center justify-center overflow-hidden">
+                    <img src="https://lh3.googleusercontent.com/aida/ALJJyrCo-y0tdg4iIEcbleH9BQWLTlroKbPA2aYI-vZsOtiu3uyGt8LX4-kr8qREBWtpgzkX3oQYV6jZl_aFrEZ6vTZEMLPFTmgt2ooBXxl37okJQIjnaUvX7njPQXXBfChEV6UPtNLSVdoHmPWvitubZydTtDfI1zU6oA8s36iugg4B73MZiSSVILQjooFZ6x_oQp2fyuDIf4WGNrGXqy8FCeqg6oxpccwG8zkvJTx9J7ZSgkRC4wFsyD-MxmOiEQ" alt="Studio ANC Headphones" class="w-full h-full object-contain">
+                  </div>
+                  <div class="flex-1 min-w-0 flex flex-col gap-gutter-xs">
+                    <p class="font-label text-label-lg text-on-light-gray truncate" data-design-text-token="label-lg">Studio ANC Headphones</p>
+                    <p class="font-body text-body-md text-muted-gray tabular-nums" data-design-text-token="body-md">Qty 1 · ₹13,999 each</p>
+                  </div>
+                  <span class="font-label text-label-lg text-on-light-gray tabular-nums shrink-0" data-design-text-token="label-lg">₹13,999</span>
+                </li>
+
+                <li class="py-gutter-md last:pb-0 flex items-start gap-gutter-md">
+                  <div class="w-16 h-16 bg-pure-white rounded-sm p-gutter-xs border border-outline-subtle shrink-0 flex items-center justify-center overflow-hidden">
+                    <img src="https://lh3.googleusercontent.com/aida/ALJJyrCRNa3urQXbEuWTmydzRdASrNT2L882VV2P7qEeTVAmocq_2HPeGy2K8C4PQVfyYY_MkNrF2IjefgWAjstKtXpIG8q5EHQQGz3Yiy054Dbos03GVKt7p33OL5YK6dAneXGlA6zxI_B9hE5kqny00BObloJPZxk4K8_t7qSUUcCd39hp9bPcpjO9kAqa3MW5xwawuS75IOCVDBsNd1r7c3BkG1Ee4NzyEuGX0vBJRkBSZEhH6MPxsuvXCKJc20sx0fWZ" alt="Precision Wireless Mouse" class="w-full h-full object-contain">
+                  </div>
+                  <div class="flex-1 min-w-0 flex flex-col gap-gutter-xs">
+                    <p class="font-label text-label-lg text-on-light-gray truncate" data-design-text-token="label-lg">Precision Wireless Mouse</p>
+                    <p class="font-body text-body-md text-muted-gray tabular-nums" data-design-text-token="body-md">Qty 1 · ₹6,299 each</p>
+                  </div>
+                  <span class="font-label text-label-lg text-on-light-gray tabular-nums shrink-0" data-design-text-token="label-lg">₹6,299</span>
+                </li>
+              </ul>
+
+              <!-- Totals -->
+              <div class="flex flex-col gap-gutter-sm py-gutter-md border-y border-outline-subtle">
+                <div class="flex items-center justify-between gap-gutter-md">
+                  <span class="font-body text-body-md text-muted-gray" data-design-text-token="body-md">Subtotal</span>
+                  <span class="font-label text-label-lg text-on-light-gray tabular-nums" data-design-text-token="label-lg">₹1,15,288</span>
+                </div>
+                <div class="flex items-center justify-between gap-gutter-md">
+                  <span class="font-body text-body-md text-muted-gray" data-design-text-token="body-md">Shipping charges</span>
+                  <span class="font-body text-body-md text-muted-gray" data-design-text-token="body-md">Pending confirmation</span>
+                </div>
+              </div>
+
+              <div class="flex items-baseline justify-between gap-gutter-md">
+                <span class="font-title text-title-lg text-on-light-gray" data-design-text-token="title-lg">Total payable</span>
+                <span class="font-headline text-headline-md text-on-light-gray tabular-nums" data-design-text-token="headline-md">₹1,15,288</span>
+              </div>
+
+              <button id="place-order-btn" type="button" onclick="handlePlaceOrder()" class="w-full py-3.5 px-gutter-lg rounded-sm bg-primary-orange text-on-primary-orange font-label text-label-lg hover:bg-primary-orange-hover transition-colors duration-state-change inline-flex items-center justify-center gap-gutter-sm">
+                <span id="place-order-spinner" class="hidden material-symbols-outlined text-[18px] animate-spin" aria-hidden="true">progress_activity</span>
+                <span id="place-order-label" data-design-text-token="label-lg">Place Order</span>
+              </button>
+
+              <p class="font-body text-body-md text-muted-gray text-pretty" data-design-text-token="body-md">
+                Your order will be confirmed after availability and payment validation.
+              </p>
+            </div>
+          </aside>
+        </div>
+
+      </div>
+    </main>
+
+    <!-- Footer (Shared Shell) -->
+    <footer id="footer" class="bg-deep-black text-on-deep-black">
+      <div class="max-w-[1360px] mx-auto px-gutter-md md:px-gutter-lg xl:px-page-margin py-section">
+        <div class="grid grid-cols-1 md:grid-cols-12 gap-gutter-xl pb-12 border-b border-outline-dark">
+          <div class="md:col-span-4 flex flex-col gap-gutter-md">
+            <span class="font-headline text-headline-md tracking-tight text-on-deep-black" data-design-text-token="headline-md">PATRONET</span>
+            <p class="font-body text-body-md text-on-surface-dark-elevated max-w-xs text-pretty" data-design-text-token="body-md">
+              Precision electronics and AI-assisted hardware discovery for creators, gamers, and teams across India.
+            </p>
+          </div>
+
+          <div class="md:col-span-2 flex flex-col gap-gutter-md">
+            <h3 class="font-label text-label-lg text-on-deep-black" data-design-text-token="label-lg">Shop</h3>
+            <ul class="flex flex-col gap-gutter-sm font-body text-body-md text-on-surface-dark-elevated">
+              <li><a href="../patronet-catalogue/PatronetCatalogue.html" class="hover:text-primary-orange transition-colors duration-state-change">Laptops</a></li>
+              <li><a href="../patronet-catalogue/PatronetCatalogue.html" class="hover:text-primary-orange transition-colors duration-state-change">Audio</a></li>
+              <li><a href="../patronet-catalogue/PatronetCatalogue.html" class="hover:text-primary-orange transition-colors duration-state-change">Monitors</a></li>
+              <li><a href="../patronet-catalogue/PatronetCatalogue.html" class="hover:text-primary-orange transition-colors duration-state-change">Wearables</a></li>
+              <li><a href="../patronet-catalogue/PatronetCatalogue.html" class="hover:text-primary-orange transition-colors duration-state-change">Gaming</a></li>
+            </ul>
+          </div>
+
+          <div class="md:col-span-2 flex flex-col gap-gutter-md">
+            <h3 class="font-label text-label-lg text-on-deep-black" data-design-text-token="label-lg">Support</h3>
+            <ul class="flex flex-col gap-gutter-sm font-body text-body-md text-on-surface-dark-elevated">
+              <li><a href="#" class="hover:text-primary-orange transition-colors duration-state-change">Help Center</a></li>
+              <li><a href="#" class="hover:text-primary-orange transition-colors duration-state-change">Track Order</a></li>
+              <li><a href="#" class="hover:text-primary-orange transition-colors duration-state-change">Warranty &amp; Service</a></li>
+              <li><a href="#" class="hover:text-primary-orange transition-colors duration-state-change">Bulk Procurement</a></li>
+            </ul>
+          </div>
+
+          <div class="md:col-span-2 flex flex-col gap-gutter-md">
+            <h3 class="font-label text-label-lg text-on-deep-black" data-design-text-token="label-lg">Account</h3>
+            <ul class="flex flex-col gap-gutter-sm font-body text-body-md text-on-surface-dark-elevated">
+              <li><a href="#" class="hover:text-primary-orange transition-colors duration-state-change">My Account</a></li>
+              <li><a href="#" class="hover:text-primary-orange transition-colors duration-state-change">Wishlist</a></li>
+              <li><a href="#" class="hover:text-primary-orange transition-colors duration-state-change">Compare Studio</a></li>
+              <li><a href="../patronet-cart/PatronetCart.html" class="hover:text-primary-orange transition-colors duration-state-change">Shopping Cart</a></li>
+            </ul>
+          </div>
+
+          <div class="md:col-span-2 flex flex-col gap-gutter-md">
+            <h3 class="font-label text-label-lg text-on-deep-black" data-design-text-token="label-lg">Policies</h3>
+            <ul class="flex flex-col gap-gutter-sm font-body text-body-md text-on-surface-dark-elevated">
+              <li><a href="#" class="hover:text-primary-orange transition-colors duration-state-change">Privacy Policy</a></li>
+              <li><a href="#" class="hover:text-primary-orange transition-colors duration-state-change">Terms of Service</a></li>
+              <li><a href="#" class="hover:text-primary-orange transition-colors duration-state-change">Shipping Policy</a></li>
+              <li><a href="#" class="hover:text-primary-orange transition-colors duration-state-change">Returns &amp; Refunds</a></li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="pt-gutter-lg flex flex-col sm:flex-row items-start sm:items-center justify-between gap-gutter-sm font-label text-label-md text-on-surface-dark-elevated">
+          <span data-design-text-token="label-md">© 2026 PATRONET. All rights reserved.</span>
+          <span data-design-text-token="label-md">Prices inclusive of GST · Pan-India Delivery</span>
+        </div>
+      </div>
+    </footer>
+  </div>
+
+  <script>
+    let addresses = [
+      {
+        id: 'addr-1',
+        label: 'Home',
+        isDefault: true,
+        fullName: 'Aarav Mehta',
+        phone: '+91 98201 44512',
+        line1: 'Flat 402, Skylark Residency, 14th Road, Bandra West',
+        line2: '',
+        city: 'Mumbai',
+        state: 'Maharashtra',
+        pincode: '400050',
+        country: 'India',
+      },
+      {
+        id: 'addr-2',
+        label: 'Work',
+        isDefault: false,
+        fullName: 'Aarav Mehta',
+        phone: '+91 98201 44512',
+        line1: 'Level 6, Maker Maxity, Bandra Kurla Complex',
+        line2: '',
+        city: 'Mumbai',
+        state: 'Maharashtra',
+        pincode: '400051',
+        country: 'India',
+      },
+    ];
+
+    let selectedAddressId = 'addr-1';
+    let selectedPaymentMethod = 'UPI';
+    let isSubmitting = false;
+
+    function renderAddresses() {
+      const listEl = document.getElementById('saved-addresses-list');
+      const emptyEl = document.getElementById('no-addresses-state');
+      const formEl = document.getElementById('address-form');
+
+      if (!addresses.length) {
+        listEl.classList.add('hidden');
+        listEl.innerHTML = '';
+        if (formEl.classList.contains('hidden')) {
+          emptyEl.classList.remove('hidden');
+        } else {
+          emptyEl.classList.add('hidden');
+        }
+        return;
+      }
+
+      emptyEl.classList.add('hidden');
+      listEl.classList.remove('hidden');
+
+      listEl.innerHTML = addresses
+        .map((addr) => {
+          const isSelected = addr.id === selectedAddressId;
+          const borderClass = isSelected
+            ? 'border-2 border-primary-orange'
+            : 'border border-outline-subtle hover:border-deep-black';
+          const labelBadge = addr.label
+            ? `<span class="px-2 py-0.5 rounded-sm bg-light-gray font-label text-label-sm text-on-light-gray" data-design-text-token="label-sm">${escapeHtml(addr.label)}</span>`
+            : '';
+          const defaultBadge = addr.isDefault
+            ? `<span class="font-label text-label-sm text-accent-orange-text" data-design-text-token="label-sm">Default</span>`
+            : '';
+          const line2Text = addr.line2 ? `, ${escapeHtml(addr.line2)}` : '';
+
+          return `
+            <div class="p-gutter-lg rounded-sm bg-pure-white ${borderClass} transition-colors duration-state-change flex flex-col sm:flex-row sm:items-start justify-between gap-gutter-md">
+              <label class="flex items-start gap-gutter-md cursor-pointer flex-1">
+                <input
+                  type="radio"
+                  name="delivery_address"
+                  value="${addr.id}"
+                  ${isSelected ? 'checked' : ''}
+                  onchange="selectAddress('${addr.id}')"
+                  class="mt-1 text-primary-orange border-outline-subtle focus:ring-primary-orange"
+                />
+                <div class="flex flex-col gap-gutter-xs">
+                  <div class="flex flex-wrap items-center gap-gutter-sm">
+                    <span class="font-title text-title-md text-on-pure-white" data-design-text-token="title-md">${escapeHtml(addr.fullName)}</span>
+                    ${labelBadge}
+                    ${defaultBadge}
+                  </div>
+                  <p class="font-body text-body-md text-on-pure-white" data-design-text-token="body-md">
+                    ${escapeHtml(addr.line1)}${line2Text}
+                  </p>
+                  <p class="font-body text-body-md text-muted-gray tabular-nums" data-design-text-token="body-md">
+                    ${escapeHtml(addr.city)}, ${escapeHtml(addr.state)} — ${escapeHtml(addr.pincode)}
+                  </p>
+                  <p class="font-body text-body-md text-muted-gray tabular-nums" data-design-text-token="body-md">
+                    Phone: ${escapeHtml(addr.phone)}
+                  </p>
+                </div>
+              </label>
+              <div class="flex items-center gap-gutter-md pl-7 sm:pl-0 shrink-0">
+                <button
+                  type="button"
+                  onclick="openAddressForm('${addr.id}')"
+                  class="font-label text-label-md text-on-pure-white hover:text-accent-orange-text transition-colors duration-state-change"
+                >
+                  <span data-design-text-token="label-md">Edit</span>
+                </button>
+                <button
+                  type="button"
+                  onclick="removeAddress('${addr.id}')"
+                  class="font-label text-label-md text-muted-gray hover:text-accent-orange-text transition-colors duration-state-change"
+                >
+                  <span data-design-text-token="label-md">Remove</span>
+                </button>
+              </div>
+            </div>
+          `;
+        })
+        .join('');
+    }
+
+    function escapeHtml(str) {
+      return String(str)
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;');
+    }
+
+    function selectAddress(id) {
+      selectedAddressId = id;
+      dismissCheckoutError();
+      renderAddresses();
+    }
+
+    function removeAddress(id) {
+      addresses = addresses.filter((a) => a.id !== id);
+      if (selectedAddressId === id) {
+        selectedAddressId = addresses.length ? addresses[0].id : null;
+      }
+      renderAddresses();
+    }
+
+    function clearFormErrors() {
+      ['fullname', 'phone', 'line1', 'city', 'state', 'pincode'].forEach((field) => {
+        document.getElementById('err-' + field).classList.add('hidden');
+      });
+    }
+
+    function openAddressForm(addressId) {
+      clearFormErrors();
+      const formEl = document.getElementById('address-form');
+      const titleEl = document.getElementById('address-form-title');
+      const editingInput = document.getElementById('editing-address-id');
+
+      if (addressId) {
+        const addr = addresses.find((a) => a.id === addressId);
+        if (!addr) return;
+        editingInput.value = addr.id;
+        titleEl.textContent = 'Edit delivery address';
+        document.getElementById('addr-fullname').value = addr.fullName;
+        document.getElementById('addr-phone').value = addr.phone;
+        document.getElementById('addr-line1').value = addr.line1;
+        document.getElementById('addr-line2').value = addr.line2 || '';
+        document.getElementById('addr-city').value = addr.city;
+        document.getElementById('addr-state').value = addr.state;
+        document.getElementById('addr-pincode').value = addr.pincode;
+        document.getElementById('addr-country').value = addr.country || 'India';
+        document.getElementById('addr-label').value = addr.label || '';
+        document.getElementById('addr-default').checked = !!addr.isDefault;
+      } else {
+        editingInput.value = '';
+        titleEl.textContent = 'Add new address';
+        document.getElementById('addr-fullname').value = '';
+        document.getElementById('addr-phone').value = '';
+        document.getElementById('addr-line1').value = '';
+        document.getElementById('addr-line2').value = '';
+        document.getElementById('addr-city').value = '';
+        document.getElementById('addr-state').value = '';
+        document.getElementById('addr-pincode').value = '';
+        document.getElementById('addr-country').value = 'India';
+        document.getElementById('addr-label').value = '';
+        document.getElementById('addr-default').checked = addresses.length === 0;
+      }
+
+      formEl.classList.remove('hidden');
+      document.getElementById('no-addresses-state').classList.add('hidden');
+      document.getElementById('addr-fullname').focus();
+    }
+
+    function closeAddressForm() {
+      document.getElementById('address-form').classList.add('hidden');
+      clearFormErrors();
+      renderAddresses();
+    }
+
+    function saveAddressForm(event) {
+      event.preventDefault();
+      clearFormErrors();
+
+      const fullName = document.getElementById('addr-fullname').value.trim();
+      const phone = document.getElementById('addr-phone').value.trim();
+      const line1 = document.getElementById('addr-line1').value.trim();
+      const line2 = document.getElementById('addr-line2').value.trim();
+      const city = document.getElementById('addr-city').value.trim();
+      const state = document.getElementById('addr-state').value.trim();
+      const pincode = document.getElementById('addr-pincode').value.trim();
+      const country = document.getElementById('addr-country').value.trim() || 'India';
+      const label = document.getElementById('addr-label').value.trim();
+      const isDefault = document.getElementById('addr-default').checked;
+
+      let hasError = false;
+      if (!fullName) {
+        document.getElementById('err-fullname').classList.remove('hidden');
+        hasError = true;
+      }
+      if (phone.replace(/\D/g, '').length < 10) {
+        document.getElementById('err-phone').classList.remove('hidden');
+        hasError = true;
+      }
+      if (!line1) {
+        document.getElementById('err-line1').classList.remove('hidden');
+        hasError = true;
+      }
+      if (!city) {
+        document.getElementById('err-city').classList.remove('hidden');
+        hasError = true;
+      }
+      if (!state) {
+        document.getElementById('err-state').classList.remove('hidden');
+        hasError = true;
+      }
+      if (!/^\d{6}$/.test(pincode)) {
+        document.getElementById('err-pincode').classList.remove('hidden');
+        hasError = true;
+      }
+
+      if (hasError) return;
+
+      if (isDefault) {
+        addresses.forEach((a) => {
+          a.isDefault = false;
+        });
+      }
+
+      const editingId = document.getElementById('editing-address-id').value;
+      if (editingId) {
+        const idx = addresses.findIndex((a) => a.id === editingId);
+        if (idx !== -1) {
+          addresses[idx] = {
+            id: editingId,
+            fullName,
+            phone,
+            line1,
+            line2,
+            city,
+            state,
+            pincode,
+            country,
+            label,
+            isDefault,
+          };
+          selectedAddressId = editingId;
+        }
+      } else {
+        const newId = 'addr-' + Date.now();
+        addresses.push({
+          id: newId,
+          fullName,
+          phone,
+          line1,
+          line2,
+          city,
+          state,
+          pincode,
+          country,
+          label,
+          isDefault,
+        });
+        selectedAddressId = newId;
+      }
+
+      dismissCheckoutError();
+      closeAddressForm();
+    }
+
+    function selectPaymentMethod(method) {
+      selectedPaymentMethod = method;
+      const upiCard = document.getElementById('payment-card-upi');
+      const codCard = document.getElementById('payment-card-cod');
+
+      if (method === 'UPI') {
+        upiCard.classList.remove('border', 'border-outline-subtle', 'hover:border-deep-black');
+        upiCard.classList.add('border-2', 'border-primary-orange');
+        codCard.classList.remove('border-2', 'border-primary-orange');
+        codCard.classList.add('border', 'border-outline-subtle', 'hover:border-deep-black');
+      } else {
+        codCard.classList.remove('border', 'border-outline-subtle', 'hover:border-deep-black');
+        codCard.classList.add('border-2', 'border-primary-orange');
+        upiCard.classList.remove('border-2', 'border-primary-orange');
+        upiCard.classList.add('border', 'border-outline-subtle', 'hover:border-deep-black');
+      }
+    }
+
+    function dismissCheckoutError() {
+      document.getElementById('checkout-error-banner').classList.add('hidden');
+    }
+
+    function handlePlaceOrder() {
+      if (isSubmitting) return;
+      dismissCheckoutError();
+
+      if (!selectedAddressId || !addresses.some((a) => a.id === selectedAddressId)) {
+        document.getElementById('checkout-error-title').textContent = 'Delivery address required';
+        document.getElementById('checkout-error-message').textContent = 'Please select or add a valid delivery address before placing your order.';
+        document.getElementById('checkout-error-banner').classList.remove('hidden');
+        return;
+      }
+
+      isSubmitting = true;
+      const btn = document.getElementById('place-order-btn');
+      const spinner = document.getElementById('place-order-spinner');
+      const label = document.getElementById('place-order-label');
+
+      btn.setAttribute('aria-busy', 'true');
+      spinner.classList.remove('hidden');
+      label.textContent = 'Placing order...';
+
+      setTimeout(() => {
+        window.location.href = '../patronet-order-success/PatronetOrderSuccess.html';
+      }, 900);
+    }
+
+    renderAddresses();
+  </script>
+
+
+</body></html>

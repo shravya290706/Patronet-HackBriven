@@ -1,0 +1,119 @@
+import * as React from 'react';
+import { cartService } from '@/services';
+import type { CartModel } from '@/services/api/cartService';
+
+interface CartContextValue {
+  cart: CartModel;
+  itemCount: number;
+  loading: boolean;
+  error: string | null;
+  addItem: (productId: string, quantity?: number) => Promise<void>;
+  updateQuantity: (productId: string, quantity: number) => Promise<void>;
+  removeItem: (productId: string) => Promise<void>;
+  clearCart: () => Promise<void>;
+  refreshCart: () => Promise<void>;
+}
+
+const CartContext = React.createContext<CartContextValue | undefined>(undefined);
+
+export const CartProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
+  const [cart, setCart] = React.useState<CartModel>({ items: [], updatedAt: new Date().toISOString() });
+  const [loading, setLoading] = React.useState<boolean>(true);
+  const [error, setError] = React.useState<string | null>(null);
+
+  // Load initial cart
+  const refreshCart = React.useCallback(async () => {
+    try {
+      setLoading(true);
+      setError(null);
+      const data = await cartService.getCart();
+      setCart(data);
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'Failed to load cart');
+    } finally {
+      setLoading(false);
+    }
+  }, []);
+
+  React.useEffect(() => {
+    refreshCart();
+  }, [refreshCart]);
+
+  const addItem = React.useCallback(async (productId: string, quantity = 1) => {
+    try {
+      setError(null);
+      const updated = await cartService.addItem(productId, quantity);
+      setCart(updated);
+    } catch (err) {
+      const msg = err instanceof Error ? err.message : 'Failed to add item to cart';
+      setError(msg);
+      throw err;
+    }
+  }, []);
+
+  const updateQuantity = React.useCallback(async (productId: string, quantity: number) => {
+    try {
+      setError(null);
+      const updated = await cartService.updateQuantity(productId, quantity);
+      setCart(updated);
+    } catch (err) {
+      const msg = err instanceof Error ? err.message : 'Failed to update quantity';
+      setError(msg);
+      throw err;
+    }
+  }, []);
+
+  const removeItem = React.useCallback(async (productId: string) => {
+    try {
+      setError(null);
+      const updated = await cartService.removeItem(productId);
+      setCart(updated);
+    } catch (err) {
+      const msg = err instanceof Error ? err.message : 'Failed to remove item';
+      setError(msg);
+      throw err;
+    }
+  }, []);
+
+  const clearCart = React.useCallback(async () => {
+    try {
+      setError(null);
+      const updated = await cartService.clearCart();
+      setCart(updated);
+    } catch (err) {
+      const msg = err instanceof Error ? err.message : 'Failed to clear cart';
+      setError(msg);
+      throw err;
+    }
+  }, []);
+
+  // Compute total item count (sum of quantities)
+  const itemCount = React.useMemo(() => {
+    return cart.items.reduce((total, item) => total + (item.quantity || 0), 0);
+  }, [cart.items]);
+
+  const value = React.useMemo(
+    () => ({
+      cart,
+      itemCount,
+      loading,
+      error,
+      addItem,
+      updateQuantity,
+      removeItem,
+      clearCart,
+      refreshCart,
+    }),
+    [cart, itemCount, loading, error, addItem, updateQuantity, removeItem, clearCart, refreshCart]
+  );
+
+  return <CartContext.Provider value={value}>{children}</CartContext.Provider>;
+};
+
+export const useCart = (): CartContextValue => {
+  const context = React.useContext(CartContext);
+  if (!context) {
+    throw new Error('useCart must be used within a CartProvider');
+  }
+  return context;
+};

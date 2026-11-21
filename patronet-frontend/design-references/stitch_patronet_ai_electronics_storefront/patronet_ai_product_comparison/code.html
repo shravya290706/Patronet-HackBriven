@@ -1,0 +1,713 @@
+<!DOCTYPE html><html lang="en"><head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>PATRONET — AI Product Comparison</title>
+  <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+  <script id="tailwind-config">/** @type {import('tailwindcss').Config} */
+globalThis.tailwind = globalThis.tailwind || {};
+globalThis.tailwind.config = {
+  darkMode: 'class',
+  theme: {
+    extend: {
+      colors: {
+        'primary-orange': '#FF6B00',
+        'on-primary-orange': '#111111',
+        'primary-orange-hover': '#E05E00',
+        'primary-orange-tint': '#FFEDE6',
+        'accent-orange-text': '#BF4E00',
+        'deep-black': '#111111',
+        'on-deep-black': '#FFFFFF',
+        'surface-dark-elevated': '#1A1A1A',
+        'on-surface-dark-elevated': '#F5F5F5',
+        'pure-white': '#FFFFFF',
+        'on-pure-white': '#111111',
+        'light-gray': '#F5F5F5',
+        'on-light-gray': '#111111',
+        'muted-gray': '#666666',
+        'outline-subtle': '#E5E5E5',
+        'outline-dark': '#2E2E2E',
+      },
+      borderRadius: {
+        'sm': '4px',
+        'DEFAULT': '6px',
+        'md': '8px',
+        'lg': '12px',
+        'xl': '16px',
+        'full': '9999px',
+      },
+      spacing: {
+        'gutter-xs': '4px',
+        'gutter-sm': '8px',
+        'gutter-md': '16px',
+        'gutter-lg': '24px',
+        'gutter-xl': '32px',
+        'section': '64px',
+        'page-margin': '48px',
+      },
+      fontFamily: {
+        'display': ['"Inter"', 'sans-serif'],
+        'headline': ['"Inter"', 'sans-serif'],
+        'title': ['"Inter"', 'sans-serif'],
+        'body': ['"Inter"', 'sans-serif'],
+        'label': ['"Inter"', 'sans-serif'],
+      },
+      fontSize: {
+        'display-xl': ['60px', { lineHeight: '64px', letterSpacing: '-1.6px', fontWeight: '700' }],
+        'display-xl-mobile': ['32px', { lineHeight: '38px', letterSpacing: '-0.6px', fontWeight: '700' }],
+        'headline-lg': ['36px', { lineHeight: '42px', letterSpacing: '-0.8px', fontWeight: '700' }],
+        'headline-lg-mobile': ['28px', { lineHeight: '34px', letterSpacing: '-0.5px', fontWeight: '700' }],
+        'headline-md': ['24px', { lineHeight: '30px', letterSpacing: '-0.4px', fontWeight: '700' }],
+        'title-lg': ['20px', { lineHeight: '26px', letterSpacing: '-0.2px', fontWeight: '600' }],
+        'title-md': ['16px', { lineHeight: '22px', letterSpacing: '-0.1px', fontWeight: '600' }],
+        'body-lg': ['16px', { lineHeight: '24px', letterSpacing: '0px', fontWeight: '400' }],
+        'body-md': ['14px', { lineHeight: '20px', letterSpacing: '0px', fontWeight: '400' }],
+        'label-lg': ['14px', { lineHeight: '20px', letterSpacing: '0px', fontWeight: '600' }],
+        'label-md': ['13px', { lineHeight: '18px', letterSpacing: '0px', fontWeight: '500' }],
+        'label-sm': ['12px', { lineHeight: '16px', letterSpacing: '0.2px', fontWeight: '500' }],
+      },
+      transitionDuration: {
+        'state-change': '150ms',
+        'surface-enter': '240ms',
+      },
+      transitionDelay: {
+        'state-change': '0ms',
+        'surface-enter': '0ms',
+      },
+      transitionTimingFunction: {
+        'state-change': 'ease-out',
+        'surface-enter': 'cubic-bezier(0.2, 0, 0, 1)',
+      },
+    },
+  },
+};
+if (typeof module !== 'undefined') module.exports = globalThis.tailwind.config;
+</script>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=block" rel="stylesheet">
+  <style>
+    .material-symbols-outlined, .material-symbols-rounded, .material-symbols-sharp, .material-icons {
+      display: inline-block;
+      width: 1em;
+      height: 1em;
+      line-height: 1 !important;
+      box-sizing: content-box;
+      overflow: hidden;
+      white-space: nowrap;
+      direction: ltr;
+      vertical-align: middle;
+    }
+  </style>
+</head>
+<body class="bg-pure-white text-on-pure-white font-body antialiased">
+  <div class="min-h-[1024px] flex flex-col bg-pure-white" data-stitch-vh="min-h-[1024px]===min-h-screen">
+
+    <!-- 1. Navigation Bar (Shared Shell) -->
+    <header class="sticky top-0 z-40 bg-pure-white border-b border-outline-subtle">
+      <div class="max-w-[1360px] mx-auto px-gutter-md md:px-gutter-lg xl:px-page-margin h-[72px] flex items-center justify-between gap-gutter-xl">
+        <a href="../patronet-homepage-refined/PatronetHomepageRefined.html" class="font-headline text-title-lg tracking-tight text-on-pure-white shrink-0" data-design-text-token="title-lg">
+          PATRONET
+        </a>
+
+        <nav aria-label="Primary navigation" class="hidden lg:flex items-center gap-10">
+          <a href="../patronet-catalogue/PatronetCatalogue.html" class="font-label text-label-lg text-on-pure-white hover:text-muted-gray transition-colors duration-state-change ease-state-change" data-design-text-token="label-lg">Shop All</a>
+          <a href="../patronet-catalogue/PatronetCatalogue.html" class="font-label text-label-lg text-on-pure-white hover:text-muted-gray transition-colors duration-state-change ease-state-change" data-design-text-token="label-lg">Electronics</a>
+          <a href="../patronet-catalogue/PatronetCatalogue.html" class="font-label text-label-lg text-on-pure-white hover:text-muted-gray transition-colors duration-state-change ease-state-change" data-design-text-token="label-lg">Computers</a>
+          <a href="../patronet-catalogue/PatronetCatalogue.html" class="font-label text-label-lg text-on-pure-white hover:text-muted-gray transition-colors duration-state-change ease-state-change" data-design-text-token="label-lg">Audio</a>
+          <a href="../patronet-catalogue/PatronetCatalogue.html" class="font-label text-label-lg text-accent-orange-text hover:text-primary-orange-hover transition-colors duration-state-change ease-state-change" data-design-text-token="label-lg">Deals</a>
+        </nav>
+
+        <div class="flex items-center gap-gutter-lg shrink-0">
+          <form class="hidden md:flex items-center gap-gutter-sm px-3.5 py-2 rounded-sm bg-light-gray border border-outline-subtle focus-within:border-deep-black w-64 lg:w-72 transition-colors duration-state-change" role="search" onsubmit="return false;">
+            <span class="material-symbols-outlined text-[18px] text-muted-gray shrink-0" aria-hidden="true">search</span>
+            <input type="search" placeholder="Search catalog" aria-label="Search PATRONET catalog" class="w-full bg-transparent border-0 p-0 font-body text-body-md text-on-pure-white placeholder:text-muted-gray focus:ring-0">
+          </form>
+
+          <div class="flex items-center gap-gutter-sm">
+            <a href="../patronet-account/PatronetAccount.html" aria-label="Account" class="inline-flex items-center justify-center w-9 h-9 text-on-pure-white hover:text-muted-gray transition-colors duration-state-change ease-state-change">
+              <span class="material-symbols-outlined text-[20px]" aria-hidden="true">person</span>
+            </a>
+
+            <button type="button" aria-label="Wishlist" class="inline-flex items-center justify-center w-9 h-9 text-on-pure-white hover:text-muted-gray transition-colors duration-state-change ease-state-change">
+              <span class="material-symbols-outlined text-[20px]" aria-hidden="true">favorite</span>
+            </button>
+
+            <a href="../patronet-cart/PatronetCart.html" aria-label="Shopping cart" class="inline-flex items-center gap-gutter-xs h-9 pl-gutter-xs text-on-pure-white hover:text-muted-gray transition-colors duration-state-change shrink-0">
+              <span class="material-symbols-outlined text-[20px] shrink-0" aria-hidden="true">shopping_cart</span>
+              <span id="cmp-header-cart-count" class="font-label text-label-md tabular-nums whitespace-nowrap" data-design-text-token="label-md">(3)</span>
+            </a>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <main class="flex-1">
+      <div class="max-w-[1360px] mx-auto px-gutter-md md:px-gutter-lg xl:px-page-margin py-gutter-xl">
+
+        <!-- 2. Comparison Header -->
+        <section aria-labelledby="compare-heading" class="pb-gutter-lg border-b border-outline-subtle mb-gutter-xl flex flex-col lg:flex-row lg:items-end justify-between gap-gutter-md">
+          <div class="flex flex-col gap-gutter-sm">
+            <span class="font-label text-label-md tracking-wider uppercase text-accent-orange-text" data-design-text-token="label-md">
+              AI COMPARISON
+            </span>
+            <h1 id="compare-heading" class="font-headline text-headline-lg-mobile md:text-headline-lg text-on-pure-white text-balance" data-design-text-token="headline-lg">
+              Compare. Understand. Choose.
+            </h1>
+            <p class="font-body text-body-lg text-muted-gray text-pretty" data-design-text-token="body-lg">
+              See the differences that matter and find the right product for your needs.
+            </p>
+          </div>
+          <span id="selected-count-label" class="font-label text-label-md text-muted-gray tabular-nums shrink-0" data-design-text-token="label-md">
+            3 of 3 products selected
+          </span>
+        </section>
+
+        <!-- Empty State (Shown when 0 products selected) -->
+        <section id="compare-empty-state" class="hidden py-section text-center flex flex-col items-center gap-gutter-md border border-outline-subtle rounded-sm bg-light-gray">
+          <span class="material-symbols-outlined text-[36px] text-muted-gray" aria-hidden="true">compare_arrows</span>
+          <div class="flex flex-col gap-gutter-xs">
+            <h2 class="font-headline text-headline-md text-on-light-gray" data-design-text-token="headline-md">
+              No products selected for comparison.
+            </h2>
+            <p class="font-body text-body-md text-muted-gray max-w-md text-pretty" data-design-text-token="body-md">
+              Add up to three products from the catalogue to compare specifications side by side.
+            </p>
+          </div>
+          <div class="flex flex-wrap items-center justify-center gap-gutter-sm mt-gutter-xs">
+            <button type="button" onclick="restoreDefaultProducts()" class="px-gutter-xl py-3 rounded-sm bg-deep-black text-on-deep-black font-label text-label-lg hover:bg-surface-dark-elevated transition-colors duration-state-change">
+              <span data-design-text-token="label-lg">Load example laptops</span>
+            </button>
+            <a href="../patronet-catalogue/PatronetCatalogue.html" class="px-gutter-xl py-3 rounded-sm border border-outline-subtle bg-pure-white font-label text-label-lg text-on-pure-white hover:border-deep-black transition-colors duration-state-change">
+              <span data-design-text-token="label-lg">Explore products</span>
+            </a>
+          </div>
+        </section>
+
+        <!-- Main Comparison Workspace -->
+        <div id="compare-workspace" class="flex flex-col gap-section">
+
+          <!-- 4. Comparison Criteria Input -->
+          <section aria-label="Comparison priorities" class="p-gutter-lg rounded-sm border border-outline-subtle bg-light-gray flex flex-col gap-gutter-md">
+            <form class="flex flex-col lg:flex-row lg:items-end gap-gutter-md" onsubmit="handleCompareAI(event)">
+              <div class="flex-1 flex flex-col gap-gutter-xs">
+                <label for="compare-priority-input" class="font-label text-label-lg text-on-light-gray" data-design-text-token="label-lg">
+                  What matters most to you?
+                </label>
+                <input id="compare-priority-input" type="text" value="Programming performance, battery life, and value for money." placeholder="Programming performance, battery life, and value for money." class="w-full px-3.5 py-3 rounded-sm border border-outline-subtle bg-pure-white font-body text-body-md text-on-pure-white placeholder:text-muted-gray focus:border-deep-black focus:ring-0">
+              </div>
+              <button id="compare-ai-btn" type="submit" class="px-gutter-xl py-3 rounded-sm bg-primary-orange text-on-primary-orange font-label text-label-lg hover:bg-primary-orange-hover transition-colors duration-state-change inline-flex items-center justify-center gap-gutter-sm shrink-0">
+                <span id="compare-ai-spinner" class="hidden material-symbols-outlined text-[18px] animate-spin" aria-hidden="true">progress_activity</span>
+                <span id="compare-ai-label" data-design-text-token="label-lg">Compare with AI</span>
+              </button>
+            </form>
+
+            <div class="flex flex-wrap items-center gap-gutter-xs">
+              <span class="font-label text-label-sm text-muted-gray mr-gutter-xs" data-design-text-token="label-sm">Priorities:</span>
+              <button type="button" onclick="appendPriority(&#39;Performance&#39;)" class="px-3 py-1.5 rounded-sm border border-outline-subtle bg-pure-white font-label text-label-sm text-on-pure-white hover:border-deep-black transition-colors duration-state-change">
+                <span data-design-text-token="label-sm">Performance</span>
+              </button>
+              <button type="button" onclick="appendPriority(&#39;Battery life&#39;)" class="px-3 py-1.5 rounded-sm border border-outline-subtle bg-pure-white font-label text-label-sm text-on-pure-white hover:border-deep-black transition-colors duration-state-change">
+                <span data-design-text-token="label-sm">Battery life</span>
+              </button>
+              <button type="button" onclick="appendPriority(&#39;Portability&#39;)" class="px-3 py-1.5 rounded-sm border border-outline-subtle bg-pure-white font-label text-label-sm text-on-pure-white hover:border-deep-black transition-colors duration-state-change">
+                <span data-design-text-token="label-sm">Portability</span>
+              </button>
+              <button type="button" onclick="appendPriority(&#39;Value for money&#39;)" class="px-3 py-1.5 rounded-sm border border-outline-subtle bg-pure-white font-label text-label-sm text-on-pure-white hover:border-deep-black transition-colors duration-state-change">
+                <span data-design-text-token="label-sm">Value for money</span>
+              </button>
+            </div>
+          </section>
+
+          <!-- 3 & 5. Selected Products + Specification Comparison Table -->
+          <section aria-label="Side-by-side product specification comparison" class="border border-outline-subtle rounded-sm overflow-x-auto bg-pure-white">
+            <table class="w-full min-w-[760px] border-collapse text-left">
+              <thead>
+                <tr id="compare-product-headers" class="border-b border-outline-subtle align-top">
+                  <!-- Populated by JS -->
+                </tr>
+              </thead>
+              <tbody id="compare-spec-rows" class="divide-y divide-outline-subtle">
+                <!-- Populated by JS -->
+              </tbody>
+            </table>
+          </section>
+
+          <!-- 7. Comparison Highlights -->
+          <section aria-labelledby="highlights-heading" class="flex flex-col gap-gutter-md">
+            <h2 id="highlights-heading" class="font-headline text-headline-md text-on-pure-white" data-design-text-token="headline-md">
+              Key specification differences
+            </h2>
+            <div id="highlights-grid" class="grid grid-cols-1 md:grid-cols-3 gap-gutter-md">
+              <!-- Populated by JS -->
+            </div>
+          </section>
+
+          <!-- 6. AI Recommendation Panel (Dark Editorial Block) -->
+          <section id="ai-recommendation-panel" aria-labelledby="ai-rec-heading" class="bg-deep-black text-on-deep-black rounded-sm p-gutter-xl flex flex-col gap-gutter-lg">
+            <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-gutter-sm pb-gutter-md border-b border-outline-dark">
+              <div class="flex flex-col gap-gutter-xs">
+                <span class="font-label text-label-sm tracking-wider uppercase text-primary-orange" data-design-text-token="label-sm">
+                  AI RECOMMENDATION
+                </span>
+                <h2 id="ai-rec-heading" class="font-headline text-headline-lg-mobile md:text-headline-lg text-on-deep-black" data-design-text-token="headline-lg">
+                  Which one fits you best?
+                </h2>
+              </div>
+              <span id="ai-rec-status" class="font-label text-label-md text-on-surface-dark-elevated" data-design-text-token="label-md">
+                Based on your stated priorities
+              </span>
+            </div>
+
+            <!-- Loading State for AI Recommendation -->
+            <div id="ai-rec-loading" class="hidden py-gutter-xl flex items-center gap-gutter-md">
+              <span class="material-symbols-outlined text-[24px] text-primary-orange animate-spin" aria-hidden="true">progress_activity</span>
+              <p class="font-body text-body-lg text-on-surface-dark-elevated" data-design-text-token="body-lg">
+                Evaluating listed specifications against your priorities...
+              </p>
+            </div>
+
+            <!-- Recommendation Content -->
+            <div id="ai-rec-content" class="grid grid-cols-1 lg:grid-cols-12 gap-gutter-xl items-start">
+              <div class="lg:col-span-5 flex flex-col gap-gutter-md">
+                <div class="flex flex-col gap-gutter-xs">
+                  <span class="font-label text-label-md text-primary-orange" data-design-text-token="label-md">Recommended choice</span>
+                  <h3 id="ai-rec-product-name" class="font-headline text-headline-md text-on-deep-black" data-design-text-token="headline-md">
+                    ProBook 14 Developer Edition
+                  </h3>
+                </div>
+                <p id="ai-rec-explanation" class="font-body text-body-lg text-on-surface-dark-elevated text-pretty" data-design-text-token="body-lg">
+                  For programming performance, battery life, and value for money, ProBook 14 Developer Edition offers the strongest balance at ₹74,990 with 16GB RAM and 10-hour battery life.
+                </p>
+                <div>
+                  <a href="../patronet-product-details/PatronetProductDetails.html" class="inline-flex items-center gap-gutter-sm px-gutter-xl py-3 rounded-sm bg-primary-orange text-on-primary-orange font-label text-label-lg hover:bg-primary-orange-hover transition-colors duration-state-change">
+                    <span data-design-text-token="label-lg">View Product Details</span>
+                    <span class="material-symbols-outlined text-[18px]" aria-hidden="true">arrow_forward</span>
+                  </a>
+                </div>
+              </div>
+
+              <div class="lg:col-span-7 grid grid-cols-1 sm:grid-cols-2 gap-gutter-lg">
+                <div class="p-gutter-lg rounded-sm bg-surface-dark-elevated border border-outline-dark flex flex-col gap-gutter-sm">
+                  <h4 class="font-title text-title-md text-on-deep-black" data-design-text-token="title-md">Key advantages</h4>
+                  <ul class="flex flex-col gap-gutter-xs font-body text-body-md text-on-surface-dark-elevated">
+                    <li class="flex items-start gap-gutter-xs">
+                      <span class="material-symbols-outlined text-[16px] text-primary-orange shrink-0 mt-0.5" aria-hidden="true">check</span>
+                      <span data-design-text-token="body-md">10-hour listed battery life supports full workdays away from power</span>
+                    </li>
+                    <li class="flex items-start gap-gutter-xs">
+                      <span class="material-symbols-outlined text-[16px] text-primary-orange shrink-0 mt-0.5" aria-hidden="true">check</span>
+                      <span data-design-text-token="body-md">₹20,000 lower than GameBook 15 while keeping 16GB DDR5 RAM</span>
+                    </li>
+                    <li class="flex items-start gap-gutter-xs">
+                      <span class="material-symbols-outlined text-[16px] text-primary-orange shrink-0 mt-0.5" aria-hidden="true">check</span>
+                      <span data-design-text-token="body-md">Lightest chassis in the comparison at 1.38 kg</span>
+                    </li>
+                  </ul>
+                </div>
+
+                <div class="p-gutter-lg rounded-sm bg-surface-dark-elevated border border-outline-dark flex flex-col gap-gutter-sm">
+                  <h4 class="font-title text-title-md text-on-deep-black" data-design-text-token="title-md">Important trade-offs</h4>
+                  <ul class="flex flex-col gap-gutter-xs font-body text-body-md text-on-surface-dark-elevated">
+                    <li class="flex items-start gap-gutter-xs">
+                      <span class="material-symbols-outlined text-[16px] text-on-surface-dark-elevated shrink-0 mt-0.5" aria-hidden="true">remove</span>
+                      <span data-design-text-token="body-md">Uses integrated graphics instead of GameBook 15&#39;s dedicated RTX 4050</span>
+                    </li>
+                    <li class="flex items-start gap-gutter-xs">
+                      <span class="material-symbols-outlined text-[16px] text-on-surface-dark-elevated shrink-0 mt-0.5" aria-hidden="true">remove</span>
+                      <span data-design-text-token="body-md">512GB storage vs 1TB on GameBook 15</span>
+                    </li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+          </section>
+
+        </div>
+      </div>
+    </main>
+
+    <!-- Footer (Shared Shell) -->
+    <footer id="footer" class="bg-deep-black text-on-deep-black">
+      <div class="max-w-[1360px] mx-auto px-gutter-md md:px-gutter-lg xl:px-page-margin py-section">
+        <div class="grid grid-cols-1 md:grid-cols-12 gap-gutter-xl pb-12 border-b border-outline-dark">
+          <div class="md:col-span-4 flex flex-col gap-gutter-md">
+            <span class="font-headline text-headline-md tracking-tight text-on-deep-black" data-design-text-token="headline-md">PATRONET</span>
+            <p class="font-body text-body-md text-on-surface-dark-elevated max-w-xs text-pretty" data-design-text-token="body-md">
+              Precision electronics and AI-assisted hardware discovery for creators, gamers, and teams across India.
+            </p>
+          </div>
+
+          <div class="md:col-span-2 flex flex-col gap-gutter-md">
+            <h3 class="font-label text-label-lg text-on-deep-black" data-design-text-token="label-lg">Shop</h3>
+            <ul class="flex flex-col gap-gutter-sm font-body text-body-md text-on-surface-dark-elevated">
+              <li><a href="../patronet-catalogue/PatronetCatalogue.html" class="hover:text-primary-orange transition-colors duration-state-change">Laptops</a></li>
+              <li><a href="../patronet-catalogue/PatronetCatalogue.html" class="hover:text-primary-orange transition-colors duration-state-change">Audio</a></li>
+              <li><a href="../patronet-catalogue/PatronetCatalogue.html" class="hover:text-primary-orange transition-colors duration-state-change">Monitors</a></li>
+              <li><a href="../patronet-catalogue/PatronetCatalogue.html" class="hover:text-primary-orange transition-colors duration-state-change">Wearables</a></li>
+              <li><a href="../patronet-catalogue/PatronetCatalogue.html" class="hover:text-primary-orange transition-colors duration-state-change">Gaming</a></li>
+            </ul>
+          </div>
+
+          <div class="md:col-span-2 flex flex-col gap-gutter-md">
+            <h3 class="font-label text-label-lg text-on-deep-black" data-design-text-token="label-lg">Support</h3>
+            <ul class="flex flex-col gap-gutter-sm font-body text-body-md text-on-surface-dark-elevated">
+              <li><a href="#" class="hover:text-primary-orange transition-colors duration-state-change">Help Center</a></li>
+              <li><a href="../patronet-orders/PatronetOrders.html" class="hover:text-primary-orange transition-colors duration-state-change">Track Order</a></li>
+              <li><a href="#" class="hover:text-primary-orange transition-colors duration-state-change">Warranty &amp; Service</a></li>
+              <li><a href="#" class="hover:text-primary-orange transition-colors duration-state-change">Bulk Procurement</a></li>
+            </ul>
+          </div>
+
+          <div class="md:col-span-2 flex flex-col gap-gutter-md">
+            <h3 class="font-label text-label-lg text-on-deep-black" data-design-text-token="label-lg">Account</h3>
+            <ul class="flex flex-col gap-gutter-sm font-body text-body-md text-on-surface-dark-elevated">
+              <li><a href="../patronet-account/PatronetAccount.html" class="hover:text-primary-orange transition-colors duration-state-change">My Account</a></li>
+              <li><a href="#" class="hover:text-primary-orange transition-colors duration-state-change">Wishlist</a></li>
+              <li><a href="../patronet-compare/PatronetCompare.html" class="hover:text-primary-orange transition-colors duration-state-change">Compare Studio</a></li>
+              <li><a href="../patronet-cart/PatronetCart.html" class="hover:text-primary-orange transition-colors duration-state-change">Shopping Cart</a></li>
+            </ul>
+          </div>
+
+          <div class="md:col-span-2 flex flex-col gap-gutter-md">
+            <h3 class="font-label text-label-lg text-on-deep-black" data-design-text-token="label-lg">Policies</h3>
+            <ul class="flex flex-col gap-gutter-sm font-body text-body-md text-on-surface-dark-elevated">
+              <li><a href="#" class="hover:text-primary-orange transition-colors duration-state-change">Privacy Policy</a></li>
+              <li><a href="#" class="hover:text-primary-orange transition-colors duration-state-change">Terms of Service</a></li>
+              <li><a href="#" class="hover:text-primary-orange transition-colors duration-state-change">Shipping Policy</a></li>
+              <li><a href="#" class="hover:text-primary-orange transition-colors duration-state-change">Returns &amp; Refunds</a></li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="pt-gutter-lg flex flex-col sm:flex-row items-start sm:items-center justify-between gap-gutter-sm font-label text-label-md text-on-surface-dark-elevated">
+          <span data-design-text-token="label-md">© 2026 PATRONET. All rights reserved.</span>
+          <span data-design-text-token="label-md">Prices inclusive of GST · Pan-India Delivery</span>
+        </div>
+      </div>
+    </footer>
+  </div>
+
+  <script data-stitch-original-script="810502f705805a4c===../../images/product_business_laptop.jpg|||161d43b6dac99e84===../../images/product_gamebook_15.jpg|||b450627e653203b6===../../images/gamebook_15_side.jpg">
+    const catalogProducts = [
+      {
+        id: 'probook-14',
+        brand: 'PATRONET',
+        name: 'ProBook 14 Developer Edition',
+        price: 74990,
+        image: 'https://lh3.googleusercontent.com/aida/ALJJyrBXD-CNoNZHD3kHM90bvNoHvJjAHYSjT6okGqGkmBlT3kOOUPB9pjT2hBYcJvZLQk28_umF06nUyN2EsFEXoS9-bD_qkgGHNnqsVMhzNx8KYa1R-UTMxYKpzFoojDQxfiA1MWzy5usMZJS-60ogq-Eac_H96J1qQXxdD5vwW4WOSEb6WG5GWH8Fg0mFGkCDwnBATJrxvaiRUd76IYlNGCz-UhCPHBvWq1B7bJvTAOSVJna1oeyU6rPoYBOXzmHMh5CK',
+        specs: {
+          Price: '₹74,990',
+          Processor: 'Intel Core Ultra 5 125H',
+          RAM: '16GB DDR5',
+          Storage: '512GB NVMe SSD',
+          Graphics: 'Integrated Arc Graphics',
+          Display: '14-inch 2.2K IPS Anti-glare',
+          Battery: 'Up to 10 hours (65Wh)',
+          Weight: '1.38 kg',
+          Connectivity: 'Wi-Fi 6E, 2× Thunderbolt 4, HDMI 2.1',
+        },
+        ramGb: 16,
+        storageGb: 512,
+      },
+      {
+        id: 'gamebook-15',
+        brand: 'PATRONET',
+        name: 'GameBook 15 (RTX 4050)',
+        price: 94990,
+        image: 'https://lh3.googleusercontent.com/aida/ALJJyrDiK48nkB5nc39ENn71KKa0NGyy5-rVdYk8Vu1ZnfeuBpxKtvutGqH3o6C-gpCjNTWsSJ_Hp4HMW3lbbNpjGSLJka8K7gPBXtJY5_Pb6RkFnYfwJ94o5DKQWlMCT2HfloilyiLgSqJ8ovDb5RWSZ1CVHQvRvrMg3T1Fw3hkhA7kFf3VMjm8L8BZbnlmJBNRTfpSi-RvqsiDLKv4j1qMs6auOjKy-Sv6TlgdLj5B0NRxmbIC_dh13EjE9mZmZhw',
+        specs: {
+          Price: '₹94,990',
+          Processor: 'AMD Ryzen 7 7840HS',
+          RAM: '32GB DDR5',
+          Storage: '1TB NVMe SSD',
+          Graphics: 'NVIDIA GeForce RTX 4050 6GB',
+          Display: '15.6-inch FHD 144Hz IPS',
+          Battery: 'Up to 6.5 hours (80Wh)',
+          Weight: '2.15 kg',
+          Connectivity: 'Wi-Fi 6E, USB-C, HDMI 2.1, RJ45',
+        },
+        ramGb: 32,
+        storageGb: 1000,
+      },
+      {
+        id: 'studiobook-15',
+        brand: 'PATRONET',
+        name: 'StudioBook 15 OLED',
+        price: 68990,
+        image: 'https://lh3.googleusercontent.com/aida/ALJJyrDClJI8x0J-zdU1ldO7nkHq7mvVnn95wbuMl3vBpSjPazckGr6JcxlAeslSTnaw6dyciBKAO0HH8TPuwaH25I66hcSCpoiorxtaQFeyqi_Iae485usQbgtfnDAGt5G_Dle6B8ZWpcQqOJ6MRJSi0ksHEgIRn7bVHzgCCQZxbqxIqKh9cLHOXP3UuNv7UhR8mOiGegqGDl7m3UmAHq3mWGlDlDWusvA7RAodj2vLy1A7l301Vkzw1z2Du5g',
+        specs: {
+          Price: '₹68,990',
+          Processor: 'Intel Core i5-13420H',
+          RAM: '16GB LPDDR5',
+          Storage: '512GB NVMe SSD',
+          Graphics: null,
+          Display: '15.6-inch FHD OLED',
+          Battery: 'Up to 11 hours (70Wh)',
+          Weight: '1.55 kg',
+          Connectivity: null,
+        },
+        ramGb: 16,
+        storageGb: 512,
+      },
+    ];
+
+    let activeProducts = [...catalogProducts];
+    let cartCount = 3;
+
+    const specRowsOrder = [
+      'Price',
+      'Processor',
+      'RAM',
+      'Storage',
+      'Graphics',
+      'Display',
+      'Battery',
+      'Weight',
+      'Connectivity',
+    ];
+
+    function renderComparison() {
+      const emptyState = document.getElementById('compare-empty-state');
+      const workspace = document.getElementById('compare-workspace');
+      const countLabel = document.getElementById('selected-count-label');
+
+      countLabel.textContent = `${activeProducts.length} of 3 products selected`;
+
+      if (activeProducts.length === 0) {
+        workspace.classList.add('hidden');
+        emptyState.classList.remove('hidden');
+        return;
+      }
+
+      emptyState.classList.add('hidden');
+      workspace.classList.remove('hidden');
+
+      const headerRow = document.getElementById('compare-product-headers');
+      const specTbody = document.getElementById('compare-spec-rows');
+
+      let headerHtml = `
+        <th class="w-48 min-w-[160px] p-gutter-lg bg-pure-white sticky left-0 z-10 border-r border-outline-subtle align-bottom">
+          <span class="font-label text-label-md text-muted-gray" data-design-text-token="label-md">Specifications</span>
+        </th>
+      `;
+
+      activeProducts.forEach((prod, idx) => {
+        headerHtml += `
+          <th class="w-72 min-w-[240px] p-gutter-lg border-r last:border-r-0 border-outline-subtle font-normal">
+            <div class="flex flex-col gap-gutter-md">
+              <div class="flex items-center justify-between gap-gutter-sm">
+                <span class="font-label text-label-sm text-muted-gray" data-design-text-token="label-sm">${prod.brand}</span>
+                <button
+                  type="button"
+                  onclick="removeComparedProduct('${prod.id}')"
+                  class="font-label text-label-sm text-muted-gray hover:text-accent-orange-text transition-colors duration-state-change"
+                >
+                  <span data-design-text-token="label-sm">Remove</span>
+                </button>
+              </div>
+
+              <a href="../patronet-product-details/PatronetProductDetails.html" class="block bg-light-gray rounded-sm aspect-[4/3] p-gutter-md flex items-center justify-center overflow-hidden">
+                <img src="${prod.image}" alt="${prod.name}" class="w-full h-full object-contain" />
+              </a>
+
+              <div class="flex flex-col gap-gutter-xs">
+                <a href="../patronet-product-details/PatronetProductDetails.html" class="font-title text-title-md text-on-pure-white hover:text-accent-orange-text transition-colors duration-state-change" data-design-text-token="title-md">
+                  ${prod.name}
+                </a>
+                <span class="font-headline text-headline-md text-on-pure-white tabular-nums" data-design-text-token="headline-md">
+                  ₹${prod.price.toLocaleString('en-IN')}
+                </span>
+              </div>
+
+              <div class="flex flex-col gap-gutter-xs">
+                <button
+                  type="button"
+                  onclick="addComparedToCart(this)"
+                  class="w-full py-2.5 px-gutter-md rounded-sm bg-deep-black text-on-deep-black font-label text-label-md hover:bg-surface-dark-elevated transition-colors duration-state-change"
+                >
+                  <span data-design-text-token="label-md">Add to Cart</span>
+                </button>
+                <a
+                  href="../patronet-product-details/PatronetProductDetails.html"
+                  class="w-full py-2 px-gutter-md rounded-sm border border-outline-subtle bg-pure-white font-label text-label-md text-on-pure-white hover:border-deep-black transition-colors duration-state-change text-center"
+                >
+                  <span data-design-text-token="label-md">View Details</span>
+                </a>
+              </div>
+            </div>
+          </th>
+        `;
+      });
+
+      if (activeProducts.length < 3) {
+        const missing = catalogProducts.filter((c) => !activeProducts.some((a) => a.id === c.id));
+        const nextOption = missing[0];
+        if (nextOption) {
+          headerHtml += `
+            <th class="w-64 min-w-[220px] p-gutter-lg align-middle bg-light-gray">
+              <div class="flex flex-col items-center text-center gap-gutter-sm">
+                <span class="material-symbols-outlined text-[24px] text-muted-gray" aria-hidden="true">add_circle</span>
+                <p class="font-body text-body-md text-muted-gray" data-design-text-token="body-md">Add another product to compare</p>
+                <button
+                  type="button"
+                  onclick="addBackProduct('${nextOption.id}')"
+                  class="px-gutter-md py-2 rounded-sm border border-outline-subtle bg-pure-white font-label text-label-md text-on-pure-white hover:border-deep-black transition-colors duration-state-change"
+                >
+                  <span data-design-text-token="label-md">Add ${nextOption.name.split(' ')[0]}</span>
+                </button>
+              </div>
+            </th>
+          `;
+        }
+      }
+
+      headerRow.innerHTML = headerHtml;
+
+      let rowsHtml = '';
+      specRowsOrder.forEach((specKey, rowIdx) => {
+        const rowBg = rowIdx % 2 === 1 ? 'bg-light-gray' : 'bg-pure-white';
+        const stickyBg = rowIdx % 2 === 1 ? 'bg-light-gray' : 'bg-pure-white';
+
+        rowsHtml += `<tr class="${rowBg}">`;
+        rowsHtml += `
+          <th scope="row" class="p-gutter-md px-gutter-lg font-label text-label-md text-on-pure-white sticky left-0 z-10 ${stickyBg} border-r border-outline-subtle">
+            <span data-design-text-token="label-md">${specKey}</span>
+          </th>
+        `;
+
+        activeProducts.forEach((prod) => {
+          const val = prod.specs[specKey];
+          if (val) {
+            rowsHtml += `
+              <td class="p-gutter-md px-gutter-lg font-body text-body-md text-on-pure-white tabular-nums border-r last:border-r-0 border-outline-subtle">
+                <span data-design-text-token="body-md">${val}</span>
+              </td>
+            `;
+          } else {
+            rowsHtml += `
+              <td class="p-gutter-md px-gutter-lg font-body text-body-md text-muted-gray border-r last:border-r-0 border-outline-subtle">
+                <span data-design-text-token="body-md">Not provided.</span>
+              </td>
+            `;
+          }
+        });
+
+        if (activeProducts.length < 3) {
+          rowsHtml += `<td class="p-gutter-md px-gutter-lg bg-light-gray"></td>`;
+        }
+
+        rowsHtml += `</tr>`;
+      });
+
+      specTbody.innerHTML = rowsHtml;
+
+      renderHighlights();
+    }
+
+    function renderHighlights() {
+      const grid = document.getElementById('highlights-grid');
+      if (activeProducts.length === 0) {
+        grid.innerHTML = '';
+        return;
+      }
+
+      const lowestPriceProd = [...activeProducts].sort((a, b) => a.price - b.price)[0];
+      const highestRamProd = [...activeProducts].sort((a, b) => b.ramGb - a.ramGb)[0];
+      const largestStorageProd = [...activeProducts].sort((a, b) => b.storageGb - a.storageGb)[0];
+
+      const cards = [
+        {
+          label: 'Lowest price',
+          value: lowestPriceProd.name,
+          detail: `₹${lowestPriceProd.price.toLocaleString('en-IN')}`,
+        },
+        {
+          label: 'Highest listed RAM',
+          value: highestRamProd.name,
+          detail: highestRamProd.specs.RAM,
+        },
+        {
+          label: 'Largest listed storage',
+          value: largestStorageProd.name,
+          detail: largestStorageProd.specs.Storage,
+        },
+      ];
+
+      grid.innerHTML = cards
+        .map(
+          (c) => `
+          <div class="p-gutter-lg rounded-sm border border-outline-subtle bg-light-gray flex flex-col gap-gutter-xs">
+            <span class="font-label text-label-sm text-muted-gray" data-design-text-token="label-sm">${c.label}</span>
+            <span class="font-title text-title-md text-on-light-gray" data-design-text-token="title-md">${c.value}</span>
+            <span class="font-label text-label-md text-on-light-gray tabular-nums" data-design-text-token="label-md">${c.detail}</span>
+          </div>
+        `
+        )
+        .join('');
+    }
+
+    function removeComparedProduct(id) {
+      activeProducts = activeProducts.filter((p) => p.id !== id);
+      renderComparison();
+    }
+
+    function addBackProduct(id) {
+      const prod = catalogProducts.find((p) => p.id === id);
+      if (prod && !activeProducts.some((a) => a.id === id)) {
+        activeProducts.push(prod);
+        renderComparison();
+      }
+    }
+
+    function restoreDefaultProducts() {
+      activeProducts = [...catalogProducts];
+      renderComparison();
+    }
+
+    function appendPriority(text) {
+      const input = document.getElementById('compare-priority-input');
+      const current = input.value.trim();
+      if (!current) {
+        input.value = text;
+      } else if (!current.toLowerCase().includes(text.toLowerCase())) {
+        input.value = current.replace(/\.$/, '') + ', ' + text.toLowerCase() + '.';
+      }
+    }
+
+    function handleCompareAI(event) {
+      event.preventDefault();
+      const btn = document.getElementById('compare-ai-btn');
+      const spinner = document.getElementById('compare-ai-spinner');
+      const label = document.getElementById('compare-ai-label');
+      const loadingEl = document.getElementById('ai-rec-loading');
+      const contentEl = document.getElementById('ai-rec-content');
+
+      btn.setAttribute('aria-busy', 'true');
+      spinner.classList.remove('hidden');
+      label.textContent = 'Analyzing...';
+      contentEl.classList.add('hidden');
+      loadingEl.classList.remove('hidden');
+
+      setTimeout(() => {
+        loadingEl.classList.add('hidden');
+        contentEl.classList.remove('hidden');
+        btn.removeAttribute('aria-busy');
+        spinner.classList.add('hidden');
+        label.textContent = 'Compare with AI';
+      }, 650);
+    }
+
+    function addComparedToCart(btn) {
+      const span = btn.querySelector('span');
+      if (span.textContent === 'Added to Cart') return;
+      cartCount += 1;
+      document.getElementById('cmp-header-cart-count').textContent = `(${cartCount})`;
+      span.textContent = 'Added to Cart';
+      btn.classList.remove('bg-deep-black', 'text-on-deep-black');
+      btn.classList.add('bg-primary-orange', 'text-on-primary-orange');
+    }
+
+    renderComparison();
+  </script>
+
+
+</body></html>

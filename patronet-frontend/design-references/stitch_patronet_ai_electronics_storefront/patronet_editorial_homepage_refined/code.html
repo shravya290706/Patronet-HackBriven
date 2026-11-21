@@ -1,0 +1,636 @@
+<!DOCTYPE html><html lang="en"><head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>PATRONET — Precision Electronics &amp; AI Retail</title>
+  <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+  <script id="tailwind-config">/** @type {import('tailwindcss').Config} */
+globalThis.tailwind = globalThis.tailwind || {};
+globalThis.tailwind.config = {
+  darkMode: 'class',
+  theme: {
+    extend: {
+      colors: {
+        'primary-orange': '#FF6B00',
+        'on-primary-orange': '#111111',
+        'primary-orange-hover': '#E05E00',
+        'primary-orange-tint': '#FFEDE6',
+        'accent-orange-text': '#BF4E00',
+        'deep-black': '#111111',
+        'on-deep-black': '#FFFFFF',
+        'surface-dark-elevated': '#1A1A1A',
+        'on-surface-dark-elevated': '#F5F5F5',
+        'pure-white': '#FFFFFF',
+        'on-pure-white': '#111111',
+        'light-gray': '#F5F5F5',
+        'on-light-gray': '#111111',
+        'muted-gray': '#666666',
+        'outline-subtle': '#E5E5E5',
+        'outline-dark': '#2E2E2E',
+      },
+      borderRadius: {
+        'sm': '4px',
+        'DEFAULT': '6px',
+        'md': '8px',
+        'lg': '12px',
+        'xl': '16px',
+        'full': '9999px',
+      },
+      spacing: {
+        'gutter-xs': '4px',
+        'gutter-sm': '8px',
+        'gutter-md': '16px',
+        'gutter-lg': '24px',
+        'gutter-xl': '32px',
+        'section': '64px',
+        'page-margin': '48px',
+      },
+      fontFamily: {
+        'display': ['"Inter"', 'sans-serif'],
+        'headline': ['"Inter"', 'sans-serif'],
+        'title': ['"Inter"', 'sans-serif'],
+        'body': ['"Inter"', 'sans-serif'],
+        'label': ['"Inter"', 'sans-serif'],
+      },
+      fontSize: {
+        'display-xl': ['60px', { lineHeight: '64px', letterSpacing: '-1.6px', fontWeight: '700' }],
+        'display-xl-mobile': ['32px', { lineHeight: '38px', letterSpacing: '-0.6px', fontWeight: '700' }],
+        'headline-lg': ['36px', { lineHeight: '42px', letterSpacing: '-0.8px', fontWeight: '700' }],
+        'headline-lg-mobile': ['28px', { lineHeight: '34px', letterSpacing: '-0.5px', fontWeight: '700' }],
+        'headline-md': ['24px', { lineHeight: '30px', letterSpacing: '-0.4px', fontWeight: '700' }],
+        'title-lg': ['20px', { lineHeight: '26px', letterSpacing: '-0.2px', fontWeight: '600' }],
+        'title-md': ['16px', { lineHeight: '22px', letterSpacing: '-0.1px', fontWeight: '600' }],
+        'body-lg': ['16px', { lineHeight: '24px', letterSpacing: '0px', fontWeight: '400' }],
+        'body-md': ['14px', { lineHeight: '20px', letterSpacing: '0px', fontWeight: '400' }],
+        'label-lg': ['14px', { lineHeight: '20px', letterSpacing: '0px', fontWeight: '600' }],
+        'label-md': ['13px', { lineHeight: '18px', letterSpacing: '0px', fontWeight: '500' }],
+        'label-sm': ['12px', { lineHeight: '16px', letterSpacing: '0.2px', fontWeight: '500' }],
+      },
+      transitionDuration: {
+        'state-change': '150ms',
+        'surface-enter': '240ms',
+      },
+      transitionDelay: {
+        'state-change': '0ms',
+        'surface-enter': '0ms',
+      },
+      transitionTimingFunction: {
+        'state-change': 'ease-out',
+        'surface-enter': 'cubic-bezier(0.2, 0, 0, 1)',
+      },
+    },
+  },
+};
+if (typeof module !== 'undefined') module.exports = globalThis.tailwind.config;
+</script>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=block" rel="stylesheet">
+  <style>
+    .material-symbols-outlined, .material-symbols-rounded, .material-symbols-sharp, .material-icons {
+      display: inline-block;
+      width: 1em;
+      height: 1em;
+      line-height: 1 !important;
+      box-sizing: content-box;
+      overflow: hidden;
+      white-space: nowrap;
+      direction: ltr;
+      vertical-align: middle;
+    }
+  </style>
+</head>
+<body class="bg-pure-white text-on-pure-white font-body antialiased">
+  <div class="min-h-[1024px] flex flex-col bg-pure-white" data-stitch-vh="min-h-[1024px]===min-h-screen">
+
+    <!-- 1. Navigation Bar -->
+    <header class="sticky top-0 z-40 bg-pure-white border-b border-outline-subtle">
+      <div class="max-w-[1360px] mx-auto px-gutter-md md:px-gutter-lg xl:px-page-margin h-[72px] flex items-center justify-between gap-gutter-xl">
+        <!-- Left: Bold PATRONET Wordmark -->
+        <a href="#" class="font-headline text-title-lg tracking-tight text-on-pure-white shrink-0" data-design-text-token="title-lg">
+          PATRONET
+        </a>
+
+        <!-- Center: Carefully Spaced Category Navigation -->
+        <nav aria-label="Primary navigation" class="hidden lg:flex items-center gap-10">
+          <a href="#categories" class="font-label text-label-lg text-on-pure-white hover:text-muted-gray transition-colors duration-state-change ease-state-change" data-design-text-token="label-lg">Shop All</a>
+          <a href="#categories" class="font-label text-label-lg text-on-pure-white hover:text-muted-gray transition-colors duration-state-change ease-state-change" data-design-text-token="label-lg">Electronics</a>
+          <a href="#categories" class="font-label text-label-lg text-on-pure-white hover:text-muted-gray transition-colors duration-state-change ease-state-change" data-design-text-token="label-lg">Computers</a>
+          <a href="#categories" class="font-label text-label-lg text-on-pure-white hover:text-muted-gray transition-colors duration-state-change ease-state-change" data-design-text-token="label-lg">Audio</a>
+          <a href="#bestsellers" class="font-label text-label-lg text-accent-orange-text hover:text-primary-orange-hover transition-colors duration-state-change ease-state-change" data-design-text-token="label-lg">Deals</a>
+        </nav>
+
+        <!-- Right: Refined Search Input + Minimal Account, Wishlist, Cart -->
+        <div class="flex items-center gap-gutter-lg shrink-0">
+          <form class="hidden md:flex items-center gap-gutter-sm px-3.5 py-2 rounded-sm bg-light-gray border border-outline-subtle focus-within:border-deep-black w-64 lg:w-72 transition-colors duration-state-change" role="search" onsubmit="return false;">
+            <span class="material-symbols-outlined text-[18px] text-muted-gray shrink-0" aria-hidden="true">search</span>
+            <input type="search" placeholder="Search catalog" aria-label="Search PATRONET catalog" class="w-full bg-transparent border-0 p-0 font-body text-body-md text-on-pure-white placeholder:text-muted-gray focus:ring-0">
+          </form>
+
+          <div class="flex items-center gap-gutter-sm">
+            <button type="button" aria-label="Account" class="inline-flex items-center justify-center w-9 h-9 text-on-pure-white hover:text-muted-gray transition-colors duration-state-change ease-state-change">
+              <span class="material-symbols-outlined text-[20px]" aria-hidden="true">person</span>
+            </button>
+
+            <button type="button" aria-label="Wishlist" class="inline-flex items-center justify-center w-9 h-9 text-on-pure-white hover:text-muted-gray transition-colors duration-state-change ease-state-change">
+              <span class="material-symbols-outlined text-[20px]" aria-hidden="true">favorite</span>
+            </button>
+
+            <button id="header-cart-btn" type="button" aria-label="Shopping cart" class="inline-flex items-center gap-gutter-xs h-9 pl-gutter-xs text-on-pure-white hover:text-muted-gray transition-colors duration-state-change ease-state-change shrink-0">
+              <span class="material-symbols-outlined text-[20px] shrink-0" aria-hidden="true">shopping_cart</span>
+              <span class="font-label text-label-md tabular-nums whitespace-nowrap" data-design-text-token="label-md">(<span id="cart-count">0</span>)</span>
+            </button>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <main class="flex-1">
+      <!-- 2. Cinematic Hero Campaign (Full-bleed Deep Black) -->
+      <section class="w-full bg-deep-black text-on-deep-black">
+        <div class="max-w-[1360px] mx-auto px-gutter-md md:px-gutter-lg xl:px-page-margin grid grid-cols-1 lg:grid-cols-12 items-center gap-gutter-lg lg:gap-gutter-xl py-gutter-xl lg:py-16">
+          <!-- Left 5 Columns: Confident Display Typography & CTAs -->
+          <div class="lg:col-span-5 flex flex-col gap-gutter-lg">
+            <div class="flex flex-col gap-gutter-md">
+              <h1 class="font-display text-display-xl-mobile md:text-display-xl text-on-deep-black text-balance" data-design-text-token="display-xl">
+                Built for your <span class="text-primary-orange">next upgrade.</span>
+              </h1>
+              <p class="font-body text-body-lg text-on-surface-dark-elevated max-w-md text-pretty" data-design-text-token="body-lg">
+                Precision-engineered laptops, studio audio, and desktop hardware for work, play, and everything in between.
+              </p>
+            </div>
+
+            <div class="flex flex-wrap items-center gap-gutter-lg pt-gutter-sm">
+              <!-- Primary Orange CTA -->
+              <a href="#bestsellers" data-component-id="btn-editorial-primary" data-component-type="button" data-component-variant="primary" class="inline-flex items-center justify-center px-gutter-xl py-3.5 rounded-sm bg-primary-orange text-on-primary-orange font-label text-label-lg hover:bg-primary-orange-hover active:scale-[0.99] transition-colors duration-state-change ease-state-change">
+                <span data-design-text-token="label-lg">Shop Now</span>
+              </a>
+
+              <!-- Understated Secondary CTA -->
+              <a href="#ai-discovery" data-component-id="btn-editorial-secondary" data-component-type="button" data-component-variant="secondary" class="inline-flex items-center gap-gutter-xs font-label text-label-lg text-on-deep-black border-b border-outline-dark pb-1 hover:border-on-deep-black transition-colors duration-state-change ease-state-change">
+                <span data-design-text-token="label-lg">Explore AI Shopping</span>
+                <span class="material-symbols-outlined text-[18px]" aria-hidden="true">arrow_forward</span>
+              </a>
+            </div>
+          </div>
+
+          <!-- Right 7 Columns: Studio Campaign Photography -->
+          <div class="lg:col-span-7">
+            <div class="aspect-[16/10] lg:min-h-[460px] w-full overflow-hidden bg-surface-dark-elevated">
+              <img src="https://lh3.googleusercontent.com/aida/ALJJyrDCh-B-ofs66ox8sUeVIqGZPPT9cj3FGzttB3ML3AMb7tdxlNhnJVnKac0lOyF6scTxTeH8KxPs7qyhKMKG6wuLPQb-Wniyhs36vpyswx-xeoAaZ7VOKhleK6AlZibc-YR1dvOM1Xz-lPZNXMpUWG5_B1DtrWoaOdmYnqVF8Ets9_deAafF0VjnB5kqxaOu6iXQpivQP2uazQrLDbB_Qnxd7rvD0v9nzd0EI0tRxFyE77mughKrhNmb9Lx9pFaK3xkr" alt="PATRONET matte-black aluminum laptop and studio headphones photographed on dark charcoal plinth with subtle orange rim reflection" class="w-full h-full object-cover object-center">
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- 3. AI Shopping Search (Seamless Architectural Strip) -->
+      <section id="ai-discovery" class="w-full bg-pure-white border-b border-outline-subtle">
+        <div class="max-w-[1360px] mx-auto px-gutter-md md:px-gutter-lg xl:px-page-margin py-10 lg:py-12 grid grid-cols-1 lg:grid-cols-12 items-start lg:items-center gap-gutter-lg">
+          <div class="lg:col-span-4 flex flex-col gap-gutter-xs">
+            <div class="flex items-center gap-gutter-sm">
+              <span class="material-symbols-outlined text-[20px] text-accent-orange-text shrink-0" aria-hidden="true">auto_awesome</span>
+              <h2 class="font-headline text-headline-md text-on-pure-white" data-design-text-token="headline-md">
+                Tell us what you&#39;re looking for.
+              </h2>
+            </div>
+            <p class="font-body text-body-md text-muted-gray" data-design-text-token="body-md">
+              Describe your requirements in plain language for calibrated hardware matches.
+            </p>
+          </div>
+
+          <div class="lg:col-span-8 flex flex-col gap-gutter-sm">
+            <form id="ai-search-form" class="flex flex-col sm:flex-row items-stretch sm:items-center gap-gutter-sm" onsubmit="return handleAiSearch(event);">
+              <div class="flex-1 flex items-center gap-gutter-sm px-gutter-md py-3.5 rounded-sm bg-light-gray border border-outline-subtle focus-within:border-deep-black focus-within:bg-pure-white transition-colors duration-state-change">
+                <span class="material-symbols-outlined text-[20px] text-muted-gray shrink-0" aria-hidden="true">search</span>
+                <input id="ai-search-input" type="text" placeholder="A lightweight laptop for programming under ₹80,000" aria-label="Describe what electronics you are looking for" class="w-full bg-transparent border-0 p-0 font-body text-body-lg text-on-pure-white placeholder:text-muted-gray focus:ring-0">
+              </div>
+              <button data-component-id="btn-editorial-with-icon" data-component-type="button" data-component-variant="with-icon" type="submit" class="inline-flex items-center justify-center gap-gutter-sm px-gutter-xl py-3.5 rounded-sm bg-primary-orange text-on-primary-orange font-label text-label-lg hover:bg-primary-orange-hover active:scale-[0.99] transition-colors duration-state-change ease-state-change shrink-0">
+                <span data-design-text-token="label-lg">AI Find</span>
+                <span class="material-symbols-outlined text-[18px]" aria-hidden="true">arrow_forward</span>
+              </button>
+            </form>
+
+            <!-- Understated Suggestion Chips -->
+            <div class="flex flex-wrap items-center gap-gutter-sm pt-gutter-xs">
+              <span class="font-label text-label-sm text-muted-gray" data-design-text-token="label-sm">Suggestions:</span>
+              <button type="button" onclick="fillAiPrompt(&#39;Coding laptops with 16GB RAM and all-day battery&#39;)" data-component-id="chip-editorial-action" data-component-type="chip" data-component-variant="action" class="px-3 py-1 rounded-sm bg-light-gray text-on-light-gray font-label text-label-sm hover:bg-outline-subtle transition-colors duration-state-change">
+                <span data-design-text-token="label-sm">Coding laptops</span>
+              </button>
+              <button type="button" onclick="fillAiPrompt(&#39;Gaming setups with RTX graphics and QHD monitor&#39;)" data-component-id="chip-editorial-action" data-component-type="chip" data-component-variant="action" class="px-3 py-1 rounded-sm bg-light-gray text-on-light-gray font-label text-label-sm hover:bg-outline-subtle transition-colors duration-state-change">
+                <span data-design-text-token="label-sm">Gaming setups</span>
+              </button>
+              <button type="button" onclick="fillAiPrompt(&#39;Work from home monitor, ANC headphones, and desk lamp&#39;)" data-component-id="chip-editorial-action" data-component-type="chip" data-component-variant="action" class="px-3 py-1 rounded-sm bg-light-gray text-on-light-gray font-label text-label-sm hover:bg-outline-subtle transition-colors duration-state-change">
+                <span data-design-text-token="label-sm">Work from home</span>
+              </button>
+              <button type="button" onclick="fillAiPrompt(&#39;Wireless audio and smartwatches under ₹20,000&#39;)" data-component-id="chip-editorial-action" data-component-type="chip" data-component-variant="action" class="px-3 py-1 rounded-sm bg-light-gray text-on-light-gray font-label text-label-sm hover:bg-outline-subtle transition-colors duration-state-change">
+                <span data-design-text-token="label-sm">Under ₹20,000</span>
+              </button>
+            </div>
+
+            <p id="ai-feedback" class="hidden font-body text-body-md text-accent-orange-text pt-gutter-xs" role="status"></p>
+          </div>
+        </div>
+      </section>
+
+      <!-- 4. Editorial Product Categories (Asymmetric Discovery Layout) -->
+      <section id="categories" class="max-w-[1360px] mx-auto px-gutter-md md:px-gutter-lg xl:px-page-margin py-section">
+        <div class="flex flex-col sm:flex-row sm:items-end justify-between gap-gutter-md pb-gutter-lg border-b border-outline-subtle mb-gutter-xl">
+          <div>
+            <h2 class="font-headline text-headline-lg-mobile md:text-headline-lg text-on-pure-white" data-design-text-token="headline-lg">
+              Hardware departments.
+            </h2>
+            <p class="font-body text-body-md text-muted-gray mt-gutter-xs" data-design-text-token="body-md">
+              Engineered systems across computing, sound, and desk architecture.
+            </p>
+          </div>
+          <a href="#bestsellers" class="inline-flex items-center gap-gutter-xs font-label text-label-lg text-on-pure-white hover:text-accent-orange-text transition-colors duration-state-change shrink-0">
+            <span data-design-text-token="label-lg">View full catalog</span>
+            <span class="material-symbols-outlined text-[18px]" aria-hidden="true">arrow_forward</span>
+          </a>
+        </div>
+
+        <!-- Row 1: Asymmetric 7 / 5 Split -->
+        <div class="grid grid-cols-1 md:grid-cols-12 gap-gutter-lg mb-gutter-xl">
+          <a href="#bestsellers" class="group md:col-span-7 flex flex-col gap-gutter-sm">
+            <div class="aspect-[16/10] w-full bg-light-gray rounded-sm overflow-hidden">
+              <img src="https://lh3.googleusercontent.com/aida/ALJJyrCVQ1N6kTKg32GiAa7RlOeYGoMJHnb-bd8tl9ZqvRD6usIUo5JjLjrMBVSygvVDcnO2tPf21fdQEXYk119B24UjkWoVKuuEvSyNEvcc5iiWofERRjvw4iYdzeYCuH8QBe6gpdcqumv78DnEh-dbNlK73NZtq4IzQffH443ZwigdPMvRDNq-qjpMEHskiLhbI58Vh6N_M-9NVnf4FwwxLQ9trKRoWZlFoKq1bpImTw0H3zQox4BTKQ_S" alt="PATRONET Laptops" class="w-full h-full object-cover group-hover:scale-[1.02] transition-transform duration-surface-enter">
+            </div>
+            <div class="flex items-baseline justify-between pt-gutter-xs">
+              <h3 class="font-headline text-headline-md text-on-pure-white group-hover:text-accent-orange-text transition-colors duration-state-change" data-design-text-token="headline-md">Laptops</h3>
+              <span class="font-body text-body-md text-muted-gray" data-design-text-token="body-md">Ultrabooks &amp; creator workstations</span>
+            </div>
+          </a>
+
+          <a href="#bestsellers" class="group md:col-span-5 flex flex-col gap-gutter-sm">
+            <div class="aspect-[16/10] md:aspect-[4/3] w-full bg-light-gray rounded-sm overflow-hidden">
+              <img src="https://lh3.googleusercontent.com/aida/ALJJyrD3bZoaABoqMNQ0sljnKYsLapeMFrEtnG_Q9eHzIyF_w7Q2RBKjsR6k47tx2zRFe_6iyME1WpQEp8Su0n613c4VODz5GiboPDCM1tZRCu5XEPxDVY3MBTOQYAkbuQZkTrC9ItoTX7woQBE_C-uZ8DvpT45g7aBMg-lA6mF3vFw9UjIyufmI58dPFxlebTpwWd-6VoG-VGvIkm7oPiJ6AASXck1NnlK6KreTEmczQH2yS7EF1eU" alt="PATRONET Studio Audio" class="w-full h-full object-cover group-hover:scale-[1.02] transition-transform duration-surface-enter">
+            </div>
+            <div class="flex items-baseline justify-between pt-gutter-xs">
+              <h3 class="font-headline text-headline-md text-on-pure-white group-hover:text-accent-orange-text transition-colors duration-state-change" data-design-text-token="headline-md">Audio</h3>
+              <span class="font-body text-body-md text-muted-gray" data-design-text-token="body-md">Studio ANC &amp; reference sound</span>
+            </div>
+          </a>
+        </div>
+
+        <!-- Row 2: Structured 3-Column Studio Grid (4 / 4 / 4) -->
+        <div class="grid grid-cols-1 sm:grid-cols-3 gap-gutter-lg mb-gutter-xl">
+          <a href="#bestsellers" class="group flex flex-col gap-gutter-sm">
+            <div class="aspect-square w-full bg-light-gray rounded-sm overflow-hidden">
+              <img src="https://lh3.googleusercontent.com/aida/ALJJyrDkE3BnE5mdQhHqa0Abklexh5xNLaqbPmkFv2hjqmEVJm-5KskYblhrS_VZgds7r-7drgoNfkRNYIheTeiYuAfCM4A3jl7lpUYm1_Dkx7hM2vMsP2EbMDkn5q399m0bq4oAdsCsJoqgW2Ad6pzslPFsY3Nv4acCLDwJuTFYbwv50xTe0pqg8jPiRpIL_AbrqOT5ThiKDYplt7n8h-dxHBjbMmef2vaoinxz0y7SR6nnwTXkZa-4lY4qHQ" alt="PATRONET QHD Monitors" class="w-full h-full object-cover group-hover:scale-[1.02] transition-transform duration-surface-enter">
+            </div>
+            <div class="flex items-baseline justify-between pt-gutter-xs">
+              <h3 class="font-title text-title-lg text-on-pure-white group-hover:text-accent-orange-text transition-colors duration-state-change" data-design-text-token="title-lg">Monitors</h3>
+              <span class="font-body text-body-md text-muted-gray" data-design-text-token="body-md">QHD &amp; 4K IPS</span>
+            </div>
+          </a>
+
+          <a href="#bestsellers" class="group flex flex-col gap-gutter-sm">
+            <div class="aspect-square w-full bg-light-gray rounded-sm overflow-hidden">
+              <img src="https://lh3.googleusercontent.com/aida/ALJJyrB0a8VX3vZBhcrasLIzQi-ufdnrj04eLq8bNhYzBE493KPykrDdhhanUBtFk-tLNJjXR7Fx7b8KopwPZ7dq9KPunBTq2IplKgOJIHotNrofmGw5_kL_GVXweT3hw_OpAM51F5KtqYnxAo6cd1w0goU__Rb-MjQuJShH9yojBqBdpl61pdkTkDnZU2F6z9lbIcM53ajYbM2WCL8OWMnhXG7xy2GgkYImcaD0jgxJGjjp09YelTIygT64ItU" alt="PATRONET Wearables" class="w-full h-full object-cover group-hover:scale-[1.02] transition-transform duration-surface-enter">
+            </div>
+            <div class="flex items-baseline justify-between pt-gutter-xs">
+              <h3 class="font-title text-title-lg text-on-pure-white group-hover:text-accent-orange-text transition-colors duration-state-change" data-design-text-token="title-lg">Wearables</h3>
+              <span class="font-body text-body-md text-muted-gray" data-design-text-token="body-md">AMOLED watches</span>
+            </div>
+          </a>
+
+          <a href="#bestsellers" class="group flex flex-col gap-gutter-sm">
+            <div class="aspect-square w-full bg-light-gray rounded-sm overflow-hidden">
+              <img src="https://lh3.googleusercontent.com/aida/ALJJyrCtPT37igkb9-X1NrNHIkCCCgwFcjhM9P5PklzETphzV2o2j6WBmAHzz4_i_Qa_95k2FKuxMbwoMLwRWN5bVvc74N96OJCqFI5CSdahkMdfOi5fOuK75kbFNKK1i7ukjCpS4N3S7ii2wZNJFm-sMruS_n_JDFlM_6hkLtEEJaSeemeiNciVmIjt2kH_HACzqyxIF8e99Q0ULrVJzhNV0JY_Hg2MhM_b5dxwn9XDfUF3wCXEWaj1HmF_pR8FVA" alt="PATRONET Desk Accessories" class="w-full h-full object-cover group-hover:scale-[1.02] transition-transform duration-surface-enter">
+            </div>
+            <div class="flex items-baseline justify-between pt-gutter-xs">
+              <h3 class="font-title text-title-lg text-on-pure-white group-hover:text-accent-orange-text transition-colors duration-state-change" data-design-text-token="title-lg">Accessories</h3>
+              <span class="font-body text-body-md text-muted-gray" data-design-text-token="body-md">Keyboards &amp; docks</span>
+            </div>
+          </a>
+        </div>
+
+        <!-- Row 3: Dark Editorial Gaming Feature Band -->
+        <a href="#bestsellers" class="group grid grid-cols-1 lg:grid-cols-12 items-center bg-deep-black text-on-deep-black rounded-sm overflow-hidden">
+          <div class="lg:col-span-5 p-gutter-xl lg:p-12 flex flex-col justify-center gap-gutter-md">
+            <h3 class="font-headline text-headline-lg-mobile md:text-headline-lg text-on-deep-black text-balance" data-design-text-token="headline-lg">
+              Gaming hardware.
+            </h3>
+            <p class="font-body text-body-lg text-on-surface-dark-elevated max-w-md text-pretty" data-design-text-token="body-lg">
+              Low-latency wireless controllers, mechanical switches, and high-refresh displays tuned for competitive play.
+            </p>
+            <span class="inline-flex items-center gap-gutter-xs font-label text-label-lg text-primary-orange pt-gutter-sm">
+              <span data-design-text-token="label-lg">Explore Gaming</span>
+              <span class="material-symbols-outlined text-[18px]" aria-hidden="true">arrow_forward</span>
+            </span>
+          </div>
+          <div class="lg:col-span-7 aspect-[16/9] w-full bg-surface-dark-elevated overflow-hidden">
+            <img src="https://lh3.googleusercontent.com/aida/ALJJyrD21mzV6ffwGf2LfbdzZzTB43uf9dL37JyQICDvuxGXsYnZ2ZyHCDEzv6ABn5ERfOVKVFzuPAd_pQB2lSn2vXw-FzGrsbs8Isf7wOdDGbbuH8Mx9f9AmODc1C4gXvBWOewMwPaZbyP7Oqp6gUKEIomhVtyAts68kMZlqoOgImJNJjT3mTm79OjqB8YlgBl89S3nSNf_nrQhh7BcbynaH3RauX7RmCGBi6hTSTosM1jFlI7vBhPMtg" alt="PATRONET Pro Wireless Gaming Controller" class="w-full h-full object-cover group-hover:scale-[1.02] transition-transform duration-surface-enter">
+          </div>
+        </a>
+      </section>
+
+      <!-- 5. Best-Selling Products (4-Column Structured Retail Grid) -->
+      <section id="bestsellers" class="max-w-[1360px] mx-auto px-gutter-md md:px-gutter-lg xl:px-page-margin pb-section">
+        <div class="flex flex-col sm:flex-row sm:items-end justify-between gap-gutter-md pb-gutter-lg border-b border-outline-subtle mb-gutter-xl">
+          <div>
+            <h2 class="font-headline text-headline-lg-mobile md:text-headline-lg text-on-pure-white" data-design-text-token="headline-lg">
+              Best sellers.
+            </h2>
+            <p class="font-body text-body-md text-muted-gray mt-gutter-xs" data-design-text-token="body-md">
+              In-stock hardware ready for pan-India dispatch.
+            </p>
+          </div>
+          <a href="#bestsellers" class="inline-flex items-center gap-gutter-xs font-label text-label-lg text-on-pure-white hover:text-accent-orange-text transition-colors duration-state-change shrink-0">
+            <span data-design-text-token="label-lg">Shop all products</span>
+            <span class="material-symbols-outlined text-[18px]" aria-hidden="true">arrow_forward</span>
+          </a>
+        </div>
+
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-gutter-lg items-stretch">
+          <!-- Product 1 -->
+          <article class="h-full flex flex-col justify-between gap-gutter-md">
+            <div class="flex flex-col gap-gutter-md">
+              <div class="relative aspect-square w-full bg-light-gray rounded-sm overflow-hidden flex items-center justify-center p-gutter-lg">
+                <img src="https://lh3.googleusercontent.com/aida/ALJJyrDiK48nkB5nc39ENn71KKa0NGyy5-rVdYk8Vu1ZnfeuBpxKtvutGqH3o6C-gpCjNTWsSJ_Hp4HMW3lbbNpjGSLJka8K7gPBXtJY5_Pb6RkFnYfwJ94o5DKQWlMCT2HfloilyiLgSqJ8ovDb5RWSZ1CVHQvRvrMg3T1Fw3hkhA7kFf3VMjm8L8BZbnlmJBNRTfpSi-RvqsiDLKv4j1qMs6auOjKy-Sv6TlgdLj5B0NRxmbIC_dh13EjE9mZmZhw" alt="PATRONET GameBook 15" class="w-full h-full object-contain">
+                <button type="button" onclick="toggleWishlist(this)" aria-label="Add PATRONET GameBook 15 to wishlist" aria-pressed="false" class="absolute top-3 right-3 inline-flex items-center justify-center w-8 h-8 rounded-full bg-pure-white text-muted-gray hover:text-on-pure-white transition-colors duration-state-change">
+                  <span class="material-symbols-outlined text-[18px]" aria-hidden="true">favorite</span>
+                </button>
+              </div>
+
+              <div class="flex flex-col gap-gutter-xs">
+                <span class="font-label text-label-md text-muted-gray" data-design-text-token="label-md">PATRONET</span>
+                <h3 class="font-title text-title-lg text-on-pure-white" data-design-text-token="title-lg">GameBook 15 (RTX 4050)</h3>
+                <p class="font-headline text-headline-md tabular-nums text-on-pure-white pt-gutter-xs" data-design-text-token="headline-md">₹94,990</p>
+              </div>
+            </div>
+
+            <footer class="flex items-center justify-between gap-gutter-sm pt-gutter-md border-t border-outline-subtle">
+              <label class="inline-flex items-center gap-gutter-xs cursor-pointer">
+                <input type="checkbox" class="rounded-sm border-outline-subtle text-deep-black focus:ring-deep-black">
+                <span class="font-label text-label-md text-muted-gray" data-design-text-token="label-md">Compare</span>
+              </label>
+              <button type="button" onclick="addToCart(&#39;GameBook 15&#39;)" class="px-gutter-lg py-2.5 rounded-sm bg-primary-orange text-on-primary-orange font-label text-label-lg hover:bg-primary-orange-hover active:scale-[0.99] transition-colors duration-state-change shrink-0">
+                <span data-design-text-token="label-lg">Add to Cart</span>
+              </button>
+            </footer>
+          </article>
+
+          <!-- Product 2 -->
+          <article class="h-full flex flex-col justify-between gap-gutter-md">
+            <div class="flex flex-col gap-gutter-md">
+              <div class="relative aspect-square w-full bg-light-gray rounded-sm overflow-hidden flex items-center justify-center p-gutter-lg">
+                <img src="https://lh3.googleusercontent.com/aida/ALJJyrCo-y0tdg4iIEcbleH9BQWLTlroKbPA2aYI-vZsOtiu3uyGt8LX4-kr8qREBWtpgzkX3oQYV6jZl_aFrEZ6vTZEMLPFTmgt2ooBXxl37okJQIjnaUvX7njPQXXBfChEV6UPtNLSVdoHmPWvitubZydTtDfI1zU6oA8s36iugg4B73MZiSSVILQjooFZ6x_oQp2fyuDIf4WGNrGXqy8FCeqg6oxpccwG8zkvJTx9J7ZSgkRC4wFsyD-MxmOiEQ" alt="Studio ANC Headphones" class="w-full h-full object-contain">
+                <button type="button" onclick="toggleWishlist(this)" aria-label="Add Studio ANC Headphones to wishlist" aria-pressed="false" class="absolute top-3 right-3 inline-flex items-center justify-center w-8 h-8 rounded-full bg-pure-white text-muted-gray hover:text-on-pure-white transition-colors duration-state-change">
+                  <span class="material-symbols-outlined text-[18px]" aria-hidden="true">favorite</span>
+                </button>
+              </div>
+
+              <div class="flex flex-col gap-gutter-xs">
+                <span class="font-label text-label-md text-muted-gray" data-design-text-token="label-md">PATRONET Audio</span>
+                <h3 class="font-title text-title-lg text-on-pure-white" data-design-text-token="title-lg">Studio ANC Headphones</h3>
+                <p class="font-headline text-headline-md tabular-nums text-on-pure-white pt-gutter-xs" data-design-text-token="headline-md">₹13,999</p>
+              </div>
+            </div>
+
+            <footer class="flex items-center justify-between gap-gutter-sm pt-gutter-md border-t border-outline-subtle">
+              <label class="inline-flex items-center gap-gutter-xs cursor-pointer">
+                <input type="checkbox" class="rounded-sm border-outline-subtle text-deep-black focus:ring-deep-black">
+                <span class="font-label text-label-md text-muted-gray" data-design-text-token="label-md">Compare</span>
+              </label>
+              <button type="button" onclick="addToCart(&#39;Studio ANC Headphones&#39;)" class="px-gutter-lg py-2.5 rounded-sm bg-primary-orange text-on-primary-orange font-label text-label-lg hover:bg-primary-orange-hover active:scale-[0.99] transition-colors duration-state-change shrink-0">
+                <span data-design-text-token="label-lg">Add to Cart</span>
+              </button>
+            </footer>
+          </article>
+
+          <!-- Product 3 -->
+          <article class="h-full flex flex-col justify-between gap-gutter-md">
+            <div class="flex flex-col gap-gutter-md">
+              <div class="relative aspect-square w-full bg-light-gray rounded-sm overflow-hidden flex items-center justify-center p-gutter-lg">
+                <img src="https://lh3.googleusercontent.com/aida/ALJJyrDoF-4nkxNhXQYwlz-garKOO8Z59cCs1ZrTh8O_zOpMyHKQndbLG8XgBYz2EQK4dJZcCq2c4LWpF6Dyy9weR9MPNQeDj3uwp-eIc8F4lH4XVaV_0Mafkrd7kGQjFdmk9Mqf2wjcIHumTX7V3i_TyyVU1R-nnAbEgybJit7MARymK_wGsicQg_nr3GUMsFdPq1KeXUD8TF18xRgypv6WN23FxrzDJEwl2W385p4-0zuy82X84WkVN2_n2cRfRNw4Xlw" alt="Fit Pro Smartwatch" class="w-full h-full object-contain">
+                <button type="button" onclick="toggleWishlist(this)" aria-label="Add Fit Pro Smartwatch to wishlist" aria-pressed="false" class="absolute top-3 right-3 inline-flex items-center justify-center w-8 h-8 rounded-full bg-pure-white text-muted-gray hover:text-on-pure-white transition-colors duration-state-change">
+                  <span class="material-symbols-outlined text-[18px]" aria-hidden="true">favorite</span>
+                </button>
+              </div>
+
+              <div class="flex flex-col gap-gutter-xs">
+                <span class="font-label text-label-md text-muted-gray" data-design-text-token="label-md">PATRONET Wearables</span>
+                <h3 class="font-title text-title-lg text-on-pure-white" data-design-text-token="title-lg">Fit Pro Watch</h3>
+                <p class="font-headline text-headline-md tabular-nums text-on-pure-white pt-gutter-xs" data-design-text-token="headline-md">₹4,999</p>
+              </div>
+            </div>
+
+            <footer class="flex items-center justify-between gap-gutter-sm pt-gutter-md border-t border-outline-subtle">
+              <label class="inline-flex items-center gap-gutter-xs cursor-pointer">
+                <input type="checkbox" class="rounded-sm border-outline-subtle text-deep-black focus:ring-deep-black">
+                <span class="font-label text-label-md text-muted-gray" data-design-text-token="label-md">Compare</span>
+              </label>
+              <button type="button" onclick="addToCart(&#39;Fit Pro Watch&#39;)" class="px-gutter-lg py-2.5 rounded-sm bg-primary-orange text-on-primary-orange font-label text-label-lg hover:bg-primary-orange-hover active:scale-[0.99] transition-colors duration-state-change shrink-0">
+                <span data-design-text-token="label-lg">Add to Cart</span>
+              </button>
+            </footer>
+          </article>
+
+          <!-- Product 4 -->
+          <article class="h-full flex flex-col justify-between gap-gutter-md">
+            <div class="flex flex-col gap-gutter-md">
+              <div class="relative aspect-square w-full bg-light-gray rounded-sm overflow-hidden flex items-center justify-center p-gutter-lg">
+                <img src="https://lh3.googleusercontent.com/aida/ALJJyrCaC1x-8eBqawxEAwTJHzn5zH6qmxithtS3DaWIRGBTmqgAfA_5kYmchkFFYpqmArvL7aROt291bKqyqK3OgezOkLHqlBHSeqyY3z5gmM9b1mvFq07FVwpB5KUZV95-TxMVRUYmYL4nXD9uiH8oo0H8hlELECOodX5Es8mrMhx_1zHgmYJYaY1Eg_3eE6F3kDlw6p-XD4xkPcXPGg7mDYaKpbY_BRqPfNTPEu49FyZ1ctjxLEc1tEScmUQT0Q" alt="Smart LED Desk Lamp" class="w-full h-full object-contain">
+                <button type="button" onclick="toggleWishlist(this)" aria-label="Add Smart LED Desk Lamp to wishlist" aria-pressed="false" class="absolute top-3 right-3 inline-flex items-center justify-center w-8 h-8 rounded-full bg-pure-white text-muted-gray hover:text-on-pure-white transition-colors duration-state-change">
+                  <span class="material-symbols-outlined text-[18px]" aria-hidden="true">favorite</span>
+                </button>
+              </div>
+
+              <div class="flex flex-col gap-gutter-xs">
+                <span class="font-label text-label-md text-muted-gray" data-design-text-token="label-md">PATRONET Home</span>
+                <h3 class="font-title text-title-lg text-on-pure-white" data-design-text-token="title-lg">Smart LED Desk Lamp</h3>
+                <p class="font-headline text-headline-md tabular-nums text-on-pure-white pt-gutter-xs" data-design-text-token="headline-md">₹2,799</p>
+              </div>
+            </div>
+
+            <footer class="flex items-center justify-between gap-gutter-sm pt-gutter-md border-t border-outline-subtle">
+              <label class="inline-flex items-center gap-gutter-xs cursor-pointer">
+                <input type="checkbox" class="rounded-sm border-outline-subtle text-deep-black focus:ring-deep-black">
+                <span class="font-label text-label-md text-muted-gray" data-design-text-token="label-md">Compare</span>
+              </label>
+              <button type="button" onclick="addToCart(&#39;Smart LED Desk Lamp&#39;)" class="px-gutter-lg py-2.5 rounded-sm bg-primary-orange text-on-primary-orange font-label text-label-lg hover:bg-primary-orange-hover active:scale-[0.99] transition-colors duration-state-change shrink-0">
+                <span data-design-text-token="label-lg">Add to Cart</span>
+              </button>
+            </footer>
+          </article>
+        </div>
+      </section>
+
+      <!-- 6. AI Feature Promotion (Asymmetric Editorial Composition) -->
+      <section class="max-w-[1360px] mx-auto px-gutter-md md:px-gutter-lg xl:px-page-margin pb-section">
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-gutter-lg items-stretch">
+          <!-- Prominent Feature: AI Shopping (7 Columns, Deep Black) -->
+          <article class="lg:col-span-7 bg-deep-black text-on-deep-black rounded-sm p-gutter-xl lg:p-page-margin flex flex-col justify-between gap-gutter-xl">
+            <div class="flex flex-col gap-gutter-md max-w-lg">
+              <span class="material-symbols-outlined text-[24px] text-primary-orange" aria-hidden="true">auto_awesome</span>
+              <h2 class="font-headline text-headline-lg-mobile md:text-headline-lg text-on-deep-black text-balance" data-design-text-token="headline-lg">
+                AI Shopping Assistant.
+              </h2>
+              <p class="font-body text-body-lg text-on-surface-dark-elevated text-pretty" data-design-text-token="body-lg">
+                Skip endless spec filters. Describe your workload, display expectations, and budget in plain English to get exact hardware recommendations.
+              </p>
+            </div>
+            <div>
+              <a href="#ai-discovery" class="inline-flex items-center gap-gutter-sm px-gutter-lg py-3 rounded-sm bg-primary-orange text-on-primary-orange font-label text-label-lg hover:bg-primary-orange-hover transition-colors duration-state-change">
+                <span data-design-text-token="label-lg">Try AI Search</span>
+                <span class="material-symbols-outlined text-[18px]" aria-hidden="true">arrow_forward</span>
+              </a>
+            </div>
+          </article>
+
+          <!-- Two Stacked Supporting Features (5 Columns) -->
+          <div class="lg:col-span-5 flex flex-col gap-gutter-lg">
+            <!-- Supporting Feature 1: Product Comparison -->
+            <article class="flex-1 bg-light-gray text-on-light-gray rounded-sm p-gutter-xl flex flex-col justify-between gap-gutter-md">
+              <div class="flex flex-col gap-gutter-sm">
+                <span class="material-symbols-outlined text-[22px] text-on-light-gray" aria-hidden="true">compare</span>
+                <h3 class="font-headline text-headline-md text-on-light-gray" data-design-text-token="headline-md">
+                  Product Comparison
+                </h3>
+                <p class="font-body text-body-md text-muted-gray text-pretty" data-design-text-token="body-md">
+                  Evaluate thermal headroom, color gamut, battery endurance, and I/O ports side-by-side before you buy.
+                </p>
+              </div>
+              <a href="#bestsellers" class="inline-flex items-center gap-gutter-xs font-label text-label-lg text-on-light-gray hover:text-accent-orange-text transition-colors duration-state-change">
+                <span data-design-text-token="label-lg">Compare specifications</span>
+                <span class="material-symbols-outlined text-[18px]" aria-hidden="true">arrow_forward</span>
+              </a>
+            </article>
+
+            <!-- Supporting Feature 2: Bulk Procurement -->
+            <article class="flex-1 bg-pure-white text-on-pure-white border border-outline-subtle rounded-sm p-gutter-xl flex flex-col justify-between gap-gutter-md">
+              <div class="flex flex-col gap-gutter-sm">
+                <span class="material-symbols-outlined text-[22px] text-on-pure-white" aria-hidden="true">inventory_2</span>
+                <h3 class="font-headline text-headline-md text-on-pure-white" data-design-text-token="headline-md">
+                  Bulk Procurement
+                </h3>
+                <p class="font-body text-body-md text-muted-gray text-pretty" data-design-text-token="body-md">
+                  Request verified supplier quotations, GST-compliant invoicing, and scheduled pan-India fleet deployment.
+                </p>
+              </div>
+              <a href="#footer" class="inline-flex items-center gap-gutter-xs font-label text-label-lg text-on-pure-white hover:text-accent-orange-text transition-colors duration-state-change">
+                <span data-design-text-token="label-lg">Request quotation</span>
+                <span class="material-symbols-outlined text-[18px]" aria-hidden="true">arrow_forward</span>
+              </a>
+            </article>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <!-- 7. Footer -->
+    <footer id="footer" class="bg-deep-black text-on-deep-black">
+      <div class="max-w-[1360px] mx-auto px-gutter-md md:px-gutter-lg xl:px-page-margin py-section">
+        <div class="grid grid-cols-1 md:grid-cols-12 gap-gutter-xl pb-12 border-b border-outline-dark">
+          <!-- Brand Column -->
+          <div class="md:col-span-4 flex flex-col gap-gutter-md">
+            <span class="font-headline text-headline-md tracking-tight text-on-deep-black" data-design-text-token="headline-md">PATRONET</span>
+            <p class="font-body text-body-md text-on-surface-dark-elevated max-w-xs text-pretty" data-design-text-token="body-md">
+              Precision electronics and AI-assisted hardware discovery for creators, gamers, and teams across India.
+            </p>
+          </div>
+
+          <!-- Shop -->
+          <div class="md:col-span-2 flex flex-col gap-gutter-md">
+            <h3 class="font-label text-label-lg text-on-deep-black" data-design-text-token="label-lg">Shop</h3>
+            <ul class="flex flex-col gap-gutter-sm font-body text-body-md text-on-surface-dark-elevated">
+              <li><a href="#categories" class="hover:text-primary-orange transition-colors duration-state-change">Laptops</a></li>
+              <li><a href="#categories" class="hover:text-primary-orange transition-colors duration-state-change">Audio</a></li>
+              <li><a href="#categories" class="hover:text-primary-orange transition-colors duration-state-change">Monitors</a></li>
+              <li><a href="#categories" class="hover:text-primary-orange transition-colors duration-state-change">Wearables</a></li>
+              <li><a href="#categories" class="hover:text-primary-orange transition-colors duration-state-change">Gaming</a></li>
+            </ul>
+          </div>
+
+          <!-- Support -->
+          <div class="md:col-span-2 flex flex-col gap-gutter-md">
+            <h3 class="font-label text-label-lg text-on-deep-black" data-design-text-token="label-lg">Support</h3>
+            <ul class="flex flex-col gap-gutter-sm font-body text-body-md text-on-surface-dark-elevated">
+              <li><a href="#" class="hover:text-primary-orange transition-colors duration-state-change">Help Center</a></li>
+              <li><a href="#" class="hover:text-primary-orange transition-colors duration-state-change">Track Order</a></li>
+              <li><a href="#" class="hover:text-primary-orange transition-colors duration-state-change">Warranty &amp; Service</a></li>
+              <li><a href="#" class="hover:text-primary-orange transition-colors duration-state-change">Bulk Procurement</a></li>
+            </ul>
+          </div>
+
+          <!-- Account -->
+          <div class="md:col-span-2 flex flex-col gap-gutter-md">
+            <h3 class="font-label text-label-lg text-on-deep-black" data-design-text-token="label-lg">Account</h3>
+            <ul class="flex flex-col gap-gutter-sm font-body text-body-md text-on-surface-dark-elevated">
+              <li><a href="#" class="hover:text-primary-orange transition-colors duration-state-change">My Account</a></li>
+              <li><a href="#" class="hover:text-primary-orange transition-colors duration-state-change">Wishlist</a></li>
+              <li><a href="#" class="hover:text-primary-orange transition-colors duration-state-change">Compare Studio</a></li>
+              <li><a href="#" class="hover:text-primary-orange transition-colors duration-state-change">Shopping Cart</a></li>
+            </ul>
+          </div>
+
+          <!-- Policies -->
+          <div class="md:col-span-2 flex flex-col gap-gutter-md">
+            <h3 class="font-label text-label-lg text-on-deep-black" data-design-text-token="label-lg">Policies</h3>
+            <ul class="flex flex-col gap-gutter-sm font-body text-body-md text-on-surface-dark-elevated">
+              <li><a href="#" class="hover:text-primary-orange transition-colors duration-state-change">Privacy Policy</a></li>
+              <li><a href="#" class="hover:text-primary-orange transition-colors duration-state-change">Terms of Service</a></li>
+              <li><a href="#" class="hover:text-primary-orange transition-colors duration-state-change">Shipping Policy</a></li>
+              <li><a href="#" class="hover:text-primary-orange transition-colors duration-state-change">Returns &amp; Refunds</a></li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="pt-gutter-lg flex flex-col sm:flex-row items-start sm:items-center justify-between gap-gutter-sm font-label text-label-md text-on-surface-dark-elevated">
+          <span data-design-text-token="label-md">© 2026 PATRONET. All rights reserved.</span>
+          <span data-design-text-token="label-md">Prices inclusive of GST · Pan-India Delivery</span>
+        </div>
+      </div>
+    </footer>
+  </div>
+
+  <script>
+    let cartTotal = 0;
+
+    function addToCart(productName) {
+      cartTotal += 1;
+      const countEl = document.getElementById('cart-count');
+      if (countEl) {
+        countEl.textContent = String(cartTotal);
+      }
+    }
+
+    function toggleWishlist(btn) {
+      const pressed = btn.getAttribute('aria-pressed') === 'true';
+      const next = !pressed;
+      btn.setAttribute('aria-pressed', String(next));
+      const icon = btn.querySelector('.material-symbols-outlined');
+      if (icon) {
+        icon.style.fontVariationSettings = next ? "'FILL' 1" : "'FILL' 0";
+      }
+      if (next) {
+        btn.classList.remove('text-muted-gray');
+        btn.classList.add('text-accent-orange-text');
+      } else {
+        btn.classList.remove('text-accent-orange-text');
+        btn.classList.add('text-muted-gray');
+      }
+    }
+
+    function fillAiPrompt(text) {
+      const input = document.getElementById('ai-search-input');
+      if (input) {
+        input.value = text;
+        input.focus();
+      }
+    }
+
+    function handleAiSearch(e) {
+      e.preventDefault();
+      const input = document.getElementById('ai-search-input');
+      const feedback = document.getElementById('ai-feedback');
+      if (input && feedback) {
+        const q = input.value.trim() || 'your requirements';
+        feedback.textContent = 'Finding top PATRONET hardware matches for: "' + q + '"';
+        feedback.classList.remove('hidden');
+      }
+      return false;
+    }
+  </script>
+
+
+</body></html>

@@ -1,0 +1,309 @@
+<!DOCTYPE html><html lang="en"><head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>PATRONET — Order Confirmation</title>
+  <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+  <script id="tailwind-config">/** @type {import('tailwindcss').Config} */
+globalThis.tailwind = globalThis.tailwind || {};
+globalThis.tailwind.config = {
+  darkMode: 'class',
+  theme: {
+    extend: {
+      colors: {
+        'primary-orange': '#FF6B00',
+        'on-primary-orange': '#111111',
+        'primary-orange-hover': '#E05E00',
+        'primary-orange-tint': '#FFEDE6',
+        'accent-orange-text': '#BF4E00',
+        'deep-black': '#111111',
+        'on-deep-black': '#FFFFFF',
+        'surface-dark-elevated': '#1A1A1A',
+        'on-surface-dark-elevated': '#F5F5F5',
+        'pure-white': '#FFFFFF',
+        'on-pure-white': '#111111',
+        'light-gray': '#F5F5F5',
+        'on-light-gray': '#111111',
+        'muted-gray': '#666666',
+        'outline-subtle': '#E5E5E5',
+        'outline-dark': '#2E2E2E',
+      },
+      borderRadius: {
+        'sm': '4px',
+        'DEFAULT': '6px',
+        'md': '8px',
+        'lg': '12px',
+        'xl': '16px',
+        'full': '9999px',
+      },
+      spacing: {
+        'gutter-xs': '4px',
+        'gutter-sm': '8px',
+        'gutter-md': '16px',
+        'gutter-lg': '24px',
+        'gutter-xl': '32px',
+        'section': '64px',
+        'page-margin': '48px',
+      },
+      fontFamily: {
+        'display': ['"Inter"', 'sans-serif'],
+        'headline': ['"Inter"', 'sans-serif'],
+        'title': ['"Inter"', 'sans-serif'],
+        'body': ['"Inter"', 'sans-serif'],
+        'label': ['"Inter"', 'sans-serif'],
+      },
+      fontSize: {
+        'display-xl': ['60px', { lineHeight: '64px', letterSpacing: '-1.6px', fontWeight: '700' }],
+        'display-xl-mobile': ['32px', { lineHeight: '38px', letterSpacing: '-0.6px', fontWeight: '700' }],
+        'headline-lg': ['36px', { lineHeight: '42px', letterSpacing: '-0.8px', fontWeight: '700' }],
+        'headline-lg-mobile': ['28px', { lineHeight: '34px', letterSpacing: '-0.5px', fontWeight: '700' }],
+        'headline-md': ['24px', { lineHeight: '30px', letterSpacing: '-0.4px', fontWeight: '700' }],
+        'title-lg': ['20px', { lineHeight: '26px', letterSpacing: '-0.2px', fontWeight: '600' }],
+        'title-md': ['16px', { lineHeight: '22px', letterSpacing: '-0.1px', fontWeight: '600' }],
+        'body-lg': ['16px', { lineHeight: '24px', letterSpacing: '0px', fontWeight: '400' }],
+        'body-md': ['14px', { lineHeight: '20px', letterSpacing: '0px', fontWeight: '400' }],
+        'label-lg': ['14px', { lineHeight: '20px', letterSpacing: '0px', fontWeight: '600' }],
+        'label-md': ['13px', { lineHeight: '18px', letterSpacing: '0px', fontWeight: '500' }],
+        'label-sm': ['12px', { lineHeight: '16px', letterSpacing: '0.2px', fontWeight: '500' }],
+      },
+      transitionDuration: {
+        'state-change': '150ms',
+        'surface-enter': '240ms',
+      },
+      transitionDelay: {
+        'state-change': '0ms',
+        'surface-enter': '0ms',
+      },
+      transitionTimingFunction: {
+        'state-change': 'ease-out',
+        'surface-enter': 'cubic-bezier(0.2, 0, 0, 1)',
+      },
+    },
+  },
+};
+if (typeof module !== 'undefined') module.exports = globalThis.tailwind.config;
+</script>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=block" rel="stylesheet">
+  <style>
+    .material-symbols-outlined, .material-symbols-rounded, .material-symbols-sharp, .material-icons {
+      display: inline-block;
+      width: 1em;
+      height: 1em;
+      line-height: 1 !important;
+      box-sizing: content-box;
+      overflow: hidden;
+      white-space: nowrap;
+      direction: ltr;
+      vertical-align: middle;
+    }
+  </style>
+</head>
+<body class="bg-pure-white text-on-pure-white font-body antialiased">
+  <div class="min-h-[1024px] flex flex-col bg-pure-white" data-stitch-vh="min-h-[1024px]===min-h-screen">
+
+    <!-- 1. Navigation Bar (Shared Shell) -->
+    <header class="sticky top-0 z-40 bg-pure-white border-b border-outline-subtle">
+      <div class="max-w-[1360px] mx-auto px-gutter-md md:px-gutter-lg xl:px-page-margin h-[72px] flex items-center justify-between gap-gutter-xl">
+        <a href="../patronet-homepage-refined/PatronetHomepageRefined.html" class="font-headline text-title-lg tracking-tight text-on-pure-white shrink-0" data-design-text-token="title-lg">
+          PATRONET
+        </a>
+
+        <nav aria-label="Primary navigation" class="hidden lg:flex items-center gap-10">
+          <a href="../patronet-catalogue/PatronetCatalogue.html" class="font-label text-label-lg text-on-pure-white hover:text-muted-gray transition-colors duration-state-change ease-state-change" data-design-text-token="label-lg">Shop All</a>
+          <a href="../patronet-catalogue/PatronetCatalogue.html" class="font-label text-label-lg text-on-pure-white hover:text-muted-gray transition-colors duration-state-change ease-state-change" data-design-text-token="label-lg">Electronics</a>
+          <a href="../patronet-catalogue/PatronetCatalogue.html" class="font-label text-label-lg text-on-pure-white hover:text-muted-gray transition-colors duration-state-change ease-state-change" data-design-text-token="label-lg">Computers</a>
+          <a href="../patronet-catalogue/PatronetCatalogue.html" class="font-label text-label-lg text-on-pure-white hover:text-muted-gray transition-colors duration-state-change ease-state-change" data-design-text-token="label-lg">Audio</a>
+          <a href="../patronet-catalogue/PatronetCatalogue.html" class="font-label text-label-lg text-accent-orange-text hover:text-primary-orange-hover transition-colors duration-state-change ease-state-change" data-design-text-token="label-lg">Deals</a>
+        </nav>
+
+        <div class="flex items-center gap-gutter-lg shrink-0">
+          <form class="hidden md:flex items-center gap-gutter-sm px-3.5 py-2 rounded-sm bg-light-gray border border-outline-subtle focus-within:border-deep-black w-64 lg:w-72 transition-colors duration-state-change" role="search" onsubmit="return false;">
+            <span class="material-symbols-outlined text-[18px] text-muted-gray shrink-0" aria-hidden="true">search</span>
+            <input type="search" placeholder="Search catalog" aria-label="Search PATRONET catalog" class="w-full bg-transparent border-0 p-0 font-body text-body-md text-on-pure-white placeholder:text-muted-gray focus:ring-0">
+          </form>
+
+          <div class="flex items-center gap-gutter-sm">
+            <button type="button" aria-label="Account" class="inline-flex items-center justify-center w-9 h-9 text-on-pure-white hover:text-muted-gray transition-colors duration-state-change ease-state-change">
+              <span class="material-symbols-outlined text-[20px]" aria-hidden="true">person</span>
+            </button>
+
+            <button type="button" aria-label="Wishlist" class="inline-flex items-center justify-center w-9 h-9 text-on-pure-white hover:text-muted-gray transition-colors duration-state-change ease-state-change">
+              <span class="material-symbols-outlined text-[20px]" aria-hidden="true">favorite</span>
+            </button>
+
+            <a href="../patronet-cart/PatronetCart.html" aria-label="Shopping cart" class="inline-flex items-center gap-gutter-xs h-9 pl-gutter-xs text-on-pure-white hover:text-muted-gray transition-colors duration-state-change shrink-0">
+              <span class="material-symbols-outlined text-[20px] shrink-0" aria-hidden="true">shopping_cart</span>
+              <span class="font-label text-label-md tabular-nums whitespace-nowrap" data-design-text-token="label-md">(0)</span>
+            </a>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <main class="flex-1 flex items-center">
+      <div class="w-full max-w-[1360px] mx-auto px-gutter-md md:px-gutter-lg xl:px-page-margin py-section">
+        <div class="max-w-2xl mx-auto flex flex-col gap-gutter-xl">
+
+          <!-- Confirmation Header -->
+          <div class="flex flex-col gap-gutter-md pb-gutter-lg border-b border-outline-subtle">
+            <div class="w-12 h-12 rounded-sm bg-primary-orange-tint flex items-center justify-center">
+              <span class="material-symbols-outlined text-[26px] text-accent-orange-text" style="font-variation-settings: &#39;FILL&#39; 1;" aria-hidden="true">check_circle</span>
+            </div>
+            <div class="flex flex-col gap-gutter-xs">
+              <h1 class="font-headline text-headline-lg-mobile md:text-headline-lg text-on-pure-white" data-design-text-token="headline-lg">
+                Order placed successfully.
+              </h1>
+              <p class="font-body text-body-lg text-muted-gray text-pretty" data-design-text-token="body-lg">
+                We have received your order request and will confirm item availability and dispatch details shortly.
+              </p>
+            </div>
+          </div>
+
+          <!-- Order Details Summary Box -->
+          <section aria-label="Order confirmation details" class="bg-light-gray rounded-sm p-gutter-lg border border-outline-subtle flex flex-col gap-gutter-lg">
+            <div class="grid grid-cols-1 sm:grid-cols-3 gap-gutter-lg pb-gutter-lg border-b border-outline-subtle">
+              <div class="flex flex-col gap-gutter-xs">
+                <span class="font-label text-label-md text-muted-gray" data-design-text-token="label-md">Order number</span>
+                <span class="font-title text-title-lg text-on-light-gray tabular-nums" data-design-text-token="title-lg">PN-2026-84921</span>
+              </div>
+              <div class="flex flex-col gap-gutter-xs">
+                <span class="font-label text-label-md text-muted-gray" data-design-text-token="label-md">Order total</span>
+                <span class="font-title text-title-lg text-on-light-gray tabular-nums" data-design-text-token="title-lg">₹1,15,288</span>
+              </div>
+              <div class="flex flex-col gap-gutter-xs">
+                <span class="font-label text-label-md text-muted-gray" data-design-text-token="label-md">Order status</span>
+                <span class="inline-flex items-center gap-gutter-sm font-title text-title-lg text-on-light-gray" data-design-text-token="title-lg">
+                  <span class="w-2.5 h-2.5 rounded-full bg-primary-orange shrink-0" aria-hidden="true"></span>
+                  <span>Order received</span>
+                </span>
+              </div>
+            </div>
+
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-gutter-lg">
+              <div class="flex flex-col gap-gutter-xs">
+                <span class="font-label text-label-md text-muted-gray" data-design-text-token="label-md">Delivery address</span>
+                <p class="font-body text-body-md text-on-light-gray" data-design-text-token="body-md">
+                  Aarav Mehta<br>
+                  Flat 402, Skylark Residency, Bandra West<br>
+                  Mumbai, Maharashtra — 400050
+                </p>
+              </div>
+              <div class="flex flex-col gap-gutter-xs">
+                <span class="font-label text-label-md text-muted-gray" data-design-text-token="label-md">Payment method</span>
+                <p class="font-body text-body-md text-on-light-gray" data-design-text-token="body-md">
+                  UPI (Pending payment validation)
+                </p>
+              </div>
+            </div>
+
+            <!-- Collapsible / Inline Item Breakdown -->
+            <div id="order-items-breakdown" class="hidden pt-gutter-lg border-t border-outline-subtle">
+              <h2 class="font-label text-label-lg text-on-light-gray mb-gutter-md" data-design-text-token="label-lg">Items in this order</h2>
+              <ul class="divide-y divide-outline-subtle">
+                <li class="py-gutter-sm flex items-center justify-between gap-gutter-md">
+                  <span class="font-body text-body-md text-on-light-gray" data-design-text-token="body-md">PATRONET GameBook 15 × 1</span>
+                  <span class="font-label text-label-md text-on-light-gray tabular-nums" data-design-text-token="label-md">₹94,990</span>
+                </li>
+                <li class="py-gutter-sm flex items-center justify-between gap-gutter-md">
+                  <span class="font-body text-body-md text-on-light-gray" data-design-text-token="body-md">Studio ANC Headphones × 1</span>
+                  <span class="font-label text-label-md text-on-light-gray tabular-nums" data-design-text-token="label-md">₹13,999</span>
+                </li>
+                <li class="py-gutter-sm flex items-center justify-between gap-gutter-md">
+                  <span class="font-body text-body-md text-on-light-gray" data-design-text-token="body-md">Precision Wireless Mouse × 1</span>
+                  <span class="font-label text-label-md text-on-light-gray tabular-nums" data-design-text-token="label-md">₹6,299</span>
+                </li>
+              </ul>
+            </div>
+          </section>
+
+          <!-- Actions -->
+          <div class="flex flex-col sm:flex-row items-stretch sm:items-center gap-gutter-md">
+            <button type="button" onclick="toggleOrderBreakdown()" id="view-order-btn" class="px-gutter-xl py-3.5 rounded-sm bg-primary-orange text-on-primary-orange font-label text-label-lg hover:bg-primary-orange-hover transition-colors duration-state-change text-center">
+              <span data-design-text-token="label-lg">View Order</span>
+            </button>
+            <a href="../patronet-catalogue/PatronetCatalogue.html" class="px-gutter-xl py-3.5 rounded-sm border border-outline-subtle bg-pure-white text-on-pure-white font-label text-label-lg hover:border-deep-black transition-colors duration-state-change text-center">
+              <span data-design-text-token="label-lg">Continue Shopping</span>
+            </a>
+          </div>
+
+        </div>
+      </div>
+    </main>
+
+    <!-- Footer (Shared Shell) -->
+    <footer id="footer" class="bg-deep-black text-on-deep-black">
+      <div class="max-w-[1360px] mx-auto px-gutter-md md:px-gutter-lg xl:px-page-margin py-section">
+        <div class="grid grid-cols-1 md:grid-cols-12 gap-gutter-xl pb-12 border-b border-outline-dark">
+          <div class="md:col-span-4 flex flex-col gap-gutter-md">
+            <span class="font-headline text-headline-md tracking-tight text-on-deep-black" data-design-text-token="headline-md">PATRONET</span>
+            <p class="font-body text-body-md text-on-surface-dark-elevated max-w-xs text-pretty" data-design-text-token="body-md">
+              Precision electronics and AI-assisted hardware discovery for creators, gamers, and teams across India.
+            </p>
+          </div>
+
+          <div class="md:col-span-2 flex flex-col gap-gutter-md">
+            <h3 class="font-label text-label-lg text-on-deep-black" data-design-text-token="label-lg">Shop</h3>
+            <ul class="flex flex-col gap-gutter-sm font-body text-body-md text-on-surface-dark-elevated">
+              <li><a href="../patronet-catalogue/PatronetCatalogue.html" class="hover:text-primary-orange transition-colors duration-state-change">Laptops</a></li>
+              <li><a href="../patronet-catalogue/PatronetCatalogue.html" class="hover:text-primary-orange transition-colors duration-state-change">Audio</a></li>
+              <li><a href="../patronet-catalogue/PatronetCatalogue.html" class="hover:text-primary-orange transition-colors duration-state-change">Monitors</a></li>
+              <li><a href="../patronet-catalogue/PatronetCatalogue.html" class="hover:text-primary-orange transition-colors duration-state-change">Wearables</a></li>
+              <li><a href="../patronet-catalogue/PatronetCatalogue.html" class="hover:text-primary-orange transition-colors duration-state-change">Gaming</a></li>
+            </ul>
+          </div>
+
+          <div class="md:col-span-2 flex flex-col gap-gutter-md">
+            <h3 class="font-label text-label-lg text-on-deep-black" data-design-text-token="label-lg">Support</h3>
+            <ul class="flex flex-col gap-gutter-sm font-body text-body-md text-on-surface-dark-elevated">
+              <li><a href="#" class="hover:text-primary-orange transition-colors duration-state-change">Help Center</a></li>
+              <li><a href="#" class="hover:text-primary-orange transition-colors duration-state-change">Track Order</a></li>
+              <li><a href="#" class="hover:text-primary-orange transition-colors duration-state-change">Warranty &amp; Service</a></li>
+              <li><a href="#" class="hover:text-primary-orange transition-colors duration-state-change">Bulk Procurement</a></li>
+            </ul>
+          </div>
+
+          <div class="md:col-span-2 flex flex-col gap-gutter-md">
+            <h3 class="font-label text-label-lg text-on-deep-black" data-design-text-token="label-lg">Account</h3>
+            <ul class="flex flex-col gap-gutter-sm font-body text-body-md text-on-surface-dark-elevated">
+              <li><a href="#" class="hover:text-primary-orange transition-colors duration-state-change">My Account</a></li>
+              <li><a href="#" class="hover:text-primary-orange transition-colors duration-state-change">Wishlist</a></li>
+              <li><a href="#" class="hover:text-primary-orange transition-colors duration-state-change">Compare Studio</a></li>
+              <li><a href="../patronet-cart/PatronetCart.html" class="hover:text-primary-orange transition-colors duration-state-change">Shopping Cart</a></li>
+            </ul>
+          </div>
+
+          <div class="md:col-span-2 flex flex-col gap-gutter-md">
+            <h3 class="font-label text-label-lg text-on-deep-black" data-design-text-token="label-lg">Policies</h3>
+            <ul class="flex flex-col gap-gutter-sm font-body text-body-md text-on-surface-dark-elevated">
+              <li><a href="#" class="hover:text-primary-orange transition-colors duration-state-change">Privacy Policy</a></li>
+              <li><a href="#" class="hover:text-primary-orange transition-colors duration-state-change">Terms of Service</a></li>
+              <li><a href="#" class="hover:text-primary-orange transition-colors duration-state-change">Shipping Policy</a></li>
+              <li><a href="#" class="hover:text-primary-orange transition-colors duration-state-change">Returns &amp; Refunds</a></li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="pt-gutter-lg flex flex-col sm:flex-row items-start sm:items-center justify-between gap-gutter-sm font-label text-label-md text-on-surface-dark-elevated">
+          <span data-design-text-token="label-md">© 2026 PATRONET. All rights reserved.</span>
+          <span data-design-text-token="label-md">Prices inclusive of GST · Pan-India Delivery</span>
+        </div>
+      </div>
+    </footer>
+  </div>
+
+  <script>
+    function toggleOrderBreakdown() {
+      const el = document.getElementById('order-items-breakdown');
+      const btn = document.getElementById('view-order-btn').querySelector('span');
+      if (el.classList.contains('hidden')) {
+        el.classList.remove('hidden');
+        btn.textContent = 'Hide Order Items';
+      } else {
+        el.classList.add('hidden');
+        btn.textContent = 'View Order';
+      }
+    }
+  </script>
+
+
+</body></html>

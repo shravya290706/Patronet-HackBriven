@@ -1,0 +1,59 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 500 500" width="100%" height="100%">
+  <defs>
+    <linearGradient id="mon-bg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#19191d"/>
+      <stop offset="100%" stop-color="#0c0c0e"/>
+    </linearGradient>
+    <linearGradient id="panel-grad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#24242c"/>
+      <stop offset="60%" stop-color="#141418"/>
+      <stop offset="100%" stop-color="#0a0a0d"/>
+    </linearGradient>
+    <linearGradient id="stand-grad" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#3a3a44"/>
+      <stop offset="50%" stop-color="#555562"/>
+      <stop offset="100%" stop-color="#2a2a32"/>
+    </linearGradient>
+  </defs>
+
+  <rect width="500" height="500" fill="url(#mon-bg)"/>
+
+  <!-- Orange Aura -->
+  <circle cx="250" cy="220" r="160" fill="#FF6B00" opacity="0.05"/>
+
+  <!-- Monitor Stand Stem -->
+  <rect x="238" y="270" width="24" height="130" fill="url(#stand-grad)" rx="3"/>
+  <!-- Cable passthrough cutout -->
+  <rect x="245" y="325" width="10" height="35" rx="5" fill="#121215"/>
+
+  <!-- Monitor Stand Base (Matte Aluminum Octagon / Wedge) -->
+  <polygon points="170,420 330,420 350,432 150,432" fill="url(#stand-grad)" stroke="#22222a" stroke-width="1"/>
+  <!-- Front lip -->
+  <polygon points="150,432 350,432 345,438 155,438" fill="#151518"/>
+
+  <!-- Monitor Screen Frame -->
+  <rect x="60" y="70" width="380" height="230" rx="8" fill="#0e0e11" stroke="#383844" stroke-width="2"/>
+  <!-- Display Panel -->
+  <rect x="68" y="78" width="364" height="210" rx="4" fill="url(#panel-grad)"/>
+
+  <!-- Color Calibration Grid & Graphic Wireframe -->
+  <circle cx="250" cy="180" r="55" fill="none" stroke="#FF6B00" stroke-width="1.5" opacity="0.6"/>
+  <circle cx="250" cy="180" r="32" fill="none" stroke="#4a4a58" stroke-width="1" stroke-dasharray="4 3"/>
+  <circle cx="250" cy="180" r="3" fill="#FF6B00"/>
+  <line x1="160" y1="180" x2="340" y2="180" stroke="#FF6B00" stroke-width="1" opacity="0.3"/>
+  <line x1="250" y1="105" x2="250" y2="255" stroke="#FF6B00" stroke-width="1" opacity="0.3"/>
+
+  <!-- Color calibration swatches in corner -->
+  <rect x="85" y="95" width="10" height="10" fill="#FF6B00" opacity="0.8"/>
+  <rect x="99" y="95" width="10" height="10" fill="#00e5ff" opacity="0.8"/>
+  <rect x="113" y="95" width="10" height="10" fill="#76ff03" opacity="0.8"/>
+
+  <!-- Diagonal panel sheen -->
+  <polygon points="68,78 240,78 120,288 68,288" fill="#ffffff" opacity="0.015"/>
+
+  <!-- Bottom chin badge -->
+  <rect x="242" y="293" width="16" height="2" fill="#FF6B00" opacity="0.8"/>
+
+  <!-- Desk Shadow -->
+  <ellipse cx="250" cy="442" rx="160" ry="10" fill="#000000" opacity="0.6"/>
+</svg>
